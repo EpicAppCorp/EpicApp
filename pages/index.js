@@ -1,6 +1,27 @@
 import Head from "next/head";
+import Stream from "./Stream"
 
 export default function Home() {
+  const inbox = [
+    {
+      id: 123,
+      author: "Samir Raza",
+      privacy: "public",
+      type: "text",
+      text: "This is text for a post",
+      likes: 10,
+      comments: [
+        {
+          commenterId: 12,
+          commentText: "This is a comment"
+        },
+        {
+          commenterId: 21,
+          commentText: "This is another comment"
+        }
+      ]
+    }
+  ]
   return (
     <>
       <Head>
@@ -9,7 +30,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container mx-auto text-6xl font-bold">HELLO</main>
+      <main className="container mx-auto">
+        <Stream className="stream" inbox={inbox}/>
+      </main>
     </>
   );
 }
