@@ -1,5 +1,7 @@
 import Head from "next/head";
-import Stream from "./Stream"
+
+//components
+import Stream from "@epicapp/components/Stream/Stream";
 
 export default function Home() {
   const inbox = [
@@ -13,15 +15,15 @@ export default function Home() {
       comments: [
         {
           commenterId: 12,
-          commentText: "This is a comment"
+          commentText: "This is a comment",
         },
         {
           commenterId: 21,
-          commentText: "This is another comment"
-        }
-      ]
-    }
-  ]
+          commentText: "This is another comment",
+        },
+      ],
+    },
+  ];
   return (
     <>
       <Head>
@@ -31,7 +33,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <Stream className="stream" inbox={inbox}/>
+        <Stream inbox={inbox} />
       </main>
     </>
   );

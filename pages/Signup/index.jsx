@@ -1,7 +1,3 @@
-const Signup = () => (
-    <div>
-        Signup
-    </div>
-)
-
-export default Signup;
+export default function signup() {
+  return <main>index</main>;
+}
