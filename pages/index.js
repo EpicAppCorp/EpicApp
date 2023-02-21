@@ -1,25 +1,25 @@
-import Head from "next/head";
+import Head from 'next/head';
 
 //components
-import Stream from "@epicapp/components/Stream/Stream";
+import Stream from '@epicapp/components/Stream/Stream';
 
 export default function Home() {
   const inbox = [
     {
       id: 123,
-      author: "Samir Raza",
-      privacy: "public",
-      type: "text",
-      text: "This is text for a post",
+      author: 'Samir Raza',
+      privacy: 'public',
+      type: 'text',
+      text: 'This is text for a post',
       likes: 10,
       comments: [
         {
           commenterId: 12,
-          commentText: "This is a comment",
+          commentText: 'This is a comment',
         },
         {
           commenterId: 21,
-          commentText: "This is another comment",
+          commentText: 'This is another comment',
         },
       ],
     },
