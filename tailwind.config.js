@@ -8,7 +8,12 @@ module.exports = {
     container: {
       center: true,
     },
-    extend: {},
+    extend: {
+      colors: {
+        epicBg:'#F5F7FB',
+        submitBg: '#08F26E'
+      }
+    },
   },
   plugins: [],
 };
