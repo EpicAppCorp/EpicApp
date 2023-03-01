@@ -3,7 +3,7 @@ import Head from 'next/head';
 //components
 import Signup from '@epicapp/components/Signup';
 
-export default function SignUp() {
+export default function SignupPage() {
   return (
     <>
       <Head>
