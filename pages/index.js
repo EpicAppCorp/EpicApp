@@ -2,6 +2,7 @@ import Head from 'next/head';
 
 //components
 import Stream from '@epicapp/components/Stream/Stream';
+import Signin from '@epicapp/components/SignIn/Signin';
 
 export default function Home() {
   const inbox = [
@@ -33,7 +34,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <Stream inbox={inbox} />
+        <Signin/>
+        {/* <Stream inbox={inbox} /> */}
       </main>
     </>
   );
