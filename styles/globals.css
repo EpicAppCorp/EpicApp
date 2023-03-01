@@ -68,8 +68,9 @@ input.login {
   margin: 5pt;
 }
 
-button.login {
+button.login, label.login {
   border: 1pt solid #7F636E;
+  background: #E2D8DC;
   border-radius: 20pt;
   padding: 2pt 20pt 2pt 20pt;
   margin-top: 5pt;
