@@ -1,9 +1,9 @@
 import Head from 'next/head';
 
 //components
-import Signin from '@epicapp/components/SignIn/Signin';
+import Signup from '@epicapp/components/Signup';
 
-export default function SigninPage() {
+export default function SignupPage() {
   return (
     <>
       <Head>
@@ -13,7 +13,7 @@ export default function SigninPage() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="container mx-auto">
-        <Signin/>
+        <Signup/>
       </main>
     </>
   );
