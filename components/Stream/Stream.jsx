@@ -16,9 +16,6 @@ export default function Stream() {
         });
     })
   }, [setStream]);
-  console.log(stream.items);
-
-  
 
   return (
     <Card>
@@ -30,28 +27,6 @@ export default function Stream() {
               <Post post={post} />
             )
           }
-          if (post.type === "comment") {
-            return (
-              <div>
-                <div className="p-4 text-gray-900 md:text-2xl">
-                  {post.author.displayName} commented:
-                </div>
-                <div className="ml-4">
-                  {post.comment}
-                </div>
-              </div>
-            )
-          }
-          // <div key={post.id} className="m-auto p-5 ">
-          //   <div>{post.summary}</div>
-          //   { 
-          //     <div>
-          //       {
-          //         post.objectContent?.description
-          //       }
-          //     </div>
-          //   }
-          // </div>
         })
       }
       </div>
