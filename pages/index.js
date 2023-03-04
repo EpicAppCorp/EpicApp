@@ -17,4 +17,19 @@ export default function SigninPage() {
       </main>
     </>
   );
+export default function Home() {
+  return (
+    <div className="flex mt-4 max-w-6xl mx-auto gap-6">
+      <div className="w-1/5">
+        <LeftSidebar />  
+      </div>
+      <div className="grow">
+        <CreatePost />
+        <Stream />
+      </div>
+      <div className="w-1/5">
+        <RightSidebar />  
+      </div>
+    </div> 
+  )
 }
