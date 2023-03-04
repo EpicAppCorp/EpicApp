@@ -29,17 +29,19 @@ export default function Home() {
   //   },
   // ];
   return (
-    <div className="flex mt-4 max-w-6xl mx-auto gap-6">
-      <div className="w-1/5">
-        <LeftSidebar />  
+    <main className="container grid h-screen grid-cols-3">
+      <div className="mx-auto flex max-w-6xl gap-6 pt-4">
+        <div className="w-1/5">
+          <LeftSidebar />
+        </div>
+        <div className="grow">
+          <CreatePost />
+          <Card>inbox stream...</Card>
+        </div>
+        <div className="w-1/5">
+          <RightSidebar />
+        </div>
       </div>
-      <div className="grow">
-        <CreatePost />
-        <Card>inbox stream...</Card>
-      </div>
-      <div className="w-1/5">
-        <RightSidebar />  
-      </div>
-    </div> 
-  )
+    </main>
+  );
 }
