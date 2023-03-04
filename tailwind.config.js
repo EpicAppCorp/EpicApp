@@ -11,7 +11,13 @@ module.exports = {
     extend: {
       colors: {
         epicBg:'#F5F7FB',
-        submitBg: '#08F26E'
+        submitBg: '#08F26E',
+        full: '#8E7680',
+        medium: '#7F636E',
+        light: '#E2D8DC',
+        xlight: '#eee8ea',
+        errorF: '#ffc7c7',
+        errorB: '#ff0000'
       }
     },
   },
