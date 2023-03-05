@@ -1,7 +1,8 @@
 import Head from 'next/head';
 
 //components
-import Signin from '@epicapp/components/SignIn/Signin';
+import Signin from '@epicapp/components/SignIn';
+import HomeLayout from '@epicapp/layouts/HomeLayout';
 
 export default function SigninPage() {
   return (
@@ -12,19 +13,8 @@ export default function SigninPage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="container grid h-screen grid-cols-3">
-        <div className="mx-auto flex max-w-6xl gap-6 pt-4">
-          <div className="w-1/5">
-            <LeftSidebar />
-          </div>
-          <div className="grow">
-            <CreatePost />
-            <Card>inbox stream...</Card>
-          </div>
-          <div className="w-1/5">
-            <RightSidebar />
-          </div>
-        </div>
+      <main className="h-screen w-screen">
+        <HomeLayout route="HOME"></HomeLayout>
       </main>
     </>
     // <>
