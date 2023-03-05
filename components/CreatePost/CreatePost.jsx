@@ -1,6 +1,35 @@
 import Card from '@epicapp/components/Card';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function CreatePost() {
+
+  const [content, setContent] = useState('');
+
+  const createPost = (e) => {
+    e.preventDefault();
+    Axios.post('http://127.0.0.1:8000/api/authors/1d0110ad-51eb-48da-aaa5-def7073ac5dd/posts', {
+      "title": "this is a title",
+      "source": "http://localhost:8000",
+      "origin": "http://localhost:8000",
+      "description": "this is test 3",
+      "content": content,
+      "contentType": "text/plain",
+      "published": "uhhh",
+      "visibility": "PUBLIC",
+      "categories": ["something", "anothring thing"],
+      "author": {
+          "type": "author",
+          "id": "1d0110ad-51eb-48da-aaa5-def7073ac5dd",
+          "host": "http://localhost:8000",
+          "displayName": "testusername",
+          "url": "http://localhost:8000",
+          "github": "githubsthff",
+          "profile_image": "more images stuff"
+      }
+    }).then(res => console.log('Posting data', res)).catch(err => console.log(err))
+  }
+  
     return (
       <Card>
         <div className="flex gap-2">
@@ -9,7 +38,10 @@ export default function CreatePost() {
               photo
             </div>
           </div>
-          <textarea className="grow py-3" placeholder={"What's on your mind?"} />
+          <textarea 
+            value={content}
+            onChange={e => setContent(e.target.value)}
+            className="grow py-3" placeholder={"What's on your mind?"} />
         </div>
         <div className="flex gap-3 item-center mt-3 pd-6">
           <div>
@@ -21,7 +53,7 @@ export default function CreatePost() {
             </button>
           </div>
           <div className="grow text-right">
-            <button className="bg-submitBg text-white px-4 py-1 rounded-md">
+            <button onClick={createPost} className="bg-submitBg text-white px-4 py-1 rounded-md">
               Share
             </button>
           </div>
