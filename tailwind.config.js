@@ -27,6 +27,7 @@ module.exports = {
         surface: '#282828',
         primary: '#fffd01',
         text: '#ffffff',
+        textAlt: '#979797',
       },
     },
   },

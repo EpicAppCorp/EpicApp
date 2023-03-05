@@ -12,7 +12,7 @@ export default function Navbar({ route }) {
 
   return (
     <nav className="grid grid-cols-3 text-text">
-      <div>epicapp</div>
+      <div className='flex items-center'>epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
           <Link className={classBuilder('HOME')} href="/">
@@ -48,7 +48,7 @@ export default function Navbar({ route }) {
           className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface py-2 pl-1 pr-3"
         >
           <Image
-            className="overflow-hidden rounded-xl object-cover"
+            className="overflow-hidden rounded-full object-cover"
             src="profile image"
             loader={() => 'https://api.multiavatar.com/c83779f7491ce19ad6.png'}
             width={30}
