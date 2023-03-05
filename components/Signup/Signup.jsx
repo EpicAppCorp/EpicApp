@@ -1,59 +1,59 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from "next/router";
+import AppContext from '@epicapp/context/AppContext';
 
 export default function Signup() {
   const router = useRouter()
   const [profileImage, setProfileImage] = React.useState("");
   const [userErrorMessage, setUserErrorMessage] = React.useState("");
   const [gitErrorMessage, setGitErrorMessage] = React.useState("");
+  const [context, setContext] = useContext(AppContext)
 
   const verifyCredentials= async (e) => {
     e.preventDefault()
     if(e.target.password.value != e.target.confirm_password.value){
       setUserErrorMessage("ERROR: Passwords do not match")
     } else{
+      let userObject = {
+        "displayName": e.target.username.value,
+        "password": e.target.password.value,
+        "github": e.target.github.value,
+        "host": "http://127.0.0.1:8000/",
+        "url": "http://127.0.0.1:8000/",
+        "profile_image": e.target.profileimg.files[0].name,
+      }
       const options = {
         method: "POST",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          "displayName": e.target.username.value,
-          "password": e.target.password.value,
-          "github": e.target.github.value,
-          "host": "http://127.0.0.1:8000/",
-          "url": "http://127.0.0.1:8000/",
-          "profile_image": e.target.profileimg.files[0].name,
-        })
+        body: JSON.stringify(userObject)
       }
+
+
 
       await fetch("http://127.0.0.1:8000/api/auth/register/", options)
       .then((res)=> {
-        if(res.status == 200){
-          router.push('/homepage')
-        }
-        return res.json()
-        
+        return res.json();
       })
       .then((json) => {
-        console.log(typeof json.displayName)
-        if((typeof json.displayName) == "object"){
-          if(json.displayName[0] == "user with this displayName already exists."){
-            setUserErrorMessage("Username already exists")
-          }
-        }else{
+        if((typeof json.displayName) == "string" && (typeof json.github) == "string"){
           setUserErrorMessage("")
-        }
-        
-        if((typeof json.github) == "object"){
-          if(json.github[0] == "user with this github already exists."){
-            setGitErrorMessage("Github link already in use.")
-          } 
+          setContext(json)
+          router.push('/homepage')
         }else{
-          setGitErrorMessage("")
+          if((typeof json.github) == "object"){
+            if(json.github[0] == "user with this github already exists."){
+              setGitErrorMessage("Github link already in use.")
+            } 
+          }
+          if((typeof json.displayName) == "object"){
+            if(json.displayName[0] == "user with this displayName already exists."){
+              setUserErrorMessage("Username already exists")
+            }
+          }
         }
-
       })
     }
   }
