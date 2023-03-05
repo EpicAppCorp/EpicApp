@@ -24,6 +24,7 @@ module.exports = {
         errorB: '#ff0000',
 
         background: '#1a1a1a',
+        layer: '#2f2f2f',
         surface: '#282828',
         primary: '#fffd01',
         text: '#ffffff',

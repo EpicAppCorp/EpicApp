@@ -29,9 +29,13 @@ export default function Profile() {
           </div>
         </div>
       </div>
-      <div className="px-8 text-center py-4">
-        <h2 className="text-text text-2xl">John Appleseed</h2>
-        <p className="text-textAlt text-lg mt-2">Author</p>
+      <div className="px-8 py-4 text-center">
+        <h2 className="text-2xl font-semibold text-text">John Appleseed</h2>
+        <p className="my-1 text-lg text-textAlt">Author</p>
+        <hr className="my-6 border-background" />
+        <button type="button" className="h-14 w-full rounded-2xl bg-layer text-textAlt text-xl">
+          My Profile
+        </button>
       </div>
     </div>
   );
