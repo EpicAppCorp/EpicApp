@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Profile() {
   return (
@@ -33,9 +34,12 @@ export default function Profile() {
         <h2 className="text-2xl font-semibold text-text">John Appleseed</h2>
         <p className="my-1 text-lg text-textAlt">Author</p>
         <hr className="my-6 border-background" />
-        <button type="button" className="h-14 w-full rounded-2xl bg-layer text-textAlt text-xl">
+        <Link
+          href="/profile"
+          className="flex h-14 w-full items-center justify-center rounded-2xl bg-layer text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
+        >
           My Profile
-        </button>
+        </Link>
       </div>
     </div>
   );
