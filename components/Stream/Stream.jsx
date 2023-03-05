@@ -6,7 +6,6 @@ import sendIcon from "./assets/send-icon.png"
 
 export default function Stream() {
   const [stream, setStream] = useState([]);
-  const [objContent, setObjectContent] = useState()
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/api/authors/c2900cf7-a019-48f7-822a-ffa4023aba91/inbox")
     .then((res) =>  {
@@ -24,7 +23,7 @@ export default function Stream() {
         stream.items?.items?.map((post) => {
           if (post.type === "post") {
             return (
-              <Post post={post} />
+              <Post key={post.id} post={post} />
             )
           }
         })
