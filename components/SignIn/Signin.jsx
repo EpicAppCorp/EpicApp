@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext }  from 'react';
 import { useRouter } from "next/router";
+import AppContext from '@epicapp/context/AppContext';
 
 export default function Signin() {
     let router= useRouter()
+    const [context, setContext] = useContext(AppContext)
+  
     const [errorMessage, setErrorMessage] = React.useState("");
 
     const createAccountRoute = (e) => {
@@ -25,13 +28,18 @@ export default function Signin() {
 
         await fetch("http://127.0.0.1:8000/api/auth/authenticate/", options)
         .then((res) => {
-          if(res.status == 200){
-            router.push('/homepage')
-          } else{
+          if(res.status != 200){
             setErrorMessage("Username and/or Password are invalid. Please try again.")
           }
+          return res.json()
         })
+        .then((json) => {
+          if(errorMessage == ""){
+            setContext(json)
+            router.push('/homepage')
+          }
 
+        })
     }
 
     return(
