@@ -1,13 +1,17 @@
 import Card from '../Card';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Post from './Post';
 import axios from 'axios';
-import sendIcon from "./assets/send-icon.png"
+import AppContext from '@epicapp/context/AppContext';
 
 export default function Stream() {
   const [stream, setStream] = useState([]);
+  const [user, setUser] = useContext(AppContext);
+  const inboxEndpoint = user.host + "api/authors/" + user.id + "/inbox";
+
+  console.log(inboxEndpoint);
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/api/authors/c2900cf7-a019-48f7-822a-ffa4023aba91/inbox")
+    axios.get(inboxEndpoint)
     .then((res) =>  {
         setStream({
             items: res.data,
@@ -15,15 +19,15 @@ export default function Stream() {
         });
     })
   }, [setStream]);
-
   return (
     <Card>
       <div className="divide-y ...">
       {
         stream.items?.items?.map((post) => {
           if (post.type === "post") {
+            console.log(post);
             return (
-              <Post key={post.id} post={post} />
+              <Post key={post.id} post={post} user={user}/>
             )
           }
         })
