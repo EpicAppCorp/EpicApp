@@ -584,10 +584,10 @@ react-dom@18.2.0:
     loose-envify "^1.1.0"
     scheduler "^0.23.0"
 
-react@18.2.0:
-  version "18.2.0"
-  resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
-  integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
+react@18.3.0:
+  version "18.3.0-next-fecc288b7-20221025"
+  resolved "https://registry.yarnpkg.com/react/-/react-18.3.0-next-fecc288b7-20221025.tgz#8da77f8c8221bb2761ed817b7638feb108ba791c"
+  integrity sha512-lKvCNWRO9XPy8q7hLd0ODK/4Oqr54r3Vr49Y7EyNBz/kfsmNT6Vx0F69KRz/eGcbt1XDvtbA7KZd+mh8w3wONQ==
   dependencies:
     loose-envify "^1.1.0"
 

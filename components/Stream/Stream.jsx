@@ -1,6 +1,6 @@
 import Card from '../Card';
 import React, { useState, useEffect, useContext } from 'react';
-import Post from './Post';
+import TextPost from './Post';
 import axios from 'axios';
 import AppContext from '@epicapp/context/AppContext';
 
@@ -19,6 +19,7 @@ export default function Stream() {
         });
     })
   }, [setStream]);
+  console.log(stream);
   return (
     <Card>
       <div className="divide-y ...">
@@ -27,7 +28,7 @@ export default function Stream() {
           if (post.type === "post") {
             console.log(post);
             return (
-              <Post key={post.id} post={post} user={user}/>
+              <TextPost key={post.id} post={post} user={user}/>
             )
           }
         })
