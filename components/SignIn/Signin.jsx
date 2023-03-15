@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import AppContext from '@epicapp/context/AppContext';
 
 export default function Signin() {
   let router = useRouter();
-  const [context, setContext] = useContext(AppContext);
 
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const createAccountRoute = (e) => {
     router.push('/signup');
@@ -27,10 +25,7 @@ export default function Signin() {
       }),
     };
 
-    await fetch(
-      `${process.env.NEXT_PUBLIC_API}/auth/authenticate/`,
-      options,
-    )
+    await fetch(`${process.env.NEXT_PUBLIC_API}/auth/authenticate/`, options)
       .then((res) => {
         if (res.status != 200) {
           setErrorMessage(

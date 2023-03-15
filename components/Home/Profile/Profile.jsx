@@ -1,7 +1,20 @@
+import { useMutation } from 'react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 
+//components
+import Button from '@epicapp/components/Button';
+
+//services
+import { logoutAuthor } from '@epicapp/services/author';
+
 export default function Profile({ author }) {
+  const logout = useMutation(() => logoutAuthor(), {
+    onSuccess() {
+      window.location.reload();
+    },
+  });
+
   return (
     <div className="w-full overflow-hidden rounded-xl bg-surface">
       <div className="h-32 w-full bg-primary" />
@@ -15,10 +28,12 @@ export default function Profile({ author }) {
             <div className="flex justify-center">
               <Image
                 className="overflow-hidden rounded-full border-8 border-background object-cover"
+                alt="profile image"
                 src="profile image"
                 loader={() => author.profile_image}
                 width={150}
                 height={150}
+                priority={true}
               />
             </div>
             <div className="self-end text-center">
@@ -34,12 +49,21 @@ export default function Profile({ author }) {
         </h2>
         <p className="my-1 text-lg text-textAlt">Author</p>
         <hr className="my-6 border-background" />
-        <Link
-          href="/profile"
-          className="flex h-14 w-full items-center justify-center rounded-2xl bg-layer text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
-        >
-          My Profile
-        </Link>
+        <div className="flex gap-4">
+          <Link
+            href="/profile"
+            className="flex h-14 w-full items-center justify-center rounded-2xl bg-layer text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
+          >
+            My Profile
+          </Link>
+          <Button
+            loading={logout.isLoading}
+            onClick={() => logout.mutate()}
+            className="rounded-2xl bg-layer px-4 text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
+          >
+            <i className="fa-regular fa-right-from-bracket" />
+          </Button>
+        </div>
       </div>
     </div>
   );

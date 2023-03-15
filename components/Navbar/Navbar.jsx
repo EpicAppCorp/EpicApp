@@ -1,14 +1,30 @@
+import { useState } from 'react';
+import { useMutation } from 'react-query';
 import Link from 'next/link';
 import Image from 'next/image';
 import clsx from 'clsx';
 
+//components
+import Button from '../Button';
+
+//services
+import { logoutAuthor } from '@epicapp/services/author';
+
 export default function Navbar({ author, route }) {
+  const [dropdown, setDropdown] = useState(false);
+
   const classBuilder = (type) => {
     return clsx(
       ' transition-all duration-150 hover:text-primary',
       route === type ? 'text-primary' : 'text-text',
     );
   };
+
+  const logout = useMutation(() => logoutAuthor(), {
+    onSuccess() {
+      window.location.reload();
+    },
+  });
 
   return (
     <nav className="grid grid-cols-3 text-text">
@@ -43,20 +59,56 @@ export default function Navbar({ author, route }) {
         </Link>
       </ul>
       <div className="flex justify-end text-text">
-        <button
-          type="button"
-          className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface py-2 pl-1 pr-3"
-        >
-          <Image
-            className="overflow-hidden rounded-full object-cover"
-            src="profile image"
-            loader={() => author.profile_image}
-            width={30}
-            height={30}
-          />
-          <span className="font-normal">{author.displayName}</span>
-          <i className="fa-regular fa-solid fa-caret-down pl-2" />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setDropdown(!dropdown)}
+            type="button"
+            className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface py-2 px-4"
+          >
+            <Image
+              className="overflow-hidden rounded-full object-cover"
+              src="profile image"
+              alt="profile image"
+              loader={() => author.profile_image}
+              width={30}
+              height={30}
+              priority={true}
+            />
+            <span className="font-normal">{author.displayName}</span>
+            <i
+              className={clsx(
+                'pl-2',
+                dropdown
+                  ? 'fa-regular fa-solid fa-caret-up'
+                  : 'fa-regular fa-solid fa-caret-down',
+              )}
+            />
+          </button>
+
+          {dropdown && (
+            <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base hover:shadow-lg">
+              <li>
+                <Link
+                  className="grid h-10 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
+                  href="/profile"
+                >
+                  <i className="fa-solid fa-user col-span-2 text-base" />
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Button
+                  loading={logout.isLoading}
+                  onClick={() => logout.mutate()}
+                  className="grid h-10 w-full grid-cols-12 items-center gap-2 px-4 text-start transition-colors duration-150 hover:bg-primary hover:text-black"
+                >
+                  <i className="fa-regular fa-right-from-bracket col-span-2" />
+                  Logout
+                </Button>
+              </li>
+            </ul>
+          )}
+        </div>
       </div>
     </nav>
   );

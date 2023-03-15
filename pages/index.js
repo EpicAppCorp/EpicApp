@@ -46,7 +46,7 @@ export default function SigninPage() {
 }
 
 export async function getServerSideProps(context) {
-  if (!context.req.headers.cookie?.includes('token=')) {
+  if (!context.req.headers.cookie?.includes('access=')) {
     return {
       props: {},
       redirect: {
