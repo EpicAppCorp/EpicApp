@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function Profile() {
+export default function Profile({ author }) {
   return (
     <div className="w-full overflow-hidden rounded-xl bg-surface">
       <div className="h-32 w-full bg-primary" />
@@ -16,9 +16,7 @@ export default function Profile() {
               <Image
                 className="overflow-hidden rounded-full border-8 border-background object-cover"
                 src="profile image"
-                loader={() =>
-                  'https://api.multiavatar.com/c83779f7491ce19ad6.png'
-                }
+                loader={() => author.profile_image}
                 width={150}
                 height={150}
               />
@@ -31,7 +29,9 @@ export default function Profile() {
         </div>
       </div>
       <div className="px-8 py-4 text-center">
-        <h2 className="text-2xl font-semibold text-text">John Appleseed</h2>
+        <h2 className="text-2xl font-semibold text-text">
+          {author.displayName}
+        </h2>
         <p className="my-1 text-lg text-textAlt">Author</p>
         <hr className="my-6 border-background" />
         <Link

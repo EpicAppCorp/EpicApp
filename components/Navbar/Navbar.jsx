@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import clsx from 'clsx';
 
-export default function Navbar({ route }) {
+export default function Navbar({ author, route }) {
   const classBuilder = (type) => {
     return clsx(
       ' transition-all duration-150 hover:text-primary',
@@ -12,7 +12,7 @@ export default function Navbar({ route }) {
 
   return (
     <nav className="grid grid-cols-3 text-text">
-      <div className='flex items-center'>epicapp</div>
+      <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
           <Link className={classBuilder('HOME')} href="/">
@@ -34,13 +34,13 @@ export default function Navbar({ route }) {
             />
           </Link>
         </li>
-        <li className={classBuilder('LIKES')} href="/likes">
+        <Link className={classBuilder('LIKES')} href="/likes">
           <i
             className={clsx(
               route === 'LIKES' ? 'fa-solid fa-heart' : 'fa-regular fa-heart',
             )}
           />
-        </li>
+        </Link>
       </ul>
       <div className="flex justify-end text-text">
         <button
@@ -50,11 +50,11 @@ export default function Navbar({ route }) {
           <Image
             className="overflow-hidden rounded-full object-cover"
             src="profile image"
-            loader={() => 'https://api.multiavatar.com/c83779f7491ce19ad6.png'}
+            loader={() => author.profile_image}
             width={30}
             height={30}
           />
-          <span className="font-normal">John Appleseed</span>
+          <span className="font-normal">{author.displayName}</span>
           <i className="fa-regular fa-solid fa-caret-down pl-2" />
         </button>
       </div>
