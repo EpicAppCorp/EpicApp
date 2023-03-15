@@ -89,7 +89,7 @@ export default function Navbar({ author, route }) {
             <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base hover:shadow-lg">
               <li>
                 <Link
-                  className="grid h-10 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
+                  className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
                   href="/profile"
                 >
                   <i className="fa-solid fa-user col-span-2 text-base" />
@@ -100,7 +100,7 @@ export default function Navbar({ author, route }) {
                 <Button
                   loading={logout.isLoading}
                   onClick={() => logout.mutate()}
-                  className="grid h-10 w-full grid-cols-12 items-center gap-2 px-4 text-start transition-colors duration-150 hover:bg-primary hover:text-black"
+                  className="grid h-11 w-full grid-cols-12 items-center gap-2 px-4 text-start transition-colors duration-150 hover:bg-primary hover:text-black"
                 >
                   <i className="fa-regular fa-right-from-bracket col-span-2" />
                   Logout

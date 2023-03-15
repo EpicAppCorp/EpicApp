@@ -13,8 +13,9 @@ export default function Document() {
           rel="stylesheet"
         />
       </Head>
-      <body className="bg-epicBg">
+      <body>
         <Main />
+        <div id="modal-root"></div>
         <NextScript />
       </body>
     </Html>

@@ -1,51 +1,36 @@
-import { useState } from 'react';
-import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from 'react-query';
 
-export default function Signin() {
-  let router = useRouter();
+//services
+import { authenticateAuthor } from '@epicapp/services/author';
 
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const createAccountRoute = (e) => {
-    router.push('/signup');
-  };
+export default function Signin({ close, switchHandler }) {
+  const queryClient = useQueryClient();
+  const authenticate = useMutation((login) => authenticateAuthor(login), {
+    onSuccess(data) {
+      queryClient.setQueryData(['author'], (oldData) =>
+        oldData
+          ? {
+              ...oldData,
+              data: { ...data.data },
+            }
+          : oldData,
+      );
+      close();
+    },
+  });
 
   const loginRoute = async (e) => {
     e.preventDefault();
-    const options = {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        displayName: e.target.username.value,
-        password: e.target.password.value,
-      }),
-    };
-
-    await fetch(`${process.env.NEXT_PUBLIC_API}/auth/authenticate/`, options)
-      .then((res) => {
-        if (res.status != 200) {
-          setErrorMessage(
-            'Username and/or Password are invalid. Please try again.',
-          );
-        }
-        return res.json();
-      })
-      .then((json) => {
-        if (errorMessage == '') {
-          setContext(json);
-          router.push('/');
-        }
-      });
+    authenticate.mutate({
+      displayName: e.target.username.value,
+      password: e.target.password.value,
+    });
   };
 
   return (
     <div className="flex h-screen items-center justify-center">
       <form
-        className="flex flex-col items-center justify-center rounded-lg border-4 border-solid border-full bg-epicBg p-10 shadow-lg shadow-full"
+        className="flex flex-col items-center justify-center rounded-xl border-4 border-solid border-full bg-epicBg p-10"
         onSubmit={loginRoute}
       >
         <div className="mb-5 text-center">
@@ -59,22 +44,22 @@ export default function Signin() {
             get posting!
           </div>
         </div>
-        {errorMessage ? (
+        {authenticate.isError ? (
           <div className="mb-5 rounded-lg bg-errorF p-1 text-errorB">
-            {errorMessage}
+            {authenticate.error.response.data}
           </div>
         ) : null}
         <input
           className="mb-5 border border-solid border-full bg-epicBg text-center"
-          type={'text'}
+          type="text"
           id="username"
           name="username"
-          placeholder="Username"
+          placeholder="Display Name"
           required
         />
         <input
           className="mb-5 border border-solid border-full bg-epicBg text-center"
-          type={'password'}
+          type="password"
           id="password"
           name="password"
           placeholder="Password"
@@ -90,7 +75,7 @@ export default function Signin() {
         <button
           type="button"
           className="rounded-lg bg-medium px-5 py-1 font-semibold text-white"
-          onClick={createAccountRoute}
+          onClick={switchHandler}
         >
           Create a new account
         </button>
