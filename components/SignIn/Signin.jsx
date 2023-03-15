@@ -7,14 +7,7 @@ export default function Signin({ close, switchHandler }) {
   const queryClient = useQueryClient();
   const authenticate = useMutation((login) => authenticateAuthor(login), {
     onSuccess(data) {
-      queryClient.setQueryData(['author'], (oldData) =>
-        oldData
-          ? {
-              ...oldData,
-              data: { ...data.data },
-            }
-          : oldData,
-      );
+      queryClient.setQueryData(['author'], () => data);
       close();
     },
   });
@@ -53,6 +46,7 @@ export default function Signin({ close, switchHandler }) {
           className="mb-5 border border-solid border-full bg-epicBg text-center"
           type="text"
           id="username"
+          autoComplete='displayname'
           name="username"
           placeholder="Display Name"
           required
@@ -61,6 +55,7 @@ export default function Signin({ close, switchHandler }) {
           className="mb-5 border border-solid border-full bg-epicBg text-center"
           type="password"
           id="password"
+          autoComplete="current-password"
           name="password"
           placeholder="Password"
           required

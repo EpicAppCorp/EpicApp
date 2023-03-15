@@ -15,6 +15,25 @@ export default function Profile({ author }) {
     },
   });
 
+  if (!author)
+    return (
+      <div className="w-full overflow-hidden rounded-xl bg-surface">
+        <div className="h-32 w-full bg-primary" />
+        <div className="relative h-24 w-full">
+          <div className="absolute flex w-full -translate-y-1/2 justify-center">
+            <div className="flex justify-center">
+              <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-8 border-layer bg-background object-cover text-6xl text-textAlt">
+                <i className="fa-solid fa-user" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="px-4 pb-4 text-center text-textAlt">
+          Create and account for a better experience
+        </div>
+      </div>
+    );
+
   return (
     <div className="w-full overflow-hidden rounded-xl bg-surface">
       <div className="h-32 w-full bg-primary" />
@@ -27,12 +46,12 @@ export default function Profile({ author }) {
             </div>
             <div className="flex justify-center">
               <Image
-                className="overflow-hidden rounded-full border-8 border-background object-cover"
+                className="overflow-hidden rounded-full border-8 border-layer object-cover"
                 alt="profile image"
                 src="profile image"
                 loader={() => author.profile_image}
-                width={150}
-                height={150}
+                width={144}
+                height={144}
                 priority={true}
               />
             </div>

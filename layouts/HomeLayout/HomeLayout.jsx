@@ -13,11 +13,15 @@ export default function HomeLayout({ children, route, author }) {
   return (
     <>
       <div className="h-full w-full px-8 py-4 font-sans">
-        <Navbar author={author} route={route} />
+        <Navbar
+          author={author}
+          route={route}
+          openLogin={() => setModal({ show: true, form: 'LOGIN' })}
+        />
         <div className="py-8">{children}</div>
       </div>
 
-      <Modal show={true}>
+      <Modal show={modal.show}>
         {modal.form === 'LOGIN' ? (
           <SignIn
             switchHandler={() => setModal({ ...modal, form: 'SIGNUP' })}

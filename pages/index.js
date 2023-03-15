@@ -8,7 +8,7 @@ import Profile from '@epicapp/components/Home/Profile';
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
-export default function SigninPage() {
+export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {
     retry: 1,
     staleTime: 10000,
@@ -24,15 +24,15 @@ export default function SigninPage() {
       </Head>
       <main className="h-screen w-screen bg-background">
         {author.isLoading ? (
-          <div className="h-full flex justify-center items-center text-9xl text-primary">
+          <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}
             <i className="fa-solid fa-spinner-third text-secondary animate-spin bg-transparent text-2xl" />
           </div>
         ) : (
-          <HomeLayout route="HOME" author={author.data.data}>
+          <HomeLayout route="HOME" author={author.data?.data}>
             <div className="grid grid-cols-4 gap-4">
               <section className="col-span-1 w-full">
-                <Profile author={author.data.data}/>
+                <Profile author={author.data?.data} />
               </section>
               <section className="col-span-3">
                 {/* stream component ggoes here */}
@@ -45,17 +45,17 @@ export default function SigninPage() {
   );
 }
 
-export async function getServerSideProps(context) {
-  if (!context.req.headers.cookie?.includes('access=')) {
-    return {
-      props: {},
-      redirect: {
-        permanent: false,
-        destination: '/login',
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-}
+// export async function getServerSideProps(context) {
+//   if (!context.req.headers.cookie?.includes('access=')) {
+//     return {
+//       props: {},
+//       redirect: {
+//         permanent: false,
+//         destination: '/login',
+//       },
+//     };
+//   }
+//   return {
+//     props: {},
+//   };
+// }
