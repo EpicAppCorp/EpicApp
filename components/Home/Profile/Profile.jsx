@@ -46,7 +46,7 @@ export default function Profile({ author }) {
             </div>
             <div className="flex justify-center">
               <Image
-                className="overflow-hidden rounded-full border-8 border-layer object-cover"
+                className="overflow-hidden rounded-full border-8 border-background object-cover"
                 alt="profile image"
                 src="profile image"
                 loader={() => author.profile_image}
