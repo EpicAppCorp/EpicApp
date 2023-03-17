@@ -7,7 +7,7 @@ export default function Signin({ close, switchHandler }) {
   const queryClient = useQueryClient();
   const authenticate = useMutation((login) => authenticateAuthor(login), {
     onSuccess(data) {
-      queryClient.setQueryData(['author'], () => data);
+      queryClient.setQueryData(['author'], () => data.data);
       close();
     },
   });
