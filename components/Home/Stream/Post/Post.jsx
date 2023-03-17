@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
 
-export default function Post({ post, author }) {
-  const [comments, setComments] = useState();
-  const [comment, setComment] = useState('');
-  const [likes, setLikes] = useState([]);
-  const authorId = author.host + 'api/authors' + author.id;
+//services
+import { getComments } from '@epicapp/services/comment';
+import { getLikes } from '@epicapp/services/like';
 
-  useEffect(() => {
-    axios.get(post.id + '/comments?page=1&size=1000').then((res) => {
-      setComments(res.data);
-    });
-    axios.get(post.id + '/likes').then((res) => {
-      setLikes(res.data);
-    });
-  }, [post]);
+export default function Post({ post, author }) {
+  const comments = useQuery({
+    queryKey: ['comments', post.id],
+    queryFn: () => getComments(post.id),
+  });
+
+  const likes = useQuery({
+    queryKey: ['likes', post.id],
+    queryFn: () => getLikes(post.id),
+  });
+
+  //   useEffect(() => {
+  //     axios.get(post.id + '/comments?page=1&size=1000').then((res) => {
+  //       setComments(res.data);
+  //     });
+  //     axios.get(post.id + '/likes').then((res) => {
+  //       setLikes(res.data);
+  //     });
+  //   }, [post]);
 
   const CommentSubmit = () => {
     axios
@@ -64,8 +73,8 @@ export default function Post({ post, author }) {
   };
 
   return (
-    <div key={post.id} className="m-auto">
-      <div className="m-4 text-gray-900 md:text-2xl">{post.title}</div>
+    <div key={post.id} className="rounded-3xl bg-surface">
+      <div className="m-4 font-bold text-text md:text-2xl">{post.title}</div>
       {post.contentType === 'image/jpeg;base64' && (
         <div className="m-4">
           <img
@@ -79,7 +88,7 @@ export default function Post({ post, author }) {
       {post.contentType === 'text/plain' && (
         <div className="m-4">{post.content}</div>
       )}
-      <div className="... mb-4 flex flex-row">
+      {/* <div className="... mb-4 flex flex-row">
         <div>
           <input
             className="ml-4 mr-2 grow py-2 pl-2"
@@ -111,7 +120,7 @@ export default function Post({ post, author }) {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 }

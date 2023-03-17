@@ -1,5 +1,7 @@
 import { useQuery } from 'react-query';
-import TextPost from './Post';
+
+//components
+import Post from './Post';
 
 //services
 import { getInbox } from '@epicapp/services/inbox';
@@ -31,12 +33,12 @@ export default function Stream({ author }) {
     );
 
   return (
-    <div className="... divide-y">
-      {inbox.data.data.items.map((post) => {
-        if (post.type === 'post') {
-          return <TextPost key={post.id} post={post} author={author} />;
-        }
-      })}
+    <div className="flex flex-col gap-6">
+      {inbox.data.data.items
+        .filter(({ type }) => type === 'post')
+        .map((item) => (
+          <Post key={item.id} post={item} author={author} />
+        ))}
     </div>
   );
 }

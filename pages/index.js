@@ -24,7 +24,7 @@ export default function Homepage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-screen bg-background">
+      <main className="h-screen w-screen bg-background overflow-y-auto">
         {author.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}

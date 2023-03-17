@@ -57,7 +57,7 @@ export default function CreatePost({ author }) {
   }
 
   return (
-    <section className="rounded-3xl bg-layer py-2 px-4">
+    <section className="rounded-3xl bg-surface p-4">
       <form onSubmit={formHandler}>
         <div className="flex gap-2">
           <Image
@@ -70,7 +70,7 @@ export default function CreatePost({ author }) {
             priority={true}
           />
           <textarea
-            className="grow bg-surface p-2 text-textAlt focus:outline-none"
+            className="grow rounded-2xl bg-foreground p-2 text-textAlt focus:outline-none"
             placeholder="What's on your mind?"
             name="body"
           />

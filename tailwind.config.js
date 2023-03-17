@@ -26,6 +26,7 @@ module.exports = {
         background: '#1a1a1a',
         layer: '#2f2f2f',
         surface: '#282828',
+        foreground: '#222',
         primary: '#fffd01',
         text: '#ffffff',
         textAlt: '#979797',
