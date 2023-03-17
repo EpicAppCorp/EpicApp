@@ -16,7 +16,7 @@ export default function HomeLayout({ children, route, author }) {
         <Navbar
           author={author}
           route={route}
-          openLogin={() => setModal({ show: true, form: 'LOGIN' })}
+          openModal={(type) => setModal({ show: true, form: type })}
         />
         <div className="py-8">{children}</div>
       </div>

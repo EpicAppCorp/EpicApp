@@ -36,9 +36,9 @@ export default function Homepage() {
               <section className="col-span-1 w-full">
                 <Profile author={author.data?.data} />
               </section>
-              <section className="col-span-3">
+              <section className="col-span-3 flex flex-col gap-6">
                 <CreatePost author={author.data?.data} />
-                {/* <Stream /> */}
+                <Stream author={author.data?.data} />
               </section>
             </div>
           </HomeLayout>
@@ -48,6 +48,7 @@ export default function Homepage() {
   );
 }
 
+//TODO: DO THIS WAY OR HAVE PUBLIC VIEW
 // export async function getServerSideProps(context) {
 //   if (!context.req.headers.cookie?.includes('access=')) {
 //     return {

@@ -10,7 +10,7 @@ import Button from '../Button';
 //services
 import { logoutAuthor } from '@epicapp/services/author';
 
-export default function Navbar({ author, route, openLogin }) {
+export default function Navbar({ author, route, openModal }) {
   const [dropdown, setDropdown] = useState(false);
 
   const classBuilder = (type) => {
@@ -27,7 +27,7 @@ export default function Navbar({ author, route, openLogin }) {
   });
 
   return (
-    <nav className="grid grid-cols-3 text-text h-12">
+    <nav className="grid h-12 grid-cols-3 text-text">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
@@ -58,7 +58,7 @@ export default function Navbar({ author, route, openLogin }) {
           />
         </Link>
       </ul>
-      <div className="flex justify-end text-text items-center">
+      <div className="flex items-center justify-end text-text">
         {author ? (
           <div className="relative">
             <button
@@ -113,10 +113,16 @@ export default function Navbar({ author, route, openLogin }) {
         ) : (
           <div>
             <Button
-              onClick={openLogin}
-              className="rounded-2xl bg-layer px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+              onClick={() => openModal('LOGIN')}
+              className="px-6 py-2 text-text transition-colors duration-150 hover:text-primary"
             >
               Login
+            </Button>
+            <Button
+              onClick={() => openModal('LOGIN')}
+              className="rounded-2xl bg-layer px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+            >
+              Signup
             </Button>
           </div>
         )}

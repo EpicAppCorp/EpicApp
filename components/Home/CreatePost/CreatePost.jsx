@@ -1,65 +1,26 @@
-import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 
 //services
 import { newPost } from '@epicapp/services/post';
 
 export default function CreatePost({ author }) {
-  const [content, setContent] = useState('');
-  // const authorEndpoint = user.host + "api/authors/" + user.id;;
-
+  const queryClient = useQueryClient();
+  // mutation
   const createPost = useMutation((post) => newPost(author, post), {
-    onSuccess() {},
+    onSuccess(data) {
+      //update cache
+      queryClient.setQueryData(['inbox'], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: [data.data, ...oldData.data.items],
+        },
+      }));
+    },
   });
 
-  // const createPost = (e) => {
-  //   axios
-  //     .post(authorEndpoint + '/posts', {
-  //       title: 'Hard Coded Title',
-  //       source: 'http://localhost:8000',
-  //       origin: 'http://localhost:8000',
-  //       description: 'This is a test Description',
-  //       content: content,
-  //       contentType: 'text/plain',
-  //       published: 'uhhh',
-  //       visibility: 'PUBLIC',
-  //       categories: ['something', 'anothring thing'],
-  //       author: {
-  //         type: 'author',
-  //         id: user.id, // Temporarily hardcoded
-  //         host: user.host,
-  //         displayName: user.displayName,
-  //         url: user.url,
-  //         github: user.github,
-  //         profile_image: user.profile_image,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log('Posting data', res);
-  //       axios.post(authorEndpoint + '/inbox', {
-  //         '@context': 'https://www.w3.org/ns/activitystreams',
-  //         title: 'Hard Coded Title',
-  //         source: 'http://localhost:8000',
-  //         origin: 'http://localhost:8000',
-  //         content: content,
-  //         contentType: 'text/plain',
-  //         type: 'post',
-  //         author: {
-  //           type: 'author',
-  //           id: user.id, // Temporarily hardcoded
-  //           host: user.host,
-  //           displayName: user.displayName,
-  //           url: user.url,
-  //           github: user.github,
-  //           profile_image: user.profile_image,
-  //         },
-  //         object: res.data.id,
-  //       });
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
-
+  //handles stuff from form
   const formHandler = (e) => {
     e.preventDefault();
 
@@ -67,7 +28,9 @@ export default function CreatePost({ author }) {
     const { body } = e.target;
 
     //mutate the post stuff to server
+    //no need to also post to inbox as api internally does that for you.
     createPost.mutate({
+      type: 'post',
       title: 'Hard Coded Title',
       source: 'http://localhost:8000',
       origin: 'http://localhost:8000',
@@ -107,7 +70,7 @@ export default function CreatePost({ author }) {
             priority={true}
           />
           <textarea
-            className="grow bg-surface p-2 text-textAlt"
+            className="grow bg-surface p-2 text-textAlt focus:outline-none"
             placeholder="What's on your mind?"
             name="body"
           />
