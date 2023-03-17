@@ -4,6 +4,8 @@ import { useQuery } from 'react-query';
 //components
 import HomeLayout from '@epicapp/layouts/HomeLayout';
 import Profile from '@epicapp/components/Home/Profile';
+import CreatePost from '@epicapp/components/Home/CreatePost';
+import Stream from '@epicapp/components/Home/Stream';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
@@ -30,12 +32,13 @@ export default function Homepage() {
           </div>
         ) : (
           <HomeLayout route="HOME" author={author.data?.data}>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-8">
               <section className="col-span-1 w-full">
                 <Profile author={author.data?.data} />
               </section>
               <section className="col-span-3">
-                {/* stream component ggoes here */}
+                <CreatePost author={author.data?.data} />
+                {/* <Stream /> */}
               </section>
             </div>
           </HomeLayout>
