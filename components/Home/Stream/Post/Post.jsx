@@ -1,4 +1,6 @@
+import Image from 'next/image';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { formatDistance } from 'date-fns';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
@@ -79,10 +81,31 @@ export default function Post({ post, author }) {
   };
 
   return (
-    <div key={post.id} className="rounded-3xl bg-surface">
-      <div className="m-4 font-bold text-text md:text-2xl">{post.title}</div>
+    <div key={post.id} className="rounded-3xl bg-surface p-4">
+      <div className="flex gap-4">
+        <Image
+          className="self-center overflow-hidden rounded-full object-cover"
+          src="profile image"
+          alt="profile image"
+          loader={() => author.profile_image}
+          width={50}
+          height={50}
+          priority={true}
+        />
+        <div>
+          <span className="text-textAlt">@{author.displayName}</span>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-text">{post.title}</h1>
+            <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
+              {formatDistance(new Date(post.published), new Date(), {
+                addSuffix: true,
+              })}
+            </span>
+          </div>
+        </div>
+      </div>
       {post.contentType === 'image/jpeg;base64' && (
-        <div className="m-4">
+        <div>
           <img
             src={post.content}
             className="w3-left w3-circle w3-margin-right"
@@ -92,13 +115,13 @@ export default function Post({ post, author }) {
         </div>
       )}
       {post.contentType === 'text/plain' && (
-        <div className="m-4">{post.content}</div>
+        <div className="my-4 text-text">{post.content}</div>
       )}
-      <form className="mb-4 flex flex-row" onSubmit={submitComment}>
+      <form className="my-2 flex flex-row" onSubmit={submitComment}>
         <div>
           <input
             name="comment"
-            className="ml-4 mr-2 grow py-2 pl-2"
+            className="py-2 px-2"
             placeholder="Comment your thoughts"
           />
         </div>
@@ -123,7 +146,7 @@ export default function Post({ post, author }) {
       {comments.isLoading ? (
         <div>lol</div>
       ) : (
-        <div className="m-4">
+        <div>
           <div>Comments:</div>
           {comments.data.data.comments.map((comment) => {
             return (
