@@ -119,7 +119,7 @@ export default function Navbar({ author, route, openModal }) {
               Login
             </Button>
             <Button
-              onClick={() => openModal('LOGIN')}
+              onClick={() => openModal('SIGNUP')}
               className="rounded-2xl bg-layer px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
             >
               Signup

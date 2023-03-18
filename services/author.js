@@ -11,3 +11,7 @@ export const logoutAuthor = () => {
 export const authenticateAuthor = (body) => {
   return axiosClient.post('/auth/authenticate/', body);
 };
+
+export const createAuthor = (body) => {
+  return axiosClient.post('/auth/register/', body);
+};
