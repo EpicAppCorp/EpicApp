@@ -84,12 +84,12 @@ export default function Post({ post, author }) {
     <div key={post.id} className="rounded-3xl bg-surface p-4">
       <div className="flex gap-4">
         <Image
-          className="self-center overflow-hidden rounded-full object-cover"
+          className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
           src="profile image"
           alt="profile image"
           loader={() => author.profile_image}
-          width={50}
-          height={50}
+          width={60}
+          height={60}
           priority={true}
         />
         <div>
