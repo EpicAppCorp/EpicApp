@@ -1,96 +1,142 @@
-import React, { useContext } from 'react';
-import { useRouter } from "next/router";
-import AppContext from '@epicapp/context/AppContext';
+import { useState } from 'react';
+import { useMutation } from 'react-query';
 
-export default function Signup() {
-  const router = useRouter()
-  const [profileImage, setProfileImage] = React.useState("");
-  const [userErrorMessage, setUserErrorMessage] = React.useState("");
-  const [gitErrorMessage, setGitErrorMessage] = React.useState("");
-  const [context, setContext] = useContext(AppContext)
+//components
+import Button from '../Button';
 
-  const verifyCredentials= async (e) => {
-    e.preventDefault()
-    if(e.target.password.value != e.target.confirm_password.value){
-      setUserErrorMessage("ERROR: Passwords do not match")
-    } else{
-      let userObject = {
-        "displayName": e.target.username.value,
-        "password": e.target.password.value,
-        "github": e.target.github.value,
-        "host": "http://127.0.0.1:8000/",
-        "url": "http://127.0.0.1:8000/",
-        "profile_image": e.target.profileimg.files[0].name,
-      }
-      const options = {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(userObject)
-      }
+//services
+import { createAuthor } from '@epicapp/services/author';
 
+export default function Signup({ close, switchHandler }) {
+  // const [profileImage, setProfileImage] = useState('');
+  const [userErrorMessage, setUserErrorMessage] = useState('');
 
+  const register = useMutation((body) => createAuthor(body), {
+    onSuccess(data) {
+      close();
+    },
+  });
 
-      await fetch("http://127.0.0.1:8000/api/auth/register/", options)
-      .then((res)=> {
-        return res.json();
-      })
-      .then((json) => {
-        if((typeof json.displayName) == "string" && (typeof json.github) == "string"){
-          setUserErrorMessage("")
-          setContext(json)
-          router.push('/homepage')
-        }else{
-          if((typeof json.github) == "object"){
-            if(json.github[0] == "user with this github already exists."){
-              setGitErrorMessage("Github link already in use.")
-            } 
-          }
-          if((typeof json.displayName) == "object"){
-            if(json.displayName[0] == "user with this displayName already exists."){
-              setUserErrorMessage("Username already exists")
-            }
-          }
-        }
-      })
+  const submitRegister = async (e) => {
+    e.preventDefault();
+
+    //TODO: Might make this server side to make all the errors come from one place.
+    if (e.target.password.value != e.target.confirm_password.value) {
+      setUserErrorMessage('ERROR: Passwords do not match');
+    } else {
+      register.mutate({
+        displayName: e.target.username.value,
+        password: e.target.password.value,
+        github: e.target.github.value,
+        host: 'http://127.0.0.1:8000/',
+        url: 'http://127.0.0.1:8000/',
+        // profile_image: e.target.profileimg.files[0].name,
+      });
     }
-  }
+  };
 
-  const routeLogin = () => {
-    router.push('/')
-  }
+  // const displayFile = (e) => {
+  //   setProfileImage(e.target.files[0]?.name);
+  // };
 
-  const displayFile = (e) => {
-    setProfileImage(e.target.files[0]?.name)
-   
-  }
-  
-  return(
-    <div className='flex items-center justify-center h-screen'>
-      <form className="flex flex-col items-center justify-center border-solid border-4 border-full rounded-lg p-10 shadow-lg shadow-full bg-epicBg" onSubmit={verifyCredentials}>
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <form
+        className="flex flex-col items-center justify-center rounded-xl border-4 border-solid border-full bg-epicBg p-10"
+        onSubmit={submitRegister}
+      >
         <div className="mb-3 text-2xl">
-            Create an Account:<br/>
+          Create an Account:
+          <br />
         </div>
-        {gitErrorMessage ? <div className="bg-errorF rounded-lg p-1 mb-2 text-errorB">{gitErrorMessage}</div>: null}
-        {userErrorMessage ? <div className="bg-errorF rounded-lg p-1 mb-2 text-errorB">{userErrorMessage}<br/></div>: null}
-        
+        {register.isError && (
+          <div className="mb-2 rounded-lg bg-errorF p-1 text-errorB">
+            {Object.keys(register.error.response.data).map((key) => (
+              <div>{register.error.response.data[key]}</div>
+            ))}
+          </div>
+        )}
 
-        <input className="border-solid border border-full mb-5 bg-epicBg text-center" type={"text"} id="username" name="username" placeholder="Username" required/>
-        <input className="border-solid border border-full mb-5 bg-epicBg text-center" type={"password"} id="password" name="password" placeholder="Password" required/>
-        <input className="border-solid border border-full mb-5 bg-epicBg text-center" type={"password"} id="confirm_password" name="confirm_password" placeholder="Confirm Password" required/>
-        <input className="border-solid border border-full mb-5 bg-epicBg text-center" type={"url"} id="github" name="github" placeholder="Github Url" required/>
-        <input className="border-solid border border-full mb-5 bg-epicBg text-center" type={"file"} id="profileimg" name="profileimg"  style={{"display": "none"}} required onChange={displayFile}/>
-        <label className="bg-light border-solid border-2 border-medium px-5 py-0.5 rounded-lg bg-epicBg" for="profileimg"> Click to upload profile image</label>
-        {profileImage? <div className="font-semibold my-4"><u>Uploaded:</u> {profileImage}</div>: <br/> }
-        <button type="submit" className="bg-medium text-white font-semibold px-5 py-1 rounded-lg " >Create New Account</button>
-        <hr className='w-3/4 border-full my-4'/>
+        {userErrorMessage ? (
+          <div className="mb-2 rounded-lg bg-errorF p-1 text-errorB">
+            {userErrorMessage}
+            <br />
+          </div>
+        ) : null}
 
-        <button type="button" className="bg-medium text-white font-semibold px-5 py-1 rounded-lg " onClick={routeLogin}>Back to Login</button>
+        <input
+          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          type={'text'}
+          id="username"
+          name="username"
+          placeholder="Username"
+          required
+        />
+        <input
+          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          type={'password'}
+          id="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <input
+          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          type={'password'}
+          id="confirm_password"
+          name="confirm_password"
+          placeholder="Confirm Password"
+          required
+        />
+        <input
+          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          type={'url'}
+          id="github"
+          name="github"
+          placeholder="Github Url"
+          required
+        />
+        {/* TODO: WE HAVE A RANDOM IMAGE ASSINGED TO NEW USERS, MAYBE WE REMOVE THIS IN THE SIGNUP AND ALLOW TO BE UPDATED LATER? */}
+        {/* <input
+          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          type={'file'}
+          id="profileimg"
+          name="profileimg"
+          style={{ display: 'none' }}
+          required
+          onChange={displayFile}
+        />
+        <label
+          className="rounded-lg border-2 border-solid border-medium bg-epicBg px-5 py-0.5"
+          htmlFor="profileimg"
+        >
+          {' '}
+          Click to upload profile image
+        </label>
+        {profileImage ? (
+          <div className="my-4 font-semibold">
+            <u>Uploaded:</u> {profileImage}
+          </div>
+        ) : (
+          <br />
+        )} */}
+        <button
+          type="submit"
+          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white "
+        >
+          Create New Account
+        </button>
+        <hr className="my-4 w-3/4 border-full" />
+
+        <Button
+          loading={register.isLoading}
+          type="button"
+          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white "
+          onClick={switchHandler}
+        >
+          Back to Login
+        </Button>
       </form>
     </div>
-  
   );
-  }
-  
+}

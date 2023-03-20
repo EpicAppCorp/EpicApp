@@ -1,10 +1,6 @@
 import Card from '@epicapp/components/Card';
-import AppContext from '@epicapp/context/AppContext';
-import { useContext } from 'react';
 
 export default function LeftSidebar() {
-    const [context, setContext] = useContext(AppContext)
-    console.log("Example fetch of the stored username: " + context.id)
     return (
         <Card>
             <div className="px-4 py-2">
