@@ -42,7 +42,7 @@ export default function Signup({ close, switchHandler }) {
   return (
     <div className="flex h-screen items-center justify-center">
       <form
-        className="flex flex-col items-center justify-center rounded-xl border-4 border-solid border-full bg-epicBg p-10"
+        className="flex flex-col items-center justify-center rounded-xl border-2 border-solid border-background text-white p-10"
         onSubmit={submitRegister}
       >
         <div className="mb-3 text-2xl">
@@ -65,7 +65,7 @@ export default function Signup({ close, switchHandler }) {
         ) : null}
 
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-background text-center"
           type={'text'}
           id="username"
           name="username"
@@ -73,7 +73,7 @@ export default function Signup({ close, switchHandler }) {
           required
         />
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-background text-center"
           type={'password'}
           id="password"
           name="password"
@@ -81,7 +81,7 @@ export default function Signup({ close, switchHandler }) {
           required
         />
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-background text-center"
           type={'password'}
           id="confirm_password"
           name="confirm_password"
@@ -89,7 +89,7 @@ export default function Signup({ close, switchHandler }) {
           required
         />
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-background text-center"
           type={'url'}
           id="github"
           name="github"
@@ -122,16 +122,16 @@ export default function Signup({ close, switchHandler }) {
         )} */}
         <button
           type="submit"
-          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white "
+          className="rounded-lg bg-layer px-5 py-1 font-semibold text-white "
         >
           Create New Account
         </button>
-        <hr className="my-4 w-3/4 border-full" />
+        <hr className="my-4 w-3/4 border-foreground" />
 
         <Button
           loading={register.isLoading}
           type="button"
-          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white "
+          className="rounded-lg bg-layer px-5 py-1 font-semibold text-white "
           onClick={switchHandler}
         >
           Back to Login
