@@ -30,7 +30,7 @@ export default function Signup({ close, switchHandler }) {
         github: e.target.github.value,
         host: 'http://127.0.0.1:8000/',
         url: 'http://127.0.0.1:8000/',
-        // profile_image: e.target.profileimg.files[0].name,
+        // profileImage: e.target.profileimg.files[0].name,
       });
     }
   };

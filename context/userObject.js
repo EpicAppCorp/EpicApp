@@ -3,7 +3,7 @@ let userObject = {
     "github": "",
     "host": "",
     "url": "",
-    "profile_image": "",
+    "profileImage": "",
     "type": "",
     "id": ""
   }

@@ -47,7 +47,7 @@ export default function CreatePost({ author }) {
         displayName: author.displayName,
         url: author.url,
         github: author.github,
-        profile_image: author.profile_image,
+        profileImage: author.profileImage,
       },
     });
   };
@@ -64,7 +64,7 @@ export default function CreatePost({ author }) {
             className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
-            loader={() => author.profile_image}
+            loader={() => author.profileImage}
             width={60}
             height={60}
             priority={true}

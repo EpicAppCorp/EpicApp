@@ -49,7 +49,7 @@ export default function Profile({ author }) {
                 className="overflow-hidden rounded-full border-8 border-background object-cover"
                 alt="profile image"
                 src="profile image"
-                loader={() => author.profile_image}
+                loader={() => author.profileImage}
                 width={144}
                 height={144}
                 priority={true}

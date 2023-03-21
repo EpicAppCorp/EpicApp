@@ -70,7 +70,7 @@ export default function Navbar({ author, route, openModal }) {
                 className="overflow-hidden rounded-full object-cover"
                 src="profile image"
                 alt="profile image"
-                loader={() => author.profile_image}
+                loader={() => author.profileImage}
                 width={30}
                 height={30}
                 priority={true}
