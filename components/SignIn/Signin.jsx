@@ -23,7 +23,7 @@ export default function Signin({ close, switchHandler }) {
   return (
     <div className="flex h-screen items-center justify-center">
       <form
-        className="flex flex-col items-center justify-center rounded-xl border-4 border-solid border-full bg-epicBg p-10"
+        className="flex flex-col items-center justify-center rounded-xl border-2 border-solid border-background text-white p-10"
         onSubmit={loginRoute}
       >
         <div className="mb-5 text-center">
@@ -32,8 +32,8 @@ export default function Signin({ close, switchHandler }) {
             <br />
           </div>
           <div className="text-lg">
-            Please <span className="font-bold text-full">Sign In</span> below or{' '}
-            <span className="font-bold text-full">Create An Account</span> and
+            Please <span className="font-bold text-primary">Sign In</span> below or{' '}
+            <span className="font-bold text-primary">Create An Account</span> and
             get posting!
           </div>
         </div>
@@ -43,7 +43,7 @@ export default function Signin({ close, switchHandler }) {
           </div>
         ) : null}
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-foreground text-center"
           type="text"
           id="username"
           autoComplete='displayname'
@@ -52,7 +52,7 @@ export default function Signin({ close, switchHandler }) {
           required
         />
         <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
+          className="mb-5 border border-solid border-foreground bg-foreground text-center"
           type="password"
           id="password"
           autoComplete="current-password"
@@ -62,14 +62,14 @@ export default function Signin({ close, switchHandler }) {
         />
         <button
           type="submit"
-          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white"
+          className="rounded-lg bg-layer px-5 py-1 font-semibold text-white"
         >
           Log in
         </button>
-        <hr className="my-4 w-3/4 border-full" />
+        <hr className="my-4 w-3/4 border-foreground" />
         <button
           type="button"
-          className="rounded-lg bg-medium px-5 py-1 font-semibold text-white"
+          className="rounded-lg bg-layer px-5 py-1 font-semibold text-white"
           onClick={switchHandler}
         >
           Create a new account
