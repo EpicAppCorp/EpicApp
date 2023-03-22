@@ -8,10 +8,18 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { newPost } from '@epicapp/services/post';
+
+///utils
 import { convertBase64 } from '@epicapp/utils/image';
 
 export default function CreatePost({ author }) {
   const [contentType, setContentType] = useState('text/plain');
+  const [imageFileName, setImageFileName] = useState(null);
+  const [visibility, setVisibility] = useState({
+    open: false,
+    type: 'PUBLIC',
+    icon: 'fa-regular fa-earth-asia',
+  });
 
   const queryClient = useQueryClient();
   // mutation
@@ -53,7 +61,7 @@ export default function CreatePost({ author }) {
         contentType === 'image/png;base64'
           ? body.split(',')[0].split('data:')[1]
           : contentType,
-      visibility: 'PUBLIC',
+      visibility: visibility.type,
       categories: ['something', 'anothring thing'],
       author: {
         type: 'author',
@@ -75,15 +83,75 @@ export default function CreatePost({ author }) {
     <section className="rounded-3xl bg-surface p-4">
       <form onSubmit={formHandler}>
         <div className="flex gap-4">
-          <Image
-            className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
-            src="profile image"
-            alt="profile image"
-            loader={() => author.profileImage}
-            width={60}
-            height={60}
-            priority={true}
-          />
+          <div>
+            <Image
+              className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+              src="profile image"
+              alt="profile image"
+              loader={() => author.profileImage}
+              width={60}
+              height={60}
+              priority={true}
+            />
+            {/* change the visibility type of post */}
+            <Button
+              type="button"
+              onClick={() =>
+                setVisibility({ ...visibility, open: !visibility.open })
+              }
+              className="relative flex w-full justify-center gap-2 py-4 text-lg text-textAlt"
+            >
+              <i className={visibility.icon} />
+              <i
+                className={clsx(
+                  'text-sm',
+                  visibility.open
+                    ? 'fa-regular fa-solid fa-caret-up'
+                    : 'fa-regular fa-solid fa-caret-down',
+                )}
+              />
+              {visibility.open && (
+                <ul className="absolute top-10 overflow-hidden rounded-xl bg-foreground text-sm shadow-xl">
+                  <li
+                    className="flex items-center gap-2 py-2 px-4 transition-colors duration-100 hover:bg-primary hover:text-background"
+                    onClick={() =>
+                      setVisibility({
+                        open: false,
+                        type: 'PUBLIC',
+                        icon: 'fa-regular fa-earth-asia',
+                      })
+                    }
+                  >
+                    <i className="fa-regular fa-earth-asia" /> Public
+                  </li>
+                  <li
+                    className="flex items-center gap-2 py-2 px-4 transition-colors duration-100 hover:bg-primary hover:text-background"
+                    onClick={() => {
+                      setVisibility(() => ({
+                        open: true,
+                        type: 'PUBLIC',
+                        icon: 'fa-regular fa-user-group',
+                      }));
+                    }}
+                  >
+                    <i className="fa-regular fa-user-group" /> Friends
+                  </li>
+                  <li
+                    className="flex items-center gap-2 py-2 px-4 transition-colors duration-100 hover:bg-primary hover:text-background"
+                    onClick={() =>
+                      setVisibility({
+                        open: false,
+                        type: 'PRIVATE',
+                        icon: 'fa-regular fa-lock',
+                      })
+                    }
+                  >
+                    <i className="fa-regular fa-lock" /> Private
+                  </li>
+                </ul>
+              )}
+            </Button>
+          </div>
           <div className="w-full">
             <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">
               <input
@@ -98,19 +166,33 @@ export default function CreatePost({ author }) {
                 name="description"
                 placeholder="Description of this cool post."
               />
-              {contentType !== 'image/png;base64' ? (
-                <textarea
-                  className="h-14 w-full grow bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
-                  placeholder="What is that you want to tell the world?"
-                  name="body"
-                />
-              ) : (
-                <input
-                  className="h-14 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
-                  type="file"
-                  name="image"
-                />
-              )}
+              <div className="flex h-14 items-center">
+                {contentType !== 'image/png;base64' ? (
+                  <textarea
+                    className="m-0 w-full bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
+                    placeholder="What is that you want to tell the world?"
+                    name="body"
+                  />
+                ) : (
+                  <label>
+                    <div className="flex w-full cursor-pointer items-center gap-2 bg-transparent p-3 text-textAlt focus:outline-none">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/25 text-primary">
+                        <i className="fa-solid fa-plus" />
+                      </div>
+                      <span>
+                        {imageFileName} (Click here to upload an image)
+                      </span>
+                    </div>
+                    <input
+                      className="hidden"
+                      type="file"
+                      accept="image/png, image/gif, image/jpeg"
+                      name="image"
+                      onChange={(e) => setImageFileName(e.target.files[0].name)}
+                    />
+                  </label>
+                )}
+              </div>
             </div>
             <div className="mt-2 flex justify-between">
               <div className="flex gap-4 text-text">

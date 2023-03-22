@@ -97,13 +97,13 @@ export default function Post({ post, author }) {
           className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
           src="profile image"
           alt="profile image"
-          loader={() => author.profileImage}
+          loader={() => post.author.profileImage}
           width={60}
           height={60}
           priority={true}
         />
         <div>
-          <span className="text-textAlt">@{author.displayName}</span>
+          <span className="text-textAlt">@{post.author.displayName}</span>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-text">{post.title}</h1>
             <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
@@ -116,7 +116,6 @@ export default function Post({ post, author }) {
         </div>
       </div>
       <div className="my-8">
-        {console.log(post.contentType)}
         {post.contentType.includes('image/') && (
           <div className="relative h-96 w-full">
             <Image
@@ -134,21 +133,33 @@ export default function Post({ post, author }) {
           <ReactMarkdown className="text-text">{post.content}</ReactMarkdown>
         )}
       </div>
-      <div className="flex items-center gap-6 text-2xl text-textAlt">
-        <Button loading={addLike.isLoading} onClick={() => addLike.mutate()}>
-          <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
-        </Button>
-        <Button
-          loading={comments.isLoading}
-          onClick={() => setShowComments(!showComments)}
-        >
-          <i
-            className={clsx(
-              'fa-regular fa-comment-dots transition-colors duration-150 ',
-              showComments ? 'text-tertiary' : 'hover:text-tertiary',
-            )}
-          />
-        </Button>
+      <div className="flex justify-between items-center text-2xl text-textAlt">
+        <div className='flex gap-6'>
+          <Button loading={addLike.isLoading} onClick={() => addLike.mutate()}>
+            <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
+          </Button>
+          <Button
+            loading={comments.isLoading}
+            onClick={() => setShowComments(!showComments)}
+          >
+            <i
+              className={clsx(
+                'fa-regular fa-comment-dots transition-colors duration-150 ',
+                showComments ? 'text-tertiary' : 'hover:text-tertiary',
+              )}
+            />
+          </Button>
+        </div>
+        <div className="flex gap-2 text-xs">
+          {post?.categories.map((category, idx) => (
+            <span
+              className="rounded-xl bg-primary/5 px-2 py-1 text-primary"
+              key={idx}
+            >
+              {category}
+            </span>
+          ))}
+        </div>
       </div>
       <form
         className="mt-6 border-t border-layer pt-4"
