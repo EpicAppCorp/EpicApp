@@ -8,6 +8,7 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { newPost } from '@epicapp/services/post';
+import { convertBase64 } from '@epicapp/utils/image';
 
 export default function CreatePost({ author }) {
   const [contentType, setContentType] = useState('text/plain');
@@ -28,11 +29,16 @@ export default function CreatePost({ author }) {
   });
 
   //handles stuff from form
-  const formHandler = (e) => {
+  const formHandler = async (e) => {
     e.preventDefault();
 
     //deconstruct the elements in form element
-    const { body, title, description } = e.target;
+    const { title, description } = e.target;
+
+    const body =
+      contentType === 'image/png;base64'
+        ? await convertBase64(e.target.image.files[0])
+        : e.target.body.value;
 
     //mutate the post stuff to server
     //no need to also post to inbox as api internally does that for you.
@@ -42,8 +48,11 @@ export default function CreatePost({ author }) {
       source: 'http://localhost:8000',
       origin: 'http://localhost:8000',
       description: description.value,
-      content: body.value,
-      contentType: contentType,
+      content: body,
+      contentType:
+        contentType === 'image/png;base64'
+          ? body.split(',')[0].split('data:')[1]
+          : contentType,
       visibility: 'PUBLIC',
       categories: ['something', 'anothring thing'],
       author: {
@@ -89,11 +98,17 @@ export default function CreatePost({ author }) {
                 name="description"
                 placeholder="Description of this cool post."
               />
-              {contentType === 'text/plain' && (
+              {contentType !== 'image/png;base64' ? (
                 <textarea
                   className="h-14 w-full grow bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
                   placeholder="What is that you want to tell the world?"
                   name="body"
+                />
+              ) : (
+                <input
+                  className="h-14 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
+                  type="file"
+                  name="image"
                 />
               )}
             </div>
@@ -106,7 +121,7 @@ export default function CreatePost({ author }) {
                     'flex w-32 items-center justify-center gap-2 rounded-2xl py-2 px-2',
                     contentType === 'text/plain'
                       ? 'bg-secondary/10'
-                      : 'hover:bg-secondary/10 bg-foreground transition-all duration-150 hover:scale-110',
+                      : 'bg-foreground transition-all duration-150 hover:scale-110 hover:bg-secondary/10',
                   )}
                 >
                   <i className="fa-regular fa-text text-secondary" />
@@ -114,10 +129,10 @@ export default function CreatePost({ author }) {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setContentType('text/img')}
+                  onClick={() => setContentType('image/png;base64')}
                   className={clsx(
                     'flex w-32 items-center justify-center gap-2 rounded-2xl py-2 px-2',
-                    contentType === 'text/img'
+                    contentType === 'image/png;base64'
                       ? 'bg-tertiary/10'
                       : 'bg-foreground transition-all duration-150 hover:scale-110 hover:bg-tertiary/10',
                   )}

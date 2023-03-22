@@ -2,6 +2,8 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { formatDistance } from 'date-fns';
+import clsx from 'clsx';
+import ReactMarkdown from 'react-markdown';
 
 //components
 import Button from '@epicapp/components/Button';
@@ -114,69 +116,79 @@ export default function Post({ post, author }) {
         </div>
       </div>
       <div className="my-8">
-        {post.contentType === 'image/jpeg;base64' && (
-          <div>
-            <img
+        {console.log(post.contentType)}
+        {post.contentType.includes('image/') && (
+          <div className="relative h-96 w-full">
+            <Image
+              alt={post.description}
               src={post.content}
-              className="w3-left w3-circle w3-margin-right"
-              width="400px"
-              height="300px"
+              className="rounded-2xl object-cover"
+              fill={true}
             />
           </div>
         )}
         {post.contentType === 'text/plain' && (
           <div className="text-text">{post.content}</div>
         )}
+        {post.contentType === 'text/markdown' && (
+          <ReactMarkdown className="text-text">{post.content}</ReactMarkdown>
+        )}
       </div>
       <div className="flex items-center gap-6 text-2xl text-textAlt">
         <Button loading={addLike.isLoading} onClick={() => addLike.mutate()}>
           <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
         </Button>
-        <Button onClick={() => setShowComments(!showComments)}>
-          <i className="fa-regular fa-comment-dots transition-colors duration-150 hover:text-tertiary" />
+        <Button
+          loading={comments.isLoading}
+          onClick={() => setShowComments(!showComments)}
+        >
+          <i
+            className={clsx(
+              'fa-regular fa-comment-dots transition-colors duration-150 ',
+              showComments ? 'text-tertiary' : 'hover:text-tertiary',
+            )}
+          />
         </Button>
       </div>
       <form
         className="mt-6 border-t border-layer pt-4"
         onSubmit={submitComment}
       >
-        {showComments && (
-          <div className="mb-4">
-            {comments.isLoading ? (
-              <i className="fa-solid fa-spinner-third h-max w-max animate-spin bg-transparent text-primary" />
-            ) : (
-              <div className="flex max-h-48 min-h-0 flex-col gap-2 overflow-y-auto">
-                {comments.data.data.comments.map((comment) => (
-                  <div className="flex items-center gap-4" key={comment.id}>
-                    <Image
-                      className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
-                      src="profile image"
-                      alt="profile image"
-                      loader={() => author.profileImage}
-                      width={40}
-                      height={40}
-                    />
-                    <div>
-                      <p className="flex gap-2 text-text">
-                        <span className="font-bold">
-                          {comment.author.displayName}
-                        </span>
-                        {comment.comment}
-                      </p>
-                      <span className="text-xs text-textAlt">
-                        {formatDistance(
-                          new Date(comment.published),
-                          new Date(),
-                          {
-                            addSuffix: true,
-                          },
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {showComments && comments.isFetched && (
+          <div
+            className={clsx(
+              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
+              comments.data.data.comments.length ? 'flex' : 'hidden',
             )}
+          >
+            {comments.data.data.comments.map((comment) => (
+              <div className="flex items-center gap-4" key={comment.id}>
+                <Image
+                  className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+                  src="profile image"
+                  alt="profile image"
+                  loader={() => author.profileImage}
+                  width={40}
+                  height={40}
+                />
+                <div className="flex flex-col gap-1">
+                  <p className="flex gap-2 text-text">
+                    <span className="font-bold">
+                      {comment.author.displayName}
+                    </span>
+                    {comment.comment}
+                  </p>
+                  <span className="flex items-center gap-2 text-xs text-textAlt">
+                    <Button className="flex text-sm">
+                      <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
+                    </Button>
+                    {formatDistance(new Date(comment.published), new Date(), {
+                      addSuffix: true,
+                    })}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         )}
         <div className="flex gap-4">
