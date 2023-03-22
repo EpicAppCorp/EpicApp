@@ -12,7 +12,12 @@ import { newPost } from '@epicapp/services/post';
 ///utils
 import { convertBase64 } from '@epicapp/utils/image';
 
-export default function CreatePost({ author }) {
+export default function CreatePost({ author, removeRounded }) {
+  var setRoundedTop = '3xl';
+  if (removeRounded === 'true') {
+    setRoundedTop = 'none'
+  }
+
   const [contentType, setContentType] = useState('text/plain');
   const [imageFileName, setImageFileName] = useState(null);
   const [visibility, setVisibility] = useState({
@@ -80,7 +85,7 @@ export default function CreatePost({ author }) {
   }
 
   return (
-    <section className="rounded-3xl bg-surface p-4">
+    <section className={`rounded-t-${setRoundedTop} rounded-b-3xl bg-surface p-4`}>
       <form onSubmit={formHandler}>
         <div className="flex gap-4">
           <div>
@@ -153,6 +158,7 @@ export default function CreatePost({ author }) {
             </Button>
           </div>
           <div className="w-full">
+            <p className="my-1 text-lg text-textAlt py-2">What's on your mind?</p>
             <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">
               <input
                 className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
