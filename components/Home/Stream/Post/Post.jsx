@@ -133,12 +133,17 @@ export default function Post({ post, author }) {
           <ReactMarkdown className="text-text">{post.content}</ReactMarkdown>
         )}
       </div>
-      <div className="flex justify-between items-center text-2xl text-textAlt">
-        <div className='flex gap-6'>
-          <Button loading={addLike.isLoading} onClick={() => addLike.mutate()}>
+      <div className="flex items-center justify-between text-2xl text-textAlt">
+        <div className="flex gap-6">
+          <Button
+            disabled={!author}
+            loading={addLike.isLoading}
+            onClick={() => addLike.mutate()}
+          >
             <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
           </Button>
           <Button
+            disabled={!author}
             loading={comments.isLoading}
             onClick={() => setShowComments(!showComments)}
           >
@@ -162,7 +167,10 @@ export default function Post({ post, author }) {
         </div>
       </div>
       <form
-        className="mt-6 border-t border-layer pt-4"
+        className={clsx(
+          'mt-6 border-t border-layer pt-4',
+          author ? 'block' : 'hidden',
+        )}
         onSubmit={submitComment}
       >
         {showComments && comments.isFetched && (
@@ -178,7 +186,7 @@ export default function Post({ post, author }) {
                   className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
                   src="profile image"
                   alt="profile image"
-                  loader={() => author.profileImage}
+                  loader={() => comment.author.profileImage}
                   width={40}
                   height={40}
                 />
@@ -207,7 +215,7 @@ export default function Post({ post, author }) {
             className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
-            loader={() => author.profileImage}
+            loader={() => author?.profileImage}
             width={40}
             height={40}
           />

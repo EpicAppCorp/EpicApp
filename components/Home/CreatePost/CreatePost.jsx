@@ -26,7 +26,7 @@ export default function CreatePost({ author }) {
   const createPost = useMutation((post) => newPost(author, post), {
     onSuccess(data) {
       //update cache
-      queryClient.setQueryData(['inbox'], (oldData) => ({
+      queryClient.setQueryData(['inbox', author], (oldData) => ({
         ...oldData,
         data: {
           ...oldData.data,
@@ -62,7 +62,7 @@ export default function CreatePost({ author }) {
           ? body.split(',')[0].split('data:')[1]
           : contentType,
       visibility: visibility.type,
-      categories: ['something', 'anothring thing'],
+      categories: ['cool'],
       author: {
         type: 'author',
         id: author.id,
