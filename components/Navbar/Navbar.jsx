@@ -16,7 +16,9 @@ export default function Navbar({ author, route, openModal }) {
   const classBuilder = (type) => {
     return clsx(
       ' transition-all duration-150 hover:text-primary',
-      route === type ? 'text-primary' : 'text-text',
+      route === type
+        ? 'relative text-primary after:mt-4 after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-2 after:rounded-full after:bg-primary after:content-[""]'
+        : 'text-text',
     );
   };
 
@@ -50,10 +52,10 @@ export default function Navbar({ author, route, openModal }) {
             />
           </Link>
         </li>
-        <Link className={classBuilder('LIKES')} href="/likes">
+        <Link className={classBuilder('INBOX')} href="/inbox">
           <i
             className={clsx(
-              route === 'LIKES' ? 'fa-solid fa-heart' : 'fa-regular fa-heart',
+              route === 'INBOX' ? 'fa-solid fa-bell' : 'fa-regular fa-bell',
             )}
           />
         </Link>

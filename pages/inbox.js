@@ -1,20 +1,19 @@
 import Head from 'next/head';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 //components
 import HomeLayout from '@epicapp/layouts/HomeLayout';
 import Profile from '@epicapp/components/Home/Profile';
-import CreatePost from '@epicapp/components/Home/CreatePost';
 import Stream from '@epicapp/components/Home/Stream';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
-export default function Homepage() {
-  const author = useQuery(['author'], getAuthorDetails, {
-    retry: 1,
-    staleTime: 10000,
-  });
+export default function Inbox() {
+    const author = useQuery(['author'], getAuthorDetails, {
+        retry: 1,
+        staleTime: 10000,
+      });
 
   return (
     <>
@@ -31,14 +30,13 @@ export default function Homepage() {
             <i className="fa-solid fa-spinner-third text-primary animate-spin bg-transparent text-2xl" />
           </div>
         ) : (
-          <HomeLayout route="HOME" author={author.data?.data}>
+          <HomeLayout route="INBOX" author={author.data?.data}>
             <div className="grid grid-cols-4 gap-8">
               <section className="col-span-1 w-full">
                 <Profile author={author.data?.data} />
               </section>
               <section className="col-span-3 flex flex-col gap-6">
-                <CreatePost author={author.data?.data} />
-                <Stream author={author.data?.data} />
+                <Stream author={author.data?.data} isInbox={true}/> {/* This should work for the posts */}
               </section>
             </div>
           </HomeLayout>
@@ -47,19 +45,3 @@ export default function Homepage() {
     </>
   );
 }
-
-//TODO: DO THIS WAY OR HAVE PUBLIC VIEW
-// export async function getServerSideProps(context) {
-//   if (!context.req.headers.cookie?.includes('access=')) {
-//     return {
-//       props: {},
-//       redirect: {
-//         permanent: false,
-//         destination: '/login',
-//       },
-//     };
-//   }
-//   return {
-//     props: {},
-//   };
-// }

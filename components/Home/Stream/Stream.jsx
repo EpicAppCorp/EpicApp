@@ -5,23 +5,23 @@ import Post from './Post';
 
 //services
 import { getInbox } from '@epicapp/services/inbox';
+import FollowRequest from '@epicapp/components/Inbox/FollowRequest';
+import Like from '@epicapp/components/Inbox/Like';
+import Comment from '@epicapp/components/Inbox/Comment';
 
-export default function Stream({ author }) {
+export default function Stream({ author, isInbox }) {
   const inbox = useQuery(['inbox'], () => getInbox(author), {
     retry: 1,
     staleTime: 10000,
     enabled: !!author,
   });
 
-  //TODO: idk, might just fetch all public posts if not logged in?
-  if (!author) return null;
-
   //loading animation
   if (inbox.isLoading)
     return (
       <div className="flex h-full items-center justify-center text-9xl text-primary">
         {/* // maybe a ekelton loading animation here? */}
-        <i className="fa-solid fa-spinner-third text-secondary animate-spin bg-transparent text-2xl" />
+        <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
       </div>
     );
 
@@ -33,7 +33,21 @@ export default function Stream({ author }) {
       </p>
     );
 
-  return (
+  return isInbox ? (
+    <div className="flex flex-col gap-6">
+      {inbox.data.data.items.map((item) =>
+        item.type === 'post' ? (
+          <Post key={item.id} post={item} author={author} />
+        ) : item.type === 'follow' ? (
+          <FollowRequest key={item.id} follow={item} author={author} />
+        ) : item.type === 'like' ? (
+          <Like key={item.id} like={item} author={author} />
+        ) : item.type === 'comment' ? (
+          <Comment key={item.id} comment={item} author={author} />
+        ) : null,
+      )}
+    </div>
+  ) : (
     <div className="flex flex-col gap-6">
       {inbox.data.data.items
         .filter(({ type }) => type === 'post')
