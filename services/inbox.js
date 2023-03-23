@@ -7,3 +7,7 @@ export const getInbox = (author) => {
       : process.env.NEXT_PUBLIC_API + '/authors/' + undefined + '/inbox',
   );
 };
+
+export const getItem = (url) => {
+  return axiosClient.get(url)
+}
