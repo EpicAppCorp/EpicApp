@@ -6,16 +6,18 @@ import clsx from 'clsx';
 
 //components
 import Button from '../Button';
+import Inbox from '@epicapp/components/Inbox';
 
 //services
 import { logoutAuthor } from '@epicapp/services/author';
 
 export default function Navbar({ author, route, openModal }) {
   const [dropdown, setDropdown] = useState(false);
+  const [inbox, setInbox] = useState(false);
 
   const classBuilder = (type) => {
     return clsx(
-      ' transition-all duration-150 hover:text-primary',
+      'transition-all duration-150 hover:text-primary cursor-pointer',
       route === type
         ? 'relative text-primary after:mt-4 after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-2 after:rounded-full after:bg-primary after:content-[""]'
         : 'text-text',
@@ -52,17 +54,29 @@ export default function Navbar({ author, route, openModal }) {
             />
           </Link>
         </li>
-        <Link className={classBuilder('INBOX')} href="/inbox">
+        {/* <li className={classBuilder(inbox, 'INBOX')}>
           <i
-            className={clsx(
-              route === 'INBOX' ? 'fa-solid fa-bell' : 'fa-regular fa-bell',
-            )}
+            onClick={() => setInbox(!inbox)}
+            className={clsx(inbox ? 'fa-solid fa-bell' : 'fa-regular fa-bell')}
           />
-        </Link>
+          {inbox && <div className="absolute">lol</div>}
+        </li> */}
       </ul>
       <div className="flex items-center justify-end text-text">
         {author ? (
-          <div className="relative">
+          <div className="relative flex items-center gap-6">
+            <div className="relative">
+              <i
+                onClick={() => setInbox(!inbox)}
+                className={clsx(
+                  'cursor-pointer text-xl',
+                  inbox
+                    ? 'fa-solid fa-bell text-primary'
+                    : 'fa-regular fa-bell hover:text-primary',
+                )}
+              />
+              {inbox && <Inbox author={author} />}
+            </div>
             <button
               onClick={() => setDropdown(!dropdown)}
               type="button"

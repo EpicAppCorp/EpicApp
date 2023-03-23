@@ -10,10 +10,9 @@ import Stream from '@epicapp/components/Home/Stream';
 import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function Inbox() {
-    const author = useQuery(['author'], getAuthorDetails, {
-        retry: 1,
-        staleTime: 10000,
-      });
+  const author = useQuery(['author'], getAuthorDetails, {
+    staleTime: Infinity,
+  });
 
   return (
     <>
@@ -23,11 +22,11 @@ export default function Inbox() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-screen bg-background overflow-y-auto">
+      <main className="h-screen w-screen overflow-y-auto bg-background">
         {author.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}
-            <i className="fa-solid fa-spinner-third text-primary animate-spin bg-transparent text-2xl" />
+            <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (
           <HomeLayout route="INBOX" author={author.data?.data}>
@@ -36,7 +35,7 @@ export default function Inbox() {
                 <Profile author={author.data?.data} />
               </section>
               <section className="col-span-3 flex flex-col gap-6">
-                <Stream author={author.data?.data} isInbox={true}/> {/* This should work for the posts */}
+                <Stream author={author.data?.data} isInbox={true} />
               </section>
             </div>
           </HomeLayout>

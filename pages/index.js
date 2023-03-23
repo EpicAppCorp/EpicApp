@@ -12,8 +12,7 @@ import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {
-    retry: 1,
-    staleTime: 10000,
+    staleTime: Infinity,
   });
 
   return (
