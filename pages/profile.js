@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 //components
 import Layout from '@epicapp/components/UserProfile/Layout';
 import CreatePost from '@epicapp/components/Home/CreatePost';
-import Stream from '@epicapp/components/Home/Stream';
+import Stream from '@epicapp/components/UserProfile/Stream';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
@@ -33,8 +33,7 @@ export default function ProfilePage() {
         ) : (
         <HomeLayout route="PROFILE" author={author.data?.data}>
             <div className="flex mt-4 max-w-6xl mx-auto gap-6">
-                <div className="w-1/6">
-                </div>
+                <div className="w-1/6" />
                 <div className="w-4/6">
                     <section className="col-span-1 w-full">
                         <Layout author={author.data?.data}/>
@@ -44,8 +43,7 @@ export default function ProfilePage() {
                         <Stream author={author.data?.data} />
                     </section>
                 </div>
-                <div className="w-1/6">
-                </div>
+                <div className="w-1/6" />
             </div> 
         </HomeLayout>
         )}
