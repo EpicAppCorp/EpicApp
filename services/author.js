@@ -1,7 +1,7 @@
 import { axiosClient } from '@epicapp/libs/axios';
 
 export const getAuthorDetails = () => {
-  return axiosClient.get('/authors/details/');
+  return axiosClient.get('/auth/details/');
 };
 
 export const logoutAuthor = () => {

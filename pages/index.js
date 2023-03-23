@@ -28,7 +28,7 @@ export default function Homepage() {
         {author.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}
-            <i className="fa-solid fa-spinner-third text-secondary animate-spin bg-transparent text-2xl" />
+            <i className="fa-solid fa-spinner-third text-primary animate-spin bg-transparent text-2xl" />
           </div>
         ) : (
           <HomeLayout route="HOME" author={author.data?.data}>
