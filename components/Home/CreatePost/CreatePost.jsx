@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation } from 'react-query';
 import Image from 'next/image';
 import clsx from 'clsx';
 
@@ -21,18 +21,17 @@ export default function CreatePost({ author }) {
     icon: 'fa-regular fa-earth-asia',
   });
 
-  const queryClient = useQueryClient();
   // mutation
   const createPost = useMutation((post) => newPost(author, post), {
     onSuccess(data) {
-      //update cache
-      queryClient.setQueryData(['inbox', author], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          items: [data.data, ...oldData.data.items],
-        },
-      }));
+      //update cache, dont think we doing it this way anoymore.
+      // queryClient.setQueryData(['inbox', author], (oldData) => ({
+      //   ...oldData,
+      //   data: {
+      //     ...oldData.data,
+      //     items: [data.data, ...oldData.data.items],
+      //   },
+      // }));
     },
   });
 
