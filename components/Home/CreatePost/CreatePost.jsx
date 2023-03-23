@@ -51,7 +51,7 @@ export default function CreatePost({ author }) {
     //mutate the post stuff to server
     //no need to also post to inbox as api internally does that for you.
     createPost.mutate({
-      type: 'post',
+      type: 'follow',
       title: title.value,
       source: 'http://localhost:8000',
       origin: 'http://localhost:8000',

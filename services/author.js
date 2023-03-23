@@ -4,6 +4,10 @@ export const getAuthorDetails = () => {
   return axiosClient.get('/auth/details/');
 };
 
+export const getAuthorById = (authorId) => {
+  return axiosClient.get('/authors/' + authorId)
+}
+
 export const logoutAuthor = () => {
   return axiosClient.post('/auth/logout/');
 };

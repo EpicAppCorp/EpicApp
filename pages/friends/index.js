@@ -1,11 +1,9 @@
 import Head from 'next/head';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 //components
 import HomeLayout from '@epicapp/layouts/HomeLayout';
 import Profile from '@epicapp/components/Home/Profile';
-import CreatePost from '@epicapp/components/Home/CreatePost';
-import Stream from '@epicapp/components/Home/Stream';
 import Search from '@epicapp/components/Friends/Search';
 
 //services
@@ -16,7 +14,6 @@ export default function Homepage() {
     retry: 1,
     staleTime: 10000,
   });
-  console.log(author);
 
   return (
     <>
@@ -39,7 +36,7 @@ export default function Homepage() {
                 <Profile author={author.data?.data} />
               </section>
               <section className="col-span-3 flex flex-col gap-6">
-                <Search/>
+                <Search author={author.data?.data}/>
               </section>
             </div>
           </HomeLayout>
