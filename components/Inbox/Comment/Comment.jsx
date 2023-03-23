@@ -3,10 +3,6 @@ import Button from "@epicapp/components/Button";
 import { formatDistance } from 'date-fns';
 
 export default function Comment({comment, author}) {
-    const commentedPost = {
-        type: "post",
-        title: "A post title they commented on",
-    }
     return(
         <div key={comment.id} className="rounded-3xl bg-surface p-4">
             <div className="flex gap-4">
@@ -29,7 +25,6 @@ export default function Comment({comment, author}) {
                     </span>
                     {comment.comment}
                   </p>
-                  <h1 className="text-lg mb-2 font-bold text-text">{commentedPost.title}</h1>
                   <span className="flex items-center gap-2 text-xs text-textAlt">
                     <Button className="flex text-sm">
                       <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />

@@ -1,15 +1,12 @@
+import { getItem } from "@epicapp/services/inbox";
 import Image from "next/image";
 import { useQuery } from "react-query";
 
 export default function Like({like, author}) {
-    // let likedObject = useQuery({
-    //     queryKey: like.object,
-    //     queryFn: getPost });
-    const likedObject = {
-        type: "post",
-        title: "A post title they liked",
-        comment: "A comment they liked"
-    }
+    let likedItem = useQuery({
+        queryKey: ['comments', 'posts'],
+        queryFn: () => getItem(like.object)
+    })
 
     return(
         <div key={like.id} className="rounded-3xl bg-surface p-4">
@@ -26,7 +23,7 @@ export default function Like({like, author}) {
                 <div>
                     <span className="text-textAlt">@{like.author.displayName}</span>
                     <p className="text-xs text-textAlt">{like.summary}</p>
-                    <h1 className="text-lg font-bold text-text">{likedObject.type === "comment" ? likedObject.comment: likedObject.title}</h1>
+                    <h1 className="text-lg font-bold text-text">{likedItem.type === "comment" ? likedItem.comment: likedItem.title}</h1>
                 </div>
             </div>  
         </div>
