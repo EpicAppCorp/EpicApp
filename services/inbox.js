@@ -11,3 +11,11 @@ export const getInbox = (author) => {
 export const getItem = (url) => {
   return axiosClient.get(url)
 }
+
+export const sendFollowRequest = (body) => {
+  const url = body.object.url + "/inbox";
+  return axiosClient.post(
+    url,
+    body,
+  )
+}

@@ -15,3 +15,7 @@ export const authenticateAuthor = (body) => {
 export const createAuthor = (body) => {
   return axiosClient.post('/auth/register/', body);
 };
+
+export const getAuthorById = (authorId) => {
+  return axiosClient.get('/authors/' + authorId)
+}
