@@ -9,10 +9,9 @@ export default function Like({ like }) {
 
   return (
     <div
-      key={like.id}
       className={clsx(
         'flex h-28 items-center',
-        like.idx % 2 === 1 ? 'bg-surface' : 'bg-foreground',
+        like.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
       )}
     >
       <div className="flex w-full gap-4 px-4">

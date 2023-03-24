@@ -7,7 +7,7 @@ export default function Comment({ comment, author }) {
       key={comment.id}
       className={clsx(
         'flex h-28 items-center',
-        comment.idx % 2 === 1 ? 'bg-surface' : 'bg-foreground',
+        comment.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
       )}
     >
       <div className="flex w-full items-center justify-between px-4">

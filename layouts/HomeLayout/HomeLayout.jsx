@@ -18,7 +18,7 @@ export default function HomeLayout({ children, route, author }) {
           route={route}
           openModal={(type) => setModal({ show: true, form: type })}
         />
-        <div className="py-24 px-8">{children}</div>
+        <div className="px-8 py-4">{children}</div>
       </div>
 
       <Modal show={modal.show}>

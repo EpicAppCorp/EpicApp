@@ -16,10 +16,9 @@ export default function FollowRequest({ follow, author }) {
   });
   return (
     <div
-      key={follow.id}
       className={clsx(
         'flex h-28 items-center',
-        follow.idx % 2 === 1 ? 'bg-surface' : 'bg-foreground',
+        follow.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
       )}
     >
       <div className="flex w-full items-center justify-between px-4">
