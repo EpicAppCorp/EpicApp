@@ -31,7 +31,7 @@ export default function Navbar({ author, route, openModal }) {
   });
 
   return (
-    <nav className="grid h-12 grid-cols-3 text-text">
+    <nav className="grid grid-cols-3 text-text fixed w-screen px-8 py-4 backdrop-blur-lg z-50">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
@@ -65,7 +65,7 @@ export default function Navbar({ author, route, openModal }) {
       <div className="flex items-center justify-end text-text">
         {author ? (
           <div className="relative flex items-center gap-6">
-            <div className="relative">
+            <div>
               <i
                 onClick={() => setInbox(!inbox)}
                 className={clsx(
@@ -103,7 +103,7 @@ export default function Navbar({ author, route, openModal }) {
             </button>
 
             {dropdown && (
-              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base hover:shadow-lg">
+              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
                 <li>
                   <Link
                     className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"

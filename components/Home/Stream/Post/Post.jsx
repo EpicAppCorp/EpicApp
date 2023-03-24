@@ -176,7 +176,7 @@ export default function Post({ post, author }) {
         {showComments && comments.isFetched && (
           <div
             className={clsx(
-              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
+              'mb-4 max-h-48 min-h-0 flex-col gap-3',
               comments.data.data.comments.length ? 'flex' : 'hidden',
             )}
           >
