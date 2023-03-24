@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation } from 'react-query';
 
 //components
@@ -8,8 +7,6 @@ import Button from '../Button';
 import { createAuthor } from '@epicapp/services/author';
 
 export default function Signup({ close, switchHandler }) {
-  const [userErrorMessage, setUserErrorMessage] = useState('');
-
   const register = useMutation((body) => createAuthor(body), {
     onSuccess() {
       switchHandler();
@@ -19,16 +16,12 @@ export default function Signup({ close, switchHandler }) {
   const submitRegister = async (e) => {
     e.preventDefault();
 
-    //TODO: Might make this server side to make all the errors come from one place.
-    if (e.target.password.value != e.target.confirm_password.value) {
-      setUserErrorMessage('ERROR: Passwords do not match');
-    } else {
-      register.mutate({
-        displayName: e.target.username.value,
-        password: e.target.password.value,
-        github: e.target.github.value,
-      });
-    }
+    register.mutate({
+      displayName: e.target.username.value,
+      password: e.target.password.value,
+      confirmpassword: e.target.confirm_password.value,
+      github: e.target.github.value,
+    });
   };
 
   return (
@@ -48,13 +41,6 @@ export default function Signup({ close, switchHandler }) {
             ))}
           </div>
         )}
-
-        {userErrorMessage ? (
-          <div className="bg-errorF text-errorB mb-2 rounded-lg p-1">
-            {userErrorMessage}
-            <br />
-          </div>
-        ) : null}
 
         <input
           className="mb-5 border border-solid border-foreground bg-background text-center"

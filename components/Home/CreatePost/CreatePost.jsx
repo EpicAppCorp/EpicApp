@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 import clsx from 'clsx';
 
@@ -13,6 +13,7 @@ import { newPost } from '@epicapp/services/post';
 import { convertBase64 } from '@epicapp/utils/image';
 
 export default function CreatePost({ author }) {
+  const queryClient = useQueryClient();
   const [contentType, setContentType] = useState('text/plain');
   const [imageFileName, setImageFileName] = useState(null);
   const [visibility, setVisibility] = useState({
@@ -25,13 +26,13 @@ export default function CreatePost({ author }) {
   const createPost = useMutation((post) => newPost(author, post), {
     onSuccess(data) {
       //update cache, dont think we doing it this way anoymore.
-      // queryClient.setQueryData(['inbox', author], (oldData) => ({
-      //   ...oldData,
-      //   data: {
-      //     ...oldData.data,
-      //     items: [data.data, ...oldData.data.items],
-      //   },
-      // }));
+      queryClient.setQueryData(['inbox', author], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: [data.data, ...oldData.data.items],
+        },
+      }));
     },
   });
 

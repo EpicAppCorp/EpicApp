@@ -27,7 +27,7 @@ export default function Stream({ author, isInbox }) {
   else if (!inbox.data?.data.items.length)
     return (
       <p className="text-center text-sm text-textAlt py-4">
-        Nothing here yet... Weird.
+        Nothing here yet... weird.
       </p>
     );
   //inbox stream

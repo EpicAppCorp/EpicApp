@@ -93,15 +93,21 @@ export default function Post({ post, author }) {
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">
       <div className="flex gap-4">
-        <Image
-          className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
-          src="profile image"
-          alt="profile image"
-          loader={() => post.author.profileImage}
-          width={60}
-          height={60}
-          priority={true}
-        />
+        {post.author?.profileImage ? (
+          <Image
+            className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+            src="profile image"
+            alt="profile image"
+            loader={() => post.author.profileImage}
+            width={60}
+            height={60}
+            priority={true}
+          />
+        ) : (
+          <div className='h-[60px] w-[60px] rounded flex justify-center items-center'>
+            <i className="fa-solid fa-user" />
+          </div>
+        )}
         <div>
           <span className="text-textAlt">@{post.author.displayName}</span>
           <div className="flex items-center gap-3">
