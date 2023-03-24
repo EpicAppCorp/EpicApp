@@ -31,7 +31,7 @@ export default function Navbar({ author, route, openModal }) {
   });
 
   return (
-    <nav className="grid grid-cols-3 text-text sticky top-0 w-screen px-8 py-4 backdrop-blur-lg z-50">
+    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 px-8 py-4 text-text backdrop-blur-lg">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
@@ -54,13 +54,6 @@ export default function Navbar({ author, route, openModal }) {
             />
           </Link>
         </li>
-        {/* <li className={classBuilder(inbox, 'INBOX')}>
-          <i
-            onClick={() => setInbox(!inbox)}
-            className={clsx(inbox ? 'fa-solid fa-bell' : 'fa-regular fa-bell')}
-          />
-          {inbox && <div className="absolute">lol</div>}
-        </li> */}
       </ul>
       <div className="flex items-center justify-end text-text">
         {author ? (
@@ -72,7 +65,7 @@ export default function Navbar({ author, route, openModal }) {
                   'cursor-pointer text-xl',
                   inbox
                     ? 'fa-solid fa-bell text-primary'
-                    : 'fa-regular fa-bell hover:text-primary',
+                    : 'fa-regular fa-bell hover:animate-bellshake hover:text-primary',
                 )}
               />
               {inbox && <Inbox author={author} />}
