@@ -108,8 +108,21 @@ export default function Post({ post, author }) {
             <i className="fa-solid fa-question" />
           </div>
         )}
-        <div>
-          <span className="text-textAlt">@{post.author.displayName}</span>
+        <div className="w-full">
+          <div className="flex justify-between">
+            <span className="text-textAlt">@{post.author.displayName}</span>
+            <div
+              title={post.author.host}
+              className={clsx(
+                'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
+                post.author.host.includes(process.env.NEXT_PUBLIC_API)
+                  ? 'hidden'
+                  : 'flex',
+              )}
+            >
+              <i className="fa-solid fa-square-up-right" /> {post.author.host}
+            </div>
+          </div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-text">{post.title}</h1>
             <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
@@ -146,7 +159,7 @@ export default function Post({ post, author }) {
             loading={addLike.isLoading}
             onClick={() => addLike.mutate()}
           >
-            <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
+            <i className="fa-regular fa-heart transition-colors duration-150 hover:text-[#880808]" />
           </Button>
           <Button
             disabled={!author}
@@ -156,7 +169,7 @@ export default function Post({ post, author }) {
             <i
               className={clsx(
                 'fa-regular fa-comment-dots transition-colors duration-150 ',
-                showComments ? 'text-tertiary' : 'hover:text-tertiary',
+                showComments ? 'text-white' : 'hover:text-white',
               )}
             />
           </Button>
@@ -164,7 +177,7 @@ export default function Post({ post, author }) {
         <div className="flex gap-2 text-xs">
           {post?.categories.map((category, idx) => (
             <span
-              className="rounded-xl bg-primary/5 px-2 py-1 text-primary"
+              className="rounded-xl text-textAlt"
               key={idx}
             >
               {category}
@@ -205,7 +218,7 @@ export default function Post({ post, author }) {
                   </p>
                   <span className="flex items-center gap-2 text-xs text-textAlt">
                     <Button className="flex text-sm">
-                      <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
+                      <i className="fa-regular fa-heart transition-colors duration-150 hover:text-[#880808]" />
                     </Button>
                     {formatDistance(new Date(comment.published), new Date(), {
                       addSuffix: true,

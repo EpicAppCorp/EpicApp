@@ -27,7 +27,7 @@ export default function Signup({ close, switchHandler }) {
   return (
     <div className="flex h-screen items-center justify-center">
       <form
-        className="flex flex-col items-center justify-center rounded-xl border-2 border-solid border-background p-10 text-white"
+        className="flex flex-col items-center justify-center rounded-2xl bg-background p-10 text-text"
         onSubmit={submitRegister}
       >
         <div className="mb-3 text-2xl">

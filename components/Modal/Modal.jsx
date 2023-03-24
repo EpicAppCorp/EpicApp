@@ -13,7 +13,7 @@ export default function Modal({ children, show }) {
   if (!show || !isClient) return null;
 
   return createPortal(
-    <main className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center bg-black/70 p-10">
+    <main className="fixed top-0 left-0 right-0 bottom-0 z-50 flex items-center justify-center p-10">
       <div className="absolute h-full w-full backdrop-blur-lg" />
       <div className="relative">{children}</div>
     </main>,

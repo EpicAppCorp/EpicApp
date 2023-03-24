@@ -13,6 +13,7 @@ module.exports = {
       sans: 'Rubik',
     },
     colors: {
+      black: '#343434',
       transparent: 'transparent',
       background: '#1a1a1a',
       layer: '#2f2f2f',
