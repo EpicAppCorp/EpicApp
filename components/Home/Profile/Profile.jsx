@@ -23,7 +23,7 @@ export default function Profile({ author }) {
           <div className="absolute flex w-full -translate-y-1/2 justify-center">
             <div className="flex justify-center">
               <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full border-8 border-layer bg-background object-cover text-6xl text-textAlt">
-                <i className="fa-solid fa-user" />
+                <i className="fa-regular fa-user" />
               </div>
             </div>
           </div>

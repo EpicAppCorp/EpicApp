@@ -12,19 +12,21 @@ module.exports = {
     fontFamily: {
       sans: 'Rubik',
     },
+    colors: {
+      transparent: 'transparent',
+      background: '#1a1a1a',
+      layer: '#2f2f2f',
+      surface: '#282828',
+      foreground: '#222',
+      primary: '#fffd01',
+      text: '#ffffff',
+      textAlt: '#979797',
+      secondary: '#28d799',
+      tertiary: '#5191f4',
+      quaternary: '#d3706f',
+      white: '#ffffff',
+    },
     extend: {
-      colors: {
-        background: '#1a1a1a',
-        layer: '#2f2f2f',
-        surface: '#282828',
-        foreground: '#222',
-        primary: '#fffd01',
-        text: '#ffffff',
-        textAlt: '#979797',
-        secondary: '#28d799',
-        tertiary: '#5191f4',
-        quaternary: '#d3706f',
-      },
       animation: {
         bellshake: 'bellshake .5s cubic-bezier(.36,.07,.19,.97) both',
       },

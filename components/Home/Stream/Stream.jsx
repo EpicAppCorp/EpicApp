@@ -2,17 +2,16 @@ import { useQuery } from 'react-query';
 
 //components
 import Post from './Post';
-
-//services
-import { getInbox } from '@epicapp/services/inbox';
-import FollowRequest from '@epicapp/components/Home/Stream/FollowRequest';
+import Follow from '@epicapp/components/Home/Stream/Follow';
 import Like from '@epicapp/components/Home/Stream/Like';
 import Comment from '@epicapp/components/Home/Stream/Comment';
 
+//services
+import { getInbox } from '@epicapp/services/inbox';
+
 export default function Stream({ author, isInbox }) {
-  const inbox = useQuery(['inbox'], () => getInbox(author), {
+  const inbox = useQuery(['inbox', author], () => getInbox(author), {
     staleTime: 10000,
-    enabled: !!author,
   });
 
   //loading animation
@@ -23,10 +22,19 @@ export default function Stream({ author, isInbox }) {
         <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
       </div>
     );
+  else if (
+    isInbox &&
+    !inbox.data?.data.items.filter((item) => item.type !== 'post').length
+  )
+    return (
+      <p className="py-4 text-center text-sm text-textAlt">
+        No new notifications.
+      </p>
+    );
   // if no items
   else if (!inbox.data?.data.items.length)
     return (
-      <p className="text-center text-sm text-textAlt py-4">
+      <p className="py-4 text-center text-sm text-textAlt">
         Nothing here yet... weird.
       </p>
     );
@@ -36,7 +44,7 @@ export default function Stream({ author, isInbox }) {
       <div className="flex flex-col">
         {inbox.data.data.items.map((item, idx) => {
           if (item.type === 'follow')
-            return <FollowRequest key={idx} follow={{ ...item, idx }} />;
+            return <Follow key={idx} follow={{ ...item, idx }} />;
           else if (item.type === 'like')
             return <Like key={idx} like={{ ...item, idx }} />;
           else if (item.type === 'comment')

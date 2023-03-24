@@ -104,8 +104,8 @@ export default function Post({ post, author }) {
             priority={true}
           />
         ) : (
-          <div className='h-[60px] w-[60px] rounded flex justify-center items-center'>
-            <i className="fa-solid fa-user" />
+          <div className="flex h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full border-4 border-layer bg-background object-cover text-3xl text-textAlt">
+            <i className="fa-solid fa-question" />
           </div>
         )}
         <div>
