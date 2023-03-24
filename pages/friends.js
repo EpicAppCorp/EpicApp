@@ -8,6 +8,7 @@ import Search from '@epicapp/components/Friends/Search';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
+import FriendsList from '@epicapp/components/Friends/FriendsList';
 
 export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {
@@ -39,6 +40,7 @@ export default function Homepage() {
               </section>
               <section className="col-span-3 flex flex-col gap-6">
                 <Search authorSendingRequest={author} />
+                <FriendsList author={author.data?.data} />
               </section>
             </div>
           </HomeLayout>
