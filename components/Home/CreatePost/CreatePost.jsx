@@ -52,6 +52,8 @@ export default function CreatePost({ author }) {
     createPost.mutate({
       type: 'post',
       title: title.value,
+      source: process.env.NEXT_PUBLIC_API,
+      origin: process.env.NEXT_PUBLIC_API,
       description: description.value,
       content: body,
       contentType:
@@ -89,6 +91,8 @@ export default function CreatePost({ author }) {
               width={60}
               height={60}
               priority={true}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
             {/* change the visibility type of post */}
             <Button

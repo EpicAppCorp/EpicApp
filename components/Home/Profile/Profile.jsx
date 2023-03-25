@@ -17,7 +17,7 @@ export default function Profile({ author }) {
 
   if (!author)
     return (
-      <div className="sticky top-24 w-full overflow-hidden rounded-xl bg-surface">
+      <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface">
         <div className="h-32 w-full bg-primary" />
         <div className="relative h-24 w-full">
           <div className="absolute flex w-full -translate-y-1/2 justify-center">
@@ -35,7 +35,7 @@ export default function Profile({ author }) {
     );
 
   return (
-    <div className="sticky top-24 w-full overflow-hidden rounded-xl bg-surface">
+    <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface">
       <div className="h-32 w-full bg-primary" />
       <div className="relative h-24 w-full">
         <div className="absolute grid w-full -translate-y-1/2 grid-cols-3">
@@ -51,6 +51,8 @@ export default function Profile({ author }) {
               loader={() => author.profileImage}
               width={144}
               height={144}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
               priority={true}
             />
           </div>

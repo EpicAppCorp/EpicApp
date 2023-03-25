@@ -98,6 +98,8 @@ export default function Post({ post, author }) {
             className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             loader={() => post.author.profileImage}
             width={60}
             height={60}
@@ -142,6 +144,8 @@ export default function Post({ post, author }) {
               src={post.content}
               className="rounded-2xl object-cover"
               fill={true}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
           </div>
         )}
@@ -205,6 +209,8 @@ export default function Post({ post, author }) {
                   loader={() => comment.author.profileImage}
                   width={40}
                   height={40}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
                 />
                 <div className="flex flex-col gap-1">
                   <p className="flex gap-2 text-text">
@@ -234,6 +240,8 @@ export default function Post({ post, author }) {
             loader={() => author?.profileImage}
             width={40}
             height={40}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
           />
           <div className="flex w-full overflow-hidden rounded-2xl bg-foreground">
             <input

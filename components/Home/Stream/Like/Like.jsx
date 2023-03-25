@@ -21,6 +21,8 @@ export default function Like({ like }) {
               className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
               src="profile image"
               alt="profile image"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
               loader={() => like.author.profileImage}
               width={40}
               height={40}

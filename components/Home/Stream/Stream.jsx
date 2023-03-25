@@ -10,14 +10,14 @@ import Comment from '@epicapp/components/Home/Stream/Comment';
 import { getInbox } from '@epicapp/services/inbox';
 
 export default function Stream({ author, isInbox }) {
-  const inbox = useQuery(['inbox', author], () => getInbox(author), {
+  const inbox = useQuery(['inbox', author?.id], () => getInbox(author), {
     staleTime: 10000,
   });
 
   //loading animation
   if (inbox.isLoading)
     return (
-      <div className="flex h-full items-center justify-center text-9xl text-primary">
+      <div className="flex h-full items-center justify-center text-9xl text-primary py-4">
         {/* // maybe a ekelton loading animation here? */}
         <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
       </div>
@@ -44,7 +44,9 @@ export default function Stream({ author, isInbox }) {
       <div className="flex flex-col">
         {inbox.data.data.items.map((item, idx) => {
           if (item.type === 'follow')
-            return <Follow key={idx} follow={{ ...item, idx }} />;
+            return (
+              <Follow key={idx} author={author} request={{ ...item, idx }} />
+            );
           else if (item.type === 'like')
             return <Like key={idx} like={{ ...item, idx }} />;
           else if (item.type === 'comment')

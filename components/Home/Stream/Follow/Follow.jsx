@@ -1,35 +1,54 @@
 import Image from 'next/image';
-import { acceptFollower } from '@epicapp/services/follow';
-import { useState } from 'react';
-import { useMutation } from 'react-query';
+import { follow, isFollowing } from '@epicapp/services/follow';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 
 //components
 import Button from '@epicapp/components/Button';
 
-export default function FollowRequest({ follow, author }) {
-  const [accepted, setAccepted] = useState(false);
-  const acceptFollow = useMutation(() => acceptFollower(author, follow.actor), {
+export default function FollowRequest({ author, request }) {
+  const queryClient = useQueryClient();
+
+  //cache will never get stale, so only one call when mouonted.
+  const following = useQuery(
+    ['following'],
+    () => isFollowing(author.id, request.actor.id),
+    {
+      staleTime: Infinity,
+    },
+  );
+
+  const addFollower = useMutation(() => follow(author.id, request.actor.id), {
+    //update cache so author has one follower now
     onSuccess() {
-      setAccepted(true);
+      queryClient.setQueryData(['author'], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          followers: (oldData.data.followers += 1),
+        },
+      }));
     },
   });
+
   return (
     <div
       className={clsx(
         'flex h-28 items-center',
-        follow.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
+        request.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
       )}
     >
       <div className="flex w-full items-center justify-between px-4">
         <div className="flex items-center gap-4">
           <div className="relative">
-            {follow.actor?.profileImage ? (
+            {request.actor?.profileImage ? (
               <Image
                 className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
                 src="profile image"
                 alt="profile image"
-                loader={() => follow.actor.profileImage}
+                placeholder="blur"
+                blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+                loader={() => request.actor.profileImage}
                 width={40}
                 height={40}
               />
@@ -42,14 +61,14 @@ export default function FollowRequest({ follow, author }) {
           </div>
           <div>
             <span className="font-semibold text-text">
-              {follow.actor.displayName}
+              {request.actor.displayName}
             </span>
             <p className="w-48 truncate text-sm text-textAlt">
-              {follow.summary}
+              {request.summary}
             </p>
-            {!process.env.NEXT_PUBLIC_API.includes(follow.actor.host) && (
+            {!process.env.NEXT_PUBLIC_API.includes(request.actor.host) && (
               <div
-                title={follow.actor.host}
+                title={request.actor.host}
                 className="mt-1 flex w-max items-center gap-2 rounded-xl bg-primary/10 py-1 px-2 text-xs text-primary"
               >
                 <i className="fa-solid fa-square-up-right" /> External
@@ -58,12 +77,12 @@ export default function FollowRequest({ follow, author }) {
           </div>
         </div>
         <Button
-          loading={acceptFollow.isLoading}
-          disabled={accepted}
-          onClick={() => acceptFollow.mutate()}
+          loading={addFollower.isLoading || following.isLoading}
+          disabled={addFollower.isSuccess || following.isSuccess}
+          onClick={() => addFollower.mutate()}
           className="self-center rounded-2xl bg-layer px-4 py-2 text-sm text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
         >
-          {accepted ? 'Accepted' : 'Accept'}
+          {addFollower.isSuccess || following.isSuccess ? 'Accepted' : 'Accept'}
         </Button>
       </div>
     </div>
