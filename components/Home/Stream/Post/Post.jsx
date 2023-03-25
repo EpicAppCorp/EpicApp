@@ -115,7 +115,7 @@ export default function Post({ post, author }) {
               title={post.author.host}
               className={clsx(
                 'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
-                post.author.host.includes(process.env.NEXT_PUBLIC_API)
+                process.env.NEXT_PUBLIC_API.includes(post.author.host)
                   ? 'hidden'
                   : 'flex',
               )}
@@ -176,10 +176,7 @@ export default function Post({ post, author }) {
         </div>
         <div className="flex gap-2 text-xs">
           {post?.categories.map((category, idx) => (
-            <span
-              className="rounded-xl text-textAlt"
-              key={idx}
-            >
+            <span className="rounded-xl text-textAlt" key={idx}>
               {category}
             </span>
           ))}

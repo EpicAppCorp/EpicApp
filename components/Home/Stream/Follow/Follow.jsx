@@ -44,8 +44,10 @@ export default function FollowRequest({ follow, author }) {
             <span className="font-semibold text-text">
               {follow.actor.displayName}
             </span>
-            <p className="text-sm text-textAlt truncate w-48">{follow.summary}</p>
-            {!follow.actor.host.includes(process.env.NEXT_PUBLIC_API) && (
+            <p className="w-48 truncate text-sm text-textAlt">
+              {follow.summary}
+            </p>
+            {!process.env.NEXT_PUBLIC_API.includes(follow.actor.host) && (
               <div
                 title={follow.actor.host}
                 className="mt-1 flex w-max items-center gap-2 rounded-xl bg-primary/10 py-1 px-2 text-xs text-primary"

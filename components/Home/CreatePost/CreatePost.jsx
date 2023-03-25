@@ -49,12 +49,9 @@ export default function CreatePost({ author }) {
         : e.target.body.value;
 
     //mutate the post stuff to server
-    //no need to also post to inbox as api internally does that for you.
     createPost.mutate({
       type: 'post',
       title: title.value,
-      source: 'http://localhost:8000',
-      origin: 'http://localhost:8000',
       description: description.value,
       content: body,
       contentType:
