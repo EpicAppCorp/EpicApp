@@ -5,5 +5,8 @@ export const getComments = (url) => {
 };
 
 export const newComment = (post) => {
-  return axiosClient.post(post.post_id + '/comments/', post);
+  if (post.author.id.includes(process.env.NEXT_PUBLIC_API)) {
+    return axiosClient.post(post.post_id + '/comments/', post);
+  }
+  return axiosClient.post(post.author.id + '/inbox', post);
 };
