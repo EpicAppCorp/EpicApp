@@ -6,7 +6,7 @@ import clsx from 'clsx';
 //components
 import Button from '@epicapp/components/Button';
 
-export default function FollowRequest({ author, request }) {
+export default function Follow({ author, request }) {
   const queryClient = useQueryClient();
 
   //cache will never get stale, so only one call when mouonted.

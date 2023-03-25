@@ -1,11 +1,46 @@
+import Image from 'next/image';
+import { useMutation, useQueryClient } from 'react-query';
 import { formatDistance } from 'date-fns';
 import clsx from 'clsx';
-
 
 //componenets
 import Button from '@epicapp/components/Button';
 
-export default function Comment({ comment }) {
+//services
+import { newLike } from '@epicapp/services/like';
+
+export default function Comment({ author, comment, post, liked }) {
+  const queryClient = useQueryClient();
+
+  const addCommentLike = useMutation((post) => newLike(post), {
+    onSuccess() {
+      //update cache
+      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: [...oldData.data.items, { object: comment.id }],
+        },
+      }));
+    },
+  });
+
+  const submitLike = (object) => {
+    addCommentLike.mutate({
+      type: 'Like',
+      author: {
+        type: 'author',
+        id: author.id,
+        host: author.host,
+        displayName: author.displayName,
+        url: author.url,
+        github: author.github,
+        profileImage: author.profileImage,
+      },
+      object,
+    });
+  };
+
   return (
     <div className="flex items-center gap-4">
       <Image
@@ -25,7 +60,7 @@ export default function Comment({ comment }) {
         </p>
         <span className="flex items-center gap-2 text-xs text-textAlt">
           <Button
-            onClick={() => submitLike('COMMENT', comment.id)}
+            onClick={() => submitLike(comment.id)}
             disabled={liked.includes(comment.id)}
             loading={addCommentLike.isLoading}
             className="flex text-sm"

@@ -17,6 +17,7 @@ export default function Post({ post, author, liked }) {
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
   const queryClient = useQueryClient();
+  const isLiked = liked?.includes(post.id);
 
   //get all comments
   const comments = useQuery({
@@ -60,20 +61,6 @@ export default function Post({ post, author, liked }) {
     },
   });
 
-  //seperate for the loading and stuff
-  const addCommentLike = useMutation((post) => newLike(post), {
-    onSuccess() {
-      //update cache
-      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          items: [...oldData.data.items, { object: post.id }],
-        },
-      }));
-    },
-  });
-
   const submitComment = (e) => {
     e.preventDefault();
     addComment.mutate({
@@ -92,8 +79,8 @@ export default function Post({ post, author, liked }) {
     });
   };
 
-  const submitLike = (type, object) => {
-    const obj = {
+  const submitLike = (object) => {
+    addPostLike.mutate({
       type: 'Like',
       author: {
         type: 'author',
@@ -105,9 +92,7 @@ export default function Post({ post, author, liked }) {
         profileImage: author.profileImage,
       },
       object,
-    };
-    if (type === 'POST') return addPostLike.mutate(obj);
-    return addCommentLike.mutate(obj);
+    });
   };
 
   return (
@@ -179,14 +164,14 @@ export default function Post({ post, author, liked }) {
       <div className="flex items-center justify-between text-2xl text-textAlt">
         <div className="flex gap-6">
           <Button
-            disabled={!author || liked}
+            disabled={!author || isLiked}
             loading={addPostLike.isLoading}
-            onClick={() => submitLike('POST', post.id)}
+            onClick={() => submitLike(post.id)}
           >
             <i
               className={clsx(
                 'transition-colors duration-150',
-                liked.includes(post.id)
+                isLiked
                   ? 'fa-solid fa-heart text-[#880808]'
                   : 'fa-regular fa-heart hover:text-[#880808]',
               )}
@@ -228,7 +213,12 @@ export default function Post({ post, author, liked }) {
             )}
           >
             {comments.data.data.comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
+              <Comment
+                key={comment.id}
+                author={author}
+                comment={comment}
+                liked={liked}
+              />
             ))}
           </div>
         )}
