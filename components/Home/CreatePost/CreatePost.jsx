@@ -26,7 +26,7 @@ export default function CreatePost({ author }) {
   const createPost = useMutation((post) => newPost(author, post), {
     onSuccess(data) {
       //update cache, dont think we doing it this way anoymore.
-      queryClient.setQueryData(['inbox', author], (oldData) => ({
+      queryClient.setQueryData(['inbox', author?.id], (oldData) => ({
         ...oldData,
         data: {
           ...oldData.data,

@@ -11,10 +11,11 @@ export default function FollowRequest({ author, request }) {
 
   //cache will never get stale, so only one call when mouonted.
   const following = useQuery(
-    ['following'],
+    ['following', request.actor.id],
     () => isFollowing(author.id, request.actor.id),
     {
       staleTime: Infinity,
+      
     },
   );
 
