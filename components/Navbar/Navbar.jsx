@@ -31,7 +31,7 @@ export default function Navbar({ author, route, openModal }) {
   });
 
   return (
-    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 px-8 py-4 text-text backdrop-blur-lg">
+    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 px-8 py-4 text-text bg-background">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>

@@ -7,12 +7,13 @@ import ReactMarkdown from 'react-markdown';
 
 //components
 import Button from '@epicapp/components/Button';
+import Comment from './Comment';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 
-export default function Post({ post, author }) {
+export default function Post({ post, author, liked }) {
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
   const queryClient = useQueryClient();
@@ -47,11 +48,28 @@ export default function Post({ post, author }) {
 
   //like mutation
   const addPostLike = useMutation((post) => newLike(post), {
-    onSuccess(data) {
+    onSuccess() {
       //update cache
-      queryClient.setQueryData(['likes', post.id], (oldData) => ({
+      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
         ...oldData,
-        data: [...oldData.data, data.data],
+        data: {
+          ...oldData.data,
+          items: [...oldData.data.items, { object: post.id }],
+        },
+      }));
+    },
+  });
+
+  //seperate for the loading and stuff
+  const addCommentLike = useMutation((post) => newLike(post), {
+    onSuccess() {
+      //update cache
+      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: [...oldData.data.items, { object: post.id }],
+        },
       }));
     },
   });
@@ -74,8 +92,8 @@ export default function Post({ post, author }) {
     });
   };
 
-  const submitCommentLike = () => {
-    addPostLike.mutate({
+  const submitLike = (type, object) => {
+    const obj = {
       type: 'Like',
       author: {
         type: 'author',
@@ -86,8 +104,10 @@ export default function Post({ post, author }) {
         github: author.github,
         profileImage: author.profileImage,
       },
-      object: post.id,
-    });
+      object,
+    };
+    if (type === 'POST') return addPostLike.mutate(obj);
+    return addCommentLike.mutate(obj);
   };
 
   return (
@@ -159,11 +179,18 @@ export default function Post({ post, author }) {
       <div className="flex items-center justify-between text-2xl text-textAlt">
         <div className="flex gap-6">
           <Button
-            disabled={!author}
+            disabled={!author || liked}
             loading={addPostLike.isLoading}
-            onClick={() => submitCommentLike()}
+            onClick={() => submitLike('POST', post.id)}
           >
-            <i className="fa-regular fa-heart transition-colors duration-150 hover:text-[#880808]" />
+            <i
+              className={clsx(
+                'transition-colors duration-150',
+                liked.includes(post.id)
+                  ? 'fa-solid fa-heart text-[#880808]'
+                  : 'fa-regular fa-heart hover:text-[#880808]',
+              )}
+            />
           </Button>
           <Button
             disabled={!author}
@@ -201,34 +228,7 @@ export default function Post({ post, author }) {
             )}
           >
             {comments.data.data.comments.map((comment) => (
-              <div className="flex items-center gap-4" key={comment.id}>
-                <Image
-                  className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
-                  src="profile image"
-                  alt="profile image"
-                  loader={() => comment.author.profileImage}
-                  width={40}
-                  height={40}
-                  placeholder="blur"
-                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
-                />
-                <div className="flex flex-col gap-1">
-                  <p className="flex gap-2 text-text">
-                    <span className="font-bold">
-                      {comment.author.displayName}
-                    </span>
-                    {comment.comment}
-                  </p>
-                  <span className="flex items-center gap-2 text-xs text-textAlt">
-                    <Button className="flex text-sm">
-                      <i className="fa-regular fa-heart transition-colors duration-150 hover:text-[#880808]" />
-                    </Button>
-                    {formatDistance(new Date(comment.published), new Date(), {
-                      addSuffix: true,
-                    })}
-                  </span>
-                </div>
-              </div>
+              <Comment key={comment.id} comment={comment} />
             ))}
           </div>
         )}

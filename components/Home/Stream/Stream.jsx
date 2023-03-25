@@ -8,9 +8,15 @@ import Comment from '@epicapp/components/Home/Stream/Comment';
 
 //services
 import { getInbox } from '@epicapp/services/inbox';
+import { getLiked } from '@epicapp/services/like';
 
 export default function Stream({ author, isInbox }) {
   const inbox = useQuery(['inbox', author?.id], () => getInbox(author), {
+    staleTime: 10000,
+  });
+
+  const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
+    enabled: !!author,
     staleTime: 10000,
   });
 
@@ -61,7 +67,12 @@ export default function Stream({ author, isInbox }) {
         {inbox.data.data.items
           .filter(({ type }) => type === 'post')
           .map((item) => (
-            <Post key={item.id} post={item} author={author} />
+            <Post
+              key={item.id}
+              post={item}
+              liked={liked.data?.data?.items.map((like) => like.object)}
+              author={author}
+            />
           ))}
       </div>
     );

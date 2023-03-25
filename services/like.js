@@ -7,3 +7,7 @@ export const getLikes = (url) => {
 export const newLike = (post) => {
   return axiosClient.post(post.object.split('/posts')[0] + '/inbox/', post);
 };
+
+export const getLiked = (authorUrl) => {
+  return axiosClient.get(authorUrl + '/liked/');
+};

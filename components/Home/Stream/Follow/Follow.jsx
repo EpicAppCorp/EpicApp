@@ -15,7 +15,11 @@ export default function FollowRequest({ author, request }) {
     () => isFollowing(author.id, request.actor.id),
     {
       staleTime: Infinity,
-      
+      onError(error) {
+        if (error.statusCode === 404) {
+          queryClient.setQueryData(['following', request.actor.id], []);
+        }
+      },
     },
   );
 
