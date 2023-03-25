@@ -46,7 +46,7 @@ export default function Post({ post, author }) {
   });
 
   //like mutation
-  const addLike = useMutation((post) => newLike(post), {
+  const addPostLike = useMutation((post) => newLike(post), {
     onSuccess(data) {
       //update cache
       queryClient.setQueryData(['likes', post.id], (oldData) => ({
@@ -74,8 +74,8 @@ export default function Post({ post, author }) {
     });
   };
 
-  const submitLike = () => {
-    addLike.mutate({
+  const submitCommentLike = () => {
+    addPostLike.mutate({
       type: 'Like',
       author: {
         type: 'author',
@@ -160,8 +160,8 @@ export default function Post({ post, author }) {
         <div className="flex gap-6">
           <Button
             disabled={!author}
-            loading={addLike.isLoading}
-            onClick={() => addLike.mutate()}
+            loading={addPostLike.isLoading}
+            onClick={() => submitCommentLike()}
           >
             <i className="fa-regular fa-heart transition-colors duration-150 hover:text-[#880808]" />
           </Button>
@@ -196,7 +196,7 @@ export default function Post({ post, author }) {
         {showComments && comments.isFetched && (
           <div
             className={clsx(
-              'mb-4 max-h-48 min-h-0 flex-col gap-3',
+              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-scroll',
               comments.data.data.comments.length ? 'flex' : 'hidden',
             )}
           >

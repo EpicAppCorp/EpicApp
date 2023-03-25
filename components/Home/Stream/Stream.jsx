@@ -17,7 +17,7 @@ export default function Stream({ author, isInbox }) {
   //loading animation
   if (inbox.isLoading)
     return (
-      <div className="flex h-full items-center justify-center text-9xl text-primary py-4">
+      <div className="flex h-full items-center justify-center py-4 text-9xl text-primary">
         {/* // maybe a ekelton loading animation here? */}
         <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
       </div>
@@ -43,13 +43,13 @@ export default function Stream({ author, isInbox }) {
     return (
       <div className="flex flex-col">
         {inbox.data.data.items.map((item, idx) => {
-          if (item.type === 'follow')
+          if (item.type.toUpperCase() === 'FOLLOW')
             return (
               <Follow key={idx} author={author} request={{ ...item, idx }} />
             );
-          else if (item.type === 'like')
+          else if (item.type.toUpperCase() === 'LIKE')
             return <Like key={idx} like={{ ...item, idx }} />;
-          else if (item.type === 'comment')
+          else if (item.type.toUpperCase() === 'COMMENT')
             return <Comment key={idx} comment={{ ...item, idx }} />;
         })}
       </div>

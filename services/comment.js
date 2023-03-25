@@ -5,5 +5,5 @@ export const getComments = (url) => {
 };
 
 export const newComment = (post) => {
-  return axiosClient.post(post.post_id + '/comments', post);
+  return axiosClient.post(post.post_id + '/comments/', post);
 };
