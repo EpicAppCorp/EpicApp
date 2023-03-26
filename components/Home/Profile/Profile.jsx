@@ -15,6 +15,9 @@ export default function Profile({ author }) {
     },
   });
 
+  //var username = author.github
+  //var getUsername = username.substring(19)
+
   if (!author)
     return (
       <div className="sticky top-[4.55rem] w-full overflow-hidden rounded-xl bg-surface">
