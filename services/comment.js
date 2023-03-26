@@ -12,3 +12,7 @@ export const newComment = (author, post) => {
     post: post.id,
   });
 };
+
+export const getComment = (commentUrl) => {
+  return axiosClient.get(commentUrl);
+};
