@@ -20,7 +20,7 @@ const Button = forwardRef(
       ref={ref}
       disabled={disabled || loading}
       type={type}
-      className={className}
+      className={disabled ? 'pointer-events-none ' + className : className}
       onClick={onClick}
       {...props}
     >

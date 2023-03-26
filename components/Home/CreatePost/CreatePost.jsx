@@ -18,6 +18,8 @@ export default function CreatePost({ author, removeRounded }) {
     setRoundedTop = 'none'
   }
 
+//export default function CreatePost({ author }) {
+  //const queryClient = useQueryClient();
   const [contentType, setContentType] = useState('text/plain');
   const [imageFileName, setImageFileName] = useState(null);
   const [visibility, setVisibility] = useState({
@@ -26,12 +28,11 @@ export default function CreatePost({ author, removeRounded }) {
     icon: 'fa-regular fa-earth-asia',
   });
 
-  const queryClient = useQueryClient();
   // mutation
   const createPost = useMutation((post) => newPost(author, post), {
     onSuccess(data) {
-      //update cache
-      queryClient.setQueryData(['inbox'], (oldData) => ({
+      //update cache, dont think we doing it this way anoymore.
+      queryClient.setQueryData(['inbox', author?.id], (oldData) => ({
         ...oldData,
         data: {
           ...oldData.data,
@@ -54,12 +55,11 @@ export default function CreatePost({ author, removeRounded }) {
         : e.target.body.value;
 
     //mutate the post stuff to server
-    //no need to also post to inbox as api internally does that for you.
     createPost.mutate({
       type: 'post',
       title: title.value,
-      source: 'http://localhost:8000',
-      origin: 'http://localhost:8000',
+      source: process.env.NEXT_PUBLIC_API,
+      origin: process.env.NEXT_PUBLIC_API,
       description: description.value,
       content: body,
       contentType:
@@ -67,7 +67,7 @@ export default function CreatePost({ author, removeRounded }) {
           ? body.split(',')[0].split('data:')[1]
           : contentType,
       visibility: visibility.type,
-      categories: ['something', 'anothring thing'],
+      categories: ['cool'],
       author: {
         type: 'author',
         id: author.id,
@@ -97,6 +97,8 @@ export default function CreatePost({ author, removeRounded }) {
               width={60}
               height={60}
               priority={true}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
             {/* change the visibility type of post */}
             <Button

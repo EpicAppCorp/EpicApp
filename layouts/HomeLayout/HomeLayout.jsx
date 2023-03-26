@@ -12,13 +12,13 @@ export default function HomeLayout({ children, route, author }) {
 
   return (
     <>
-      <div className="h-full w-full px-8 py-4 font-sans">
+      <div>
         <Navbar
           author={author}
           route={route}
           openModal={(type) => setModal({ show: true, form: type })}
         />
-        <div className="py-8">{children}</div>
+        <div className="px-8 py-4">{children}</div>
       </div>
 
       <Modal show={modal.show}>

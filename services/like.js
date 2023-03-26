@@ -1,9 +1,21 @@
 import { axiosClient } from '@epicapp/libs/axios';
 
 export const getLikes = (url) => {
-  return axiosClient.get(url + '/likes');
+  return axiosClient.get(url + '/likes/');
 };
 
-export const newLike = (post) => {
-  return axiosClient.post(post.object.split('/posts')[0] + '/inbox', post);
+export const newLike = (author, post) => {
+  const likedPost = axiosClient.post(author.id + '/liked/', {
+    object: post.id,
+  });
+  const inbox = axiosClient.post(post.author.id + '/inbox/', {
+    type: 'Like',
+    author: author.id,
+    object: post.id,
+  });
+  return axios.all([likedPost, inbox]);
+};
+
+export const getLiked = (authorUrl) => {
+  return axiosClient.get(authorUrl + '/liked/');
 };
