@@ -23,7 +23,7 @@ export default function Follow({ author, request }) {
     },
   );
 
-  const addFollower = useMutation(() => follow(author.id, request.actor.id), {
+  const addFollower = useMutation(() => follow(author.id, request.actor.url), {
     //update cache so author has one follower now
     onSuccess() {
       queryClient.setQueryData(['author'], (oldData) => ({
