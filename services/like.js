@@ -5,11 +5,15 @@ export const getLikes = (url) => {
 };
 
 export const newLike = (author, post) => {
-  return axiosClient.post(post.author.id + '/inbox/', {
+  const likedPost = axiosClient.post(author.id + '/liked/', {
+    object: post.id,
+  });
+  const inbox = axiosClient.post(post.author.id + '/inbox/', {
     type: 'Like',
     author: author.id,
     object: post.id,
   });
+  return axios.all([likedPost, inbox]);
 };
 
 export const getLiked = (authorUrl) => {
