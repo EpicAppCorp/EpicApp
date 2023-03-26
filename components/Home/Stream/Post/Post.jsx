@@ -144,7 +144,7 @@ export default function Post({ post, author, liked }) {
           <div className="text-text">{post.content}</div>
         )}
         {post.contentType === 'text/markdown' && (
-          <ReactMarkdown className="text-text">{post.content}</ReactMarkdown>
+          <ReactMarkdown children={post.content} className="text-text" />
         )}
       </div>
       <div className="flex items-center justify-between text-2xl text-textAlt">
