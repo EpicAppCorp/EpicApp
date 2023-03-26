@@ -12,8 +12,7 @@ import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {
-    retry: 1,
-    staleTime: 10000,
+    staleTime: Infinity,
   });
 
   return (
@@ -24,11 +23,11 @@ export default function Homepage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen w-screen bg-background overflow-y-auto">
+      <main className="h-screen w-screen">
         {author.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}
-            <i className="fa-solid fa-spinner-third text-primary animate-spin bg-transparent text-2xl" />
+            <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (
           <HomeLayout route="HOME" author={author.data?.data}>

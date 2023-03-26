@@ -7,15 +7,17 @@ import ReactMarkdown from 'react-markdown';
 
 //components
 import Button from '@epicapp/components/Button';
+import Comment from './Comment';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 
-export default function Post({ post, author }) {
+export default function Post({ post, author, liked }) {
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
   const queryClient = useQueryClient();
+  const isLiked = liked?.includes(post.id);
 
   //get all comments
   const comments = useQuery({
@@ -46,12 +48,15 @@ export default function Post({ post, author }) {
   });
 
   //like mutation
-  const addLike = useMutation((post) => newLike(post), {
-    onSuccess(data) {
+  const addPostLike = useMutation((post) => newLike(post), {
+    onSuccess() {
       //update cache
-      queryClient.setQueryData(['likes', post.id], (oldData) => ({
+      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
         ...oldData,
-        data: [...oldData.data, data.data],
+        data: {
+          ...oldData.data,
+          items: [...oldData.data.items, { object: post.id }],
+        },
       }));
     },
   });
@@ -74,8 +79,8 @@ export default function Post({ post, author }) {
     });
   };
 
-  const submitLike = () => {
-    addLike.mutate({
+  const submitLike = (object) => {
+    addPostLike.mutate({
       type: 'Like',
       author: {
         type: 'author',
@@ -86,24 +91,45 @@ export default function Post({ post, author }) {
         github: author.github,
         profileImage: author.profileImage,
       },
-      object: post.id,
+      object,
     });
   };
 
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">
       <div className="flex gap-4">
-        <Image
-          className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
-          src="profile image"
-          alt="profile image"
-          loader={() => post.author.profileImage}
-          width={60}
-          height={60}
-          priority={true}
-        />
-        <div>
-          <span className="text-textAlt">@{post.author.displayName}</span>
+        {post.author?.profileImage ? (
+          <Image
+            className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+            src="profile image"
+            alt="profile image"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+            loader={() => post.author.profileImage}
+            width={60}
+            height={60}
+            priority={true}
+          />
+        ) : (
+          <div className="flex h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-full border-4 border-layer bg-background object-cover text-3xl text-textAlt">
+            <i className="fa-solid fa-question" />
+          </div>
+        )}
+        <div className="w-full">
+          <div className="flex justify-between">
+            <span className="text-textAlt">@{post.author.displayName}</span>
+            <div
+              title={post.author.host}
+              className={clsx(
+                'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
+                process.env.NEXT_PUBLIC_API.includes(post.author.host)
+                  ? 'hidden'
+                  : 'flex',
+              )}
+            >
+              <i className="fa-solid fa-square-up-right" /> {post.author.host}
+            </div>
+          </div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-text">{post.title}</h1>
             <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
@@ -123,6 +149,8 @@ export default function Post({ post, author }) {
               src={post.content}
               className="rounded-2xl object-cover"
               fill={true}
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
           </div>
         )}
@@ -136,11 +164,18 @@ export default function Post({ post, author }) {
       <div className="flex items-center justify-between text-2xl text-textAlt">
         <div className="flex gap-6">
           <Button
-            disabled={!author}
-            loading={addLike.isLoading}
-            onClick={() => addLike.mutate()}
+            disabled={!author || isLiked}
+            loading={addPostLike.isLoading}
+            onClick={() => submitLike(post.id)}
           >
-            <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
+            <i
+              className={clsx(
+                'transition-colors duration-150',
+                isLiked
+                  ? 'fa-solid fa-heart text-[#880808]'
+                  : 'fa-regular fa-heart hover:text-[#880808]',
+              )}
+            />
           </Button>
           <Button
             disabled={!author}
@@ -150,17 +185,14 @@ export default function Post({ post, author }) {
             <i
               className={clsx(
                 'fa-regular fa-comment-dots transition-colors duration-150 ',
-                showComments ? 'text-tertiary' : 'hover:text-tertiary',
+                showComments ? 'text-white' : 'hover:text-white',
               )}
             />
           </Button>
         </div>
         <div className="flex gap-2 text-xs">
           {post?.categories.map((category, idx) => (
-            <span
-              className="rounded-xl bg-primary/5 px-2 py-1 text-primary"
-              key={idx}
-            >
+            <span className="rounded-xl text-textAlt" key={idx}>
               {category}
             </span>
           ))}
@@ -176,37 +208,17 @@ export default function Post({ post, author }) {
         {showComments && comments.isFetched && (
           <div
             className={clsx(
-              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
+              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-scroll',
               comments.data.data.comments.length ? 'flex' : 'hidden',
             )}
           >
             {comments.data.data.comments.map((comment) => (
-              <div className="flex items-center gap-4" key={comment.id}>
-                <Image
-                  className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
-                  src="profile image"
-                  alt="profile image"
-                  loader={() => comment.author.profileImage}
-                  width={40}
-                  height={40}
-                />
-                <div className="flex flex-col gap-1">
-                  <p className="flex gap-2 text-text">
-                    <span className="font-bold">
-                      {comment.author.displayName}
-                    </span>
-                    {comment.comment}
-                  </p>
-                  <span className="flex items-center gap-2 text-xs text-textAlt">
-                    <Button className="flex text-sm">
-                      <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
-                    </Button>
-                    {formatDistance(new Date(comment.published), new Date(), {
-                      addSuffix: true,
-                    })}
-                  </span>
-                </div>
-              </div>
+              <Comment
+                key={comment.id}
+                author={author}
+                comment={comment}
+                liked={liked}
+              />
             ))}
           </div>
         )}
@@ -218,6 +230,8 @@ export default function Post({ post, author }) {
             loader={() => author?.profileImage}
             width={40}
             height={40}
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
           />
           <div className="flex w-full overflow-hidden rounded-2xl bg-foreground">
             <input

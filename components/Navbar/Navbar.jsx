@@ -6,16 +6,18 @@ import clsx from 'clsx';
 
 //components
 import Button from '../Button';
+import Inbox from '@epicapp/components/Inbox';
 
 //services
 import { logoutAuthor } from '@epicapp/services/author';
 
 export default function Navbar({ author, route, openModal }) {
   const [dropdown, setDropdown] = useState(false);
+  const [inbox, setInbox] = useState(false);
 
   const classBuilder = (type) => {
     return clsx(
-      ' transition-all duration-150 hover:text-primary',
+      'transition-all duration-150 hover:text-primary cursor-pointer',
       route === type
         ? 'relative text-primary after:mt-4 after:absolute after:-bottom-3 after:left-1/2 after:-translate-x-1/2 after:h-2 after:w-2 after:rounded-full after:bg-primary after:content-[""]'
         : 'text-text',
@@ -29,7 +31,7 @@ export default function Navbar({ author, route, openModal }) {
   });
 
   return (
-    <nav className="grid h-12 grid-cols-3 text-text">
+    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 px-8 py-4 text-text bg-background">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
@@ -52,17 +54,22 @@ export default function Navbar({ author, route, openModal }) {
             />
           </Link>
         </li>
-        <Link className={classBuilder('INBOX')} href="/inbox">
-          <i
-            className={clsx(
-              route === 'INBOX' ? 'fa-solid fa-bell' : 'fa-regular fa-bell',
-            )}
-          />
-        </Link>
       </ul>
       <div className="flex items-center justify-end text-text">
         {author ? (
-          <div className="relative">
+          <div className="relative flex items-center gap-6">
+            <div>
+              <i
+                onClick={() => setInbox(!inbox)}
+                className={clsx(
+                  'cursor-pointer text-xl',
+                  inbox
+                    ? 'fa-solid fa-bell text-primary'
+                    : 'fa-regular fa-bell hover:animate-bellshake hover:text-primary',
+                )}
+              />
+              {inbox && <Inbox author={author} />}
+            </div>
             <button
               onClick={() => setDropdown(!dropdown)}
               type="button"
@@ -89,7 +96,7 @@ export default function Navbar({ author, route, openModal }) {
             </button>
 
             {dropdown && (
-              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base hover:shadow-lg">
+              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
                 <li>
                   <Link
                     className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"

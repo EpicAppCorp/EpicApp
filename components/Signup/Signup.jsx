@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useMutation } from 'react-query';
 
 //components
@@ -8,41 +7,27 @@ import Button from '../Button';
 import { createAuthor } from '@epicapp/services/author';
 
 export default function Signup({ close, switchHandler }) {
-  // const [profileImage, setProfileImage] = useState('');
-  const [userErrorMessage, setUserErrorMessage] = useState('');
-
   const register = useMutation((body) => createAuthor(body), {
-    onSuccess(data) {
-      close();
+    onSuccess() {
+      switchHandler();
     },
   });
 
   const submitRegister = async (e) => {
     e.preventDefault();
 
-    //TODO: Might make this server side to make all the errors come from one place.
-    if (e.target.password.value != e.target.confirm_password.value) {
-      setUserErrorMessage('ERROR: Passwords do not match');
-    } else {
-      register.mutate({
-        displayName: e.target.username.value,
-        password: e.target.password.value,
-        github: e.target.github.value,
-        host: 'http://127.0.0.1:8000/',
-        url: 'http://127.0.0.1:8000/',
-        // profileImage: e.target.profileimg.files[0].name,
-      });
-    }
+    register.mutate({
+      displayName: e.target.username.value,
+      password: e.target.password.value,
+      confirmpassword: e.target.confirm_password.value,
+      github: e.target.github.value,
+    });
   };
-
-  // const displayFile = (e) => {
-  //   setProfileImage(e.target.files[0]?.name);
-  // };
 
   return (
     <div className="flex h-screen items-center justify-center">
       <form
-        className="flex flex-col items-center justify-center rounded-xl border-2 border-solid border-background text-white p-10"
+        className="flex flex-col items-center justify-center rounded-2xl bg-background p-10 text-text"
         onSubmit={submitRegister}
       >
         <div className="mb-3 text-2xl">
@@ -50,19 +35,12 @@ export default function Signup({ close, switchHandler }) {
           <br />
         </div>
         {register.isError && (
-          <div className="mb-2 rounded-lg bg-errorF p-1 text-errorB">
+          <div className="bg-errorF text-errorB mb-2 rounded-lg p-1">
             {Object.keys(register.error.response.data).map((key) => (
               <div>{register.error.response.data[key]}</div>
             ))}
           </div>
         )}
-
-        {userErrorMessage ? (
-          <div className="mb-2 rounded-lg bg-errorF p-1 text-errorB">
-            {userErrorMessage}
-            <br />
-          </div>
-        ) : null}
 
         <input
           className="mb-5 border border-solid border-foreground bg-background text-center"
@@ -96,30 +74,6 @@ export default function Signup({ close, switchHandler }) {
           placeholder="Github Url"
           required
         />
-        {/* TODO: WE HAVE A RANDOM IMAGE ASSINGED TO NEW USERS, MAYBE WE REMOVE THIS IN THE SIGNUP AND ALLOW TO BE UPDATED LATER? */}
-        {/* <input
-          className="mb-5 border border-solid border-full bg-epicBg text-center"
-          type={'file'}
-          id="profileimg"
-          name="profileimg"
-          style={{ display: 'none' }}
-          required
-          onChange={displayFile}
-        />
-        <label
-          className="rounded-lg border-2 border-solid border-medium bg-epicBg px-5 py-0.5"
-          htmlFor="profileimg"
-        >
-          {' '}
-          Click to upload profile image
-        </label>
-        {profileImage ? (
-          <div className="my-4 font-semibold">
-            <u>Uploaded:</u> {profileImage}
-          </div>
-        ) : (
-          <br />
-        )} */}
         <button
           type="submit"
           className="rounded-lg bg-layer px-5 py-1 font-semibold text-white "

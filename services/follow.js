@@ -1,7 +1,13 @@
-export const acceptFollower = (author, foreignAuthor) => {
-    return axiosClient.put(author.host + 'api/authors/' + author.id + '/followers/' + foreignAuthor.id);
-  };
+import { axiosClient } from '@epicapp/libs/axios';
 
-export const unFollow = (author, foreignAuthor) => {
-    return axiosClient.delete(author.host + 'api/authors/' + author.id + '/followers/' + foreignAuthor.id);
+export const follow = (authorId, foreignAuthorId) => {
+  return axiosClient.put(authorId + '/followers/' + foreignAuthorId);
+};
+
+export const isFollowing = (authorId, foreignAuthorId) => {
+  return axiosClient.get(authorId + '/followers/' + foreignAuthorId);
+};
+
+export const unfollow = (author, foreignAuthor) => {
+  return axiosClient.delete(author + '/followers/' + foreignAuthor.id);
 };
