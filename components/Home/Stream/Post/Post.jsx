@@ -33,23 +33,26 @@ export default function Post({ post, author, liked }) {
   // });
 
   //comment mutation
-  const addComment = useMutation((post) => newComment(post), {
-    onSuccess(data) {
-      commentInputRef.current.value = '';
-      //update cache
-      showComments &&
-        queryClient.setQueryData(['comments', post.id], (oldData) => ({
-          ...oldData,
-          data: {
-            ...oldData.data,
-            comments: [...oldData.data.comments, data.data],
-          },
-        }));
+  const addComment = useMutation(
+    (comment) => newComment(author, { ...post, comment }),
+    {
+      onSuccess(data) {
+        commentInputRef.current.value = '';
+        //update cache
+        showComments &&
+          queryClient.setQueryData(['comments', post.id], (oldData) => ({
+            ...oldData,
+            data: {
+              ...oldData.data,
+              comments: [...oldData.data.comments, data.data],
+            },
+          }));
+      },
     },
-  });
+  );
 
   //like mutation
-  const addPostLike = useMutation((post) => newLike(post), {
+  const addPostLike = useMutation(() => newLike(author, { ...post }), {
     onSuccess() {
       //update cache
       queryClient.setQueryData(['liked', author?.id], (oldData) => ({
@@ -62,24 +65,13 @@ export default function Post({ post, author, liked }) {
     },
   });
 
-  const submitComment = (e) => {
-    e.preventDefault();
-    addComment.mutate({
-      type: 'comment',
-      contentType: 'text/plain',
-      comment: e.target.comment.value,
-      author: author.id,
-      post: post.id,
-    });
-  };
-
-  const submitLike = () => {
-    addPostLike.mutate({
-      type: 'Like',
-      author: author.id,
-      post: post.id,
-    });
-  };
+  // const submitLike = () => {
+  //   addPostLike.mutate({
+  //     type: 'Like',
+  //     author: author.id,
+  //     post: post.id,
+  //   });
+  // };
 
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">
@@ -152,7 +144,7 @@ export default function Post({ post, author, liked }) {
           <Button
             disabled={!author || isLiked}
             loading={addPostLike.isLoading}
-            onClick={() => submitLike(post.id)}
+            onClick={() => addPostLike.mutate()}
           >
             <i
               className={clsx(
@@ -189,7 +181,10 @@ export default function Post({ post, author, liked }) {
           'mt-6 border-t border-layer pt-4',
           author ? 'block' : 'hidden',
         )}
-        onSubmit={submitComment}
+        onSubmit={(e) => {
+          e.preventDefault();
+          return addComment.mutate(e.target.comment.value);
+        }}
       >
         {showComments && comments.isFetched && (
           <div
