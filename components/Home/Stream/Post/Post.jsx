@@ -37,13 +37,14 @@ export default function Post({ post, author, liked }) {
     onSuccess(data) {
       commentInputRef.current.value = '';
       //update cache
-      queryClient.setQueryData(['comments', post.id], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          comments: [...oldData.data.comments, data.data],
-        },
-      }));
+      showComments &&
+        queryClient.setQueryData(['comments', post.id], (oldData) => ({
+          ...oldData,
+          data: {
+            ...oldData.data,
+            comments: [...oldData.data.comments, data.data],
+          },
+        }));
     },
   });
 
@@ -64,34 +65,19 @@ export default function Post({ post, author, liked }) {
   const submitComment = (e) => {
     e.preventDefault();
     addComment.mutate({
+      type: 'comment',
+      contentType: 'text/plain',
       comment: e.target.comment.value,
-      post_id: post.id,
-      author: {
-        type: 'author',
-        id: author.id,
-        host: author.host,
-        displayName: author.displayName,
-        url: author.url,
-        github: author.github,
-        profileImage: author.profileImage,
-      },
-      author_id: author.id,
+      author: author.id,
+      post: post.id,
     });
   };
 
-  const submitLike = (object) => {
+  const submitLike = () => {
     addPostLike.mutate({
       type: 'Like',
-      author: {
-        type: 'author',
-        id: author.id,
-        host: author.host,
-        displayName: author.displayName,
-        url: author.url,
-        github: author.github,
-        profileImage: author.profileImage,
-      },
-      object,
+      author: author.id,
+      post: post.id,
     });
   };
 
