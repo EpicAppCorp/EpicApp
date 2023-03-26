@@ -11,3 +11,7 @@ export const isFollowing = (authorId, foreignAuthorId) => {
 export const unfollow = (author, foreignAuthor) => {
   return axiosClient.delete(author + '/followers/' + foreignAuthor.id);
 };
+
+export const getFollowers = (author) => {
+  return axiosClient.get(author.id + '/followers/');
+};

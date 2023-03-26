@@ -46,10 +46,10 @@ export default function Navbar({ author, route, openModal }) {
           </Link>
         </li>
         <li>
-          <Link className={classBuilder('PROFILE')} href="/profile">
+          <Link className={classBuilder('FRIENDS')} href="/friends">
             <i
               className={clsx(
-                route === 'PROFILE' ? 'fa-solid fa-user' : 'fa-regular fa-user',
+                route === 'FRIENDS' ? 'fa-solid fa-user' : 'fa-regular fa-user',
               )}
             />
           </Link>
