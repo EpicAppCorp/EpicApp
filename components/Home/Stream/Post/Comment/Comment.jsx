@@ -8,11 +8,10 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { newLike } from '@epicapp/services/like';
-import { getComment } from '@epicapp/services/comment';
+// import { getComment } from '@epicapp/services/comment';
 
-export default function Comment({ author, comment, post, liked }) {
+export default function Comment({ author, comment, liked }) {
   const queryClient = useQueryClient();
-
   // TODO FIX THIS WITH ACTUAL AUTHOR OBJ
   // const commentRequest = useQuery(
   //   ['comment', comment?.author],
@@ -23,7 +22,7 @@ export default function Comment({ author, comment, post, liked }) {
   // );
 
   const addCommentLike = useMutation(
-    () => newLike(author, { ...post, object: comment.id }),
+    () => newLike(author, { ...comment, object: comment?.id }),
     {
       onSuccess() {
         //update cache
@@ -31,7 +30,7 @@ export default function Comment({ author, comment, post, liked }) {
           ...oldData,
           data: {
             ...oldData.data,
-            items: [...oldData.data.items, { object: comment.id }],
+            items: [...oldData.data.items, { object: comment?.id }],
           },
         }));
       },

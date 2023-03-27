@@ -41,7 +41,7 @@ export default function Stream({ author }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {postItems
+      {posts?.data?.data?.items
         .filter(({ type }) => type === 'post')
         .map((item) => (
           <Post
