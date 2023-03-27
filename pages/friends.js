@@ -8,7 +8,7 @@ import Search from '@epicapp/components/Friends/Search';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
-import FriendsList from '@epicapp/components/Friends/FriendsList';
+import FriendsList from '@epicapp/components/Friends/Friend';
 
 export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {

@@ -154,9 +154,6 @@ export default function CreatePost({ author }) {
             </Button>
           </div>
           <div className="w-full">
-            <p className="my-1 py-2 text-lg text-textAlt">
-              What's on your mind?
-            </p>
             <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">
               <input
                 className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"

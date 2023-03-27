@@ -6,6 +6,7 @@ import HomeLayout from '@epicapp/layouts/HomeLayout';
 import Profile from '@epicapp/components/Home/Profile';
 import CreatePost from '@epicapp/components/Home/CreatePost';
 import Stream from '@epicapp/components/Home/Stream';
+import Friends from '@epicapp/components/Friends';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
@@ -39,6 +40,11 @@ export default function Homepage() {
                 <CreatePost author={author.data?.data} />
                 <Stream author={author.data?.data} />
               </section>
+              {author.data?.data && (
+                <section className="col-span-2">
+                  <Friends author={author.data?.data} />
+                </section>
+              )}
             </div>
           </HomeLayout>
         )}

@@ -17,5 +17,9 @@ export const createAuthor = (body) => {
 };
 
 export const getAuthorById = (authorId) => {
-  return axiosClient.get('/authors/' + authorId)
-}
+  return axiosClient.get('/authors/' + authorId);
+};
+
+export const getAllAuthors = () => {
+  return axiosClient.get(process.env.NEXT_PUBLIC_API + '/friends/');
+};

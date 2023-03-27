@@ -9,13 +9,13 @@ export const getInbox = (author) => {
 };
 
 export const getItem = (url) => {
-  return axiosClient.get(url)
-}
+  return axiosClient.get(url);
+};
 
-export const sendFollowRequest = (body) => {
-  const url = body.object.url + "/inbox";
-  return axiosClient.post(
-    url,
-    body,
-  )
-}
+export const followRequest = (actor, object) =>
+  axiosClient.post(object.id + '/inbox/', {
+    type: 'follow',
+    summary: `${actor.displayName} wants to follow ${object.displayName}`,
+    actor,
+    object,
+  });
