@@ -67,7 +67,7 @@ export default function Profile({ author }) {
       </div>
       <div className="px-8 py-4 text-center">
         <h2 className="text-2xl font-semibold text-text">
-          {author.displayName}
+          @{author.displayName}
         </h2>
         <p className="my-1 text-lg text-textAlt">Author</p>
         <hr className="my-6 border-layer" />

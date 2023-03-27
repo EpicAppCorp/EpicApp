@@ -15,3 +15,11 @@ export const authenticateAuthor = (body) => {
 export const createAuthor = (body) => {
   return axiosClient.post('/auth/register/', body);
 };
+
+export const getAuthorById = (authorId) => {
+  return axiosClient.get('/authors/' + authorId);
+};
+
+export const getAllAuthors = () => {
+  return axiosClient.get(process.env.NEXT_PUBLIC_API + '/friends/');
+};

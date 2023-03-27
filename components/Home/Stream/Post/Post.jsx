@@ -65,14 +65,6 @@ export default function Post({ post, author, liked }) {
     },
   });
 
-  // const submitLike = () => {
-  //   addPostLike.mutate({
-  //     type: 'Like',
-  //     author: author.id,
-  //     post: post.id,
-  //   });
-  // };
-
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">
       <div className="flex gap-4">

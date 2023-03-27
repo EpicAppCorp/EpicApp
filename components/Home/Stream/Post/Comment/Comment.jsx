@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient, useQuery } from 'react-query';
 import { formatDistance } from 'date-fns';
 import clsx from 'clsx';
 
@@ -8,9 +8,19 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { newLike } from '@epicapp/services/like';
+import { getComment } from '@epicapp/services/comment';
 
 export default function Comment({ author, comment, post, liked }) {
   const queryClient = useQueryClient();
+
+  // TODO FIX THIS WITH ACTUAL AUTHOR OBJ
+  const commentRequest = useQuery(
+    ['comment', comment?.author],
+    () => getComment(comment?.author),
+    {
+      staleTime: 10000,
+    },
+  );
 
   const addCommentLike = useMutation((post) => newLike(post), {
     onSuccess() {
@@ -41,13 +51,17 @@ export default function Comment({ author, comment, post, liked }) {
     });
   };
 
+  if (commentRequest.isLoading) {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-4">
       <Image
         className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
         src="profile image"
         alt="profile image"
-        loader={() => comment.author.profileImage}
+        loader={() => commentRequest?.data?.data.profileImage}
         width={40}
         height={40}
         placeholder="blur"
@@ -55,7 +69,9 @@ export default function Comment({ author, comment, post, liked }) {
       />
       <div className="flex flex-col gap-1">
         <p className="flex gap-2 text-text">
-          <span className="font-bold">{comment.author.displayName}</span>
+          <span className="font-bold">
+            {commentRequest?.data?.data.displayName}
+          </span>
           {comment.comment}
         </p>
         <span className="flex items-center gap-2 text-xs text-textAlt">
@@ -74,9 +90,10 @@ export default function Comment({ author, comment, post, liked }) {
               )}
             />
           </Button>
-          {formatDistance(new Date(comment.published), new Date(), {
-            addSuffix: true,
-          })}
+          {comment?.published &&
+            formatDistance(new Date(comment.published), new Date(), {
+              addSuffix: true,
+            })}
         </span>
       </div>
     </div>
