@@ -100,7 +100,7 @@ export default function Navbar({ author, route, openModal }) {
                 <li>
                   <Link
                     className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
-                    href="/profile"
+                    href="/details"
                   >
                     <i className="fa-solid fa-user col-span-2 text-base" />
                     Profile
