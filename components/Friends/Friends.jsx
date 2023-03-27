@@ -20,7 +20,7 @@ export default function Friends({ author }) {
   }
 
   return (
-    <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface p-4">
+    <div className="sticky top-20 w-full h-5/6 overflow-y-auto rounded-xl bg-surface p-4">
       <h1 className="text-xl text-text">Other Authors</h1>
       <div className="mt-4 flex flex-col gap-3">
         {friends.data.data.items
