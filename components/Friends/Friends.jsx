@@ -10,21 +10,24 @@ import { getAllAuthors } from '@epicapp/services/author';
 export default function Friends({ author }) {
   const friends = useQuery(['friends'], () => getAllAuthors(), {
     staleTime: 10000,
+    enabled: !!author,
   });
+
+  if (!author) return null;
 
   if (friends.isLoading) {
     return null;
   }
 
   return (
-    <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface">
-      <h1 className="px-4 pt-4 text-2xl font-semibold text-text">
-        Other Authors
-      </h1>
+    <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface p-4">
+      <h1 className="text-xl text-text">Other Authors</h1>
       <div className="mt-4 flex flex-col gap-3">
-        {friends.data.data.items.map((friend) => (
-          <Friend key={friend.id} author={author} friend={friend} />
-        ))}
+        {friends.data.data.items
+          .filter((friend) => friend.id !== author.id)
+          .map((friend) => (
+            <Friend key={friend.id} author={author} friend={friend} />
+          ))}
       </div>
     </div>
   );

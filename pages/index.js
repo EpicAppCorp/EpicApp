@@ -40,11 +40,9 @@ export default function Homepage() {
                 <CreatePost author={author.data?.data} />
                 <Stream author={author.data?.data} />
               </section>
-              {author.data?.data && (
-                <section className="col-span-2">
-                  <Friends author={author.data?.data} />
-                </section>
-              )}
+              <section className="col-span-2">
+                <Friends author={author.data?.data} />
+              </section>
             </div>
           </HomeLayout>
         )}
