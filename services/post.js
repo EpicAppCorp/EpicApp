@@ -5,5 +5,5 @@ export const newPost = (author, post) => {
 };
 
 export const getPosts = (author) => {
-  return axiosClient.get(author.host + 'api/authors/' + author.id + '/posts');
+  return axiosClient.get(author + '/posts/');
 };

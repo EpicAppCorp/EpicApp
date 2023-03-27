@@ -7,6 +7,7 @@ import Profile from '@epicapp/components/Home/Profile';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
+import Stream from '@epicapp/components/Profile/Stream/Stream';
 
 export default function ProfilePage() {
   const author = useQuery(['author'], getAuthorDetails, {
@@ -35,8 +36,9 @@ export default function ProfilePage() {
                 {/* might need to make another component, idk depending on what you want to do */}
                 <Profile author={author.data?.data} />
               </section>
-              <section className="col-span-4 flex flex-col gap-6">
+              <section className="col-span-2 col-start-2 flex flex-col gap-6">
                 {/* SHOULD ONLY HAVE POSTS FROM THIS AUTHOR */}
+                <Stream author={author?.data?.data} />
               </section>
             </div>
           </HomeLayout>
