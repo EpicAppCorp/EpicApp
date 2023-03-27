@@ -10,18 +10,19 @@ import { followRequest } from '@epicapp/services/inbox';
 
 export default function Friend({ author, friend }) {
   const isAlreadyFollowing = author.following.includes(friend.url);
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
   const followAuthor = useMutation(() => followRequest(author, friend), {
-    onSuccess() {
-      queryClient.setQueryData(['author'], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          following: (oldData.data.followers += 1),
-        },
-      }));
-    },
+    // onSuccess() {
+    //   // TODO: FIX THIS FOR NEW FOLLOWING IMPLEMENTATION
+    //   queryClient.setQueryData(['author'], (oldData) => ({
+    //     ...oldData,
+    //     data: {
+    //       ...oldData.data,
+    //       following: (oldData.data.followers += 1),
+    //     },
+    //   }));
+    // },
   });
 
   return (
