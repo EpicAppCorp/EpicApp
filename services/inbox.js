@@ -13,7 +13,7 @@ export const getItem = (url) => {
 };
 
 export const followRequest = (actor, object) =>
-  axiosClient.post(object.url + '/inbox/', {
+  axiosClient.post(object.url + '/inbox', {
     type: 'follow',
     summary: `${actor.displayName} wants to follow ${object.displayName}`,
     actor,

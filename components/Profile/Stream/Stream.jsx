@@ -19,8 +19,6 @@ export default function Stream({ author }) {
     enabled: !!author,
   });
 
-  const postItems = posts?.data?.data?.items;
-
   //TODO: idk, might just fetch all public posts if not logged in?
   if (!author) return null;
 
@@ -34,7 +32,7 @@ export default function Stream({ author }) {
     );
 
   // if no items
-  if (!postItems.length)
+  if (!posts?.data?.data?.items.length)
     return (
       <p className="text-center text-sm text-textAlt">
         Nothing here yet... Weird.
@@ -43,7 +41,7 @@ export default function Stream({ author }) {
 
   return (
     <div className="flex flex-col gap-6">
-      {postItems
+      {posts?.data?.data?.items
         .filter(({ type }) => type === 'post')
         .map((item) => (
           <Post
