@@ -1,7 +1,7 @@
 import { axiosClient } from '@epicapp/libs/axios';
 
 export const getComments = (url) =>
-  axiosClient.get(url + '/comments?page=1&size=5');
+  axiosClient.get(url + '/comments?page=1&size=20');
 
 export const newComment = (author, post) =>
   axiosClient.post(post.author.id + '/inbox/', {
