@@ -15,9 +15,6 @@ export default function Profile({ author }) {
     },
   });
 
-  //var username = author.github
-  //var getUsername = username.substring(19)
-
   if (!author)
     return (
       <div className="sticky top-[4.55rem] w-full overflow-hidden rounded-xl bg-surface">
@@ -43,7 +40,7 @@ export default function Profile({ author }) {
       <div className="relative h-24 w-full">
         <div className="absolute grid w-full -translate-y-1/2 grid-cols-3">
           <div className="self-end text-center">
-            <h6 className="text-2xl text-text">{author.followers}</h6>
+            <h6 className="text-2xl text-text">{author.followers.length}</h6>
             <span className="text-lg text-textAlt">Followers</span>
           </div>
           <div className="flex justify-center">
@@ -60,7 +57,7 @@ export default function Profile({ author }) {
             />
           </div>
           <div className="self-end text-center">
-            <h6 className="text-2xl text-text">{author.following}</h6>
+            <h6 className="text-2xl text-text">{author.following.length}</h6>
             <span className="text-lg text-textAlt">Following</span>
           </div>
         </div>

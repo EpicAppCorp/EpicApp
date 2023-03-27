@@ -1,6 +1,5 @@
 import { useMutation } from 'react-query';
 
-
 import { getAuthorById } from '@epicapp/services/author';
 import { sendFollowRequest } from '@epicapp/services/inbox';
 
@@ -8,9 +7,6 @@ import { sendFollowRequest } from '@epicapp/services/inbox';
 import Button from '@epicapp/components/Button';
 
 export default function ({ authorSendingRequest }) {
-
-    
-
   const sendFollow = useMutation((body) => {
     return sendFollowRequest(body);
   });
