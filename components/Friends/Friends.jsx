@@ -22,7 +22,7 @@ export default function Friends({ author }) {
         Other Authors
       </h1>
       <div className="mt-4 flex flex-col gap-3">
-        {friends.data.data.items.map((friend) => (
+        {friends.data?.data.items.map((friend) => (
           <Friend key={friend.id} author={author} friend={friend} />
         ))}
       </div>
