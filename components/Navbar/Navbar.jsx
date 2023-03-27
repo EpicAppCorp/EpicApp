@@ -31,7 +31,7 @@ export default function Navbar({ author, route, openModal }) {
   });
 
   return (
-    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 px-8 py-4 text-text bg-background">
+    <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 bg-background px-8 py-4 text-text">
       <div className="flex items-center">epicapp</div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
@@ -46,10 +46,10 @@ export default function Navbar({ author, route, openModal }) {
           </Link>
         </li>
         <li>
-          <Link className={classBuilder('FRIENDS')} href="/friends">
+          <Link className={classBuilder('PROFILE')} href="/details">
             <i
               className={clsx(
-                route === 'FRIENDS' ? 'fa-solid fa-user' : 'fa-regular fa-user',
+                route === 'PROFILE' ? 'fa-solid fa-user' : 'fa-regular fa-user',
               )}
             />
           </Link>
