@@ -11,9 +11,7 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
-import { getLikes, newLike } from '@epicapp/services/like';
-import { reactStrictMode } from '@epicapp/next.config';
-import { getUserPost } from '@epicapp/services/userPosts';
+import { newLike } from '@epicapp/services/like';
 
 export default function Post({ post, author }) {
   const commentInputRef = useRef(null);
@@ -22,7 +20,6 @@ export default function Post({ post, author }) {
   const [dropdown, setDropdown] = useState(false);
   const [editPost, setEditPost] = useState(false);
 
-  console.log(dropdown)
   function setValues() {
     setEditPost(!editPost);
     setDropdown(!dropdown);
@@ -124,40 +121,39 @@ export default function Post({ post, author }) {
         />
         {!editPost && (
           <div>
-          <span className="text-textAlt">@{post.author.displayName}</span>
-          <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-text">{post.title}</h1>
-            <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
-              {formatDistance(new Date(post.published), new Date(), {
-                addSuffix: true,
-              })}
-            </span>
+            <span className="text-textAlt">@{post.author.displayName}</span>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold text-text">{post.title}</h1>
+              <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
+                {formatDistance(new Date(post.published), new Date(), {
+                  addSuffix: true,
+                })}
+              </span>
+            </div>
+            <p className="text-xs text-textAlt">{post.description}</p>
           </div>
-          <p className="text-xs text-textAlt">{post.description}</p>
-        </div>
         )}
         {editPost && (
           <div>
             <span className="text-textAlt">@{post.author.displayName}</span>
-            <div className="w-full">
-            </div>
+            <div className="w-full"></div>
             <p className="text-xs text-textAlt">{post.description}</p>
           </div>
         )}
         <div className="flex grow flex-row-reverse">
           <div className="relative">
-            <button 
+            <button
               onClick={() => setDropdown(!dropdown)}
               type="button"
               className="text-textAlt"
             >
-              <i 
-              className={clsx(
-                    'pl-4',
-                    dropdown
-                      ? 'fa-light fa-circle-ellipsis transition-colors hover:text-primary'
-                      : 'fa-light fa-circle-ellipsis transition-primary',
-                  )}
+              <i
+                className={clsx(
+                  'pl-4',
+                  dropdown
+                    ? 'fa-light fa-circle-ellipsis transition-colors hover:text-primary'
+                    : 'fa-light fa-circle-ellipsis transition-primary',
+                )}
               />
             </button>
             {dropdown && (
@@ -206,24 +202,24 @@ export default function Post({ post, author }) {
       )}
       {editPost && (
         <div className="w-full">
-          <div className="w-full overflow-hidden rounded-2xl my-6 bg-foreground text-text py-2">
-          <input
-                  className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt focus:outline-none"
-                  type="text"
-                  name="title"
-                  placeholder={post.title}
+          <div className="my-6 w-full overflow-hidden rounded-2xl bg-foreground py-2 text-text">
+            <input
+              className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt focus:outline-none"
+              type="text"
+              name="title"
+              placeholder={post.title}
             />
             <input
-                  className="h-9 w-full bg-transparent px-3 py-6 placeholder:text-textAlt focus:outline-none"
-                  type="text"
-                  name="body"
-                  placeholder={post.content}
+              className="h-9 w-full bg-transparent px-3 py-6 placeholder:text-textAlt focus:outline-none"
+              type="text"
+              name="body"
+              placeholder={post.content}
             />
           </div>
         </div>
       )}
-        <div className="flex justify-between items-center text-2xl text-textAlt">
-        <div className='flex gap-6'>
+      <div className="flex items-center justify-between text-2xl text-textAlt">
+        <div className="flex gap-6">
           <Button loading={addLike.isLoading} onClick={() => addLike.mutate()}>
             <i className="fa-regular fa-heart transition-colors duration-150 hover:text-quaternary" />
           </Button>
@@ -293,45 +289,45 @@ export default function Post({ post, author }) {
         )}
         {!editPost && (
           <div className="flex gap-4">
-          <Image
-            className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
-            src="profile image"
-            alt="profile image"
-            loader={() => author.profileImage}
-            width={40}
-            height={40}
-          />
-          <div className="flex w-full overflow-hidden rounded-2xl bg-foreground">
-            <input
-              ref={commentInputRef}
-              name="comment"
-              className="w-full bg-transparent px-4 py-3 text-text placeholder:text-textAlt/20 focus:outline-none"
-              placeholder="Write a cool comment."
+            <Image
+              className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+              src="profile image"
+              alt="profile image"
+              loader={() => author.profileImage}
+              width={40}
+              height={40}
             />
-            <Button
-              type="submit"
-              loading={addComment.isLoading}
-              className="px-4 text-textAlt transition-colors hover:text-primary"
-            >
-              <i className="fa-solid fa-paper-plane" />
-            </Button>
+            <div className="flex w-full overflow-hidden rounded-2xl bg-foreground">
+              <input
+                ref={commentInputRef}
+                name="comment"
+                className="w-full bg-transparent px-4 py-3 text-text placeholder:text-textAlt/20 focus:outline-none"
+                placeholder="Write a cool comment."
+              />
+              <Button
+                type="submit"
+                loading={addComment.isLoading}
+                className="px-4 text-textAlt transition-colors hover:text-primary"
+              >
+                <i className="fa-solid fa-paper-plane" />
+              </Button>
+            </div>
           </div>
-        </div>
         )}
         {editPost && (
           <div>
             <Button
-                  onClick={() => setEditPost(!editPost)}
-                  className="rounded-2xl bg-layer px-6 py-2 mr-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
-                >
-                  Cancel
+              onClick={() => setEditPost(!editPost)}
+              className="mr-2 rounded-2xl bg-layer px-6 py-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
+            >
+              Cancel
             </Button>
             <Button
-                  type="submit"
-                  //loading={createPost.isLoading}
-                  className="rounded-2xl bg-layer px-6 py-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
-                >
-                  Submit
+              type="submit"
+              //loading={createPost.isLoading}
+              className="rounded-2xl bg-layer px-6 py-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
+            >
+              Submit
             </Button>
           </div>
         )}
