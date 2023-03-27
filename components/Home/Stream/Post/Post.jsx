@@ -14,10 +14,11 @@ import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 
 export default function Post({ post, author, liked }) {
-  const commentInputRef = useRef(null);
-  const [showComments, setShowComments] = useState(false);
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
+
+  const commentInputRef = useRef(null);
+  const [showComments, setShowComments] = useState(false);
 
   //get all comments
   const comments = useQuery({
@@ -52,18 +53,21 @@ export default function Post({ post, author, liked }) {
   );
 
   //like mutation
-  const addPostLike = useMutation(() => newLike(author, { ...post }), {
-    onSuccess() {
-      //update cache
-      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          items: [...oldData.data.items, { object: post.id }],
-        },
-      }));
+  const addPostLike = useMutation(
+    () => newLike(author, { ...post, object: post.id }),
+    {
+      onSuccess() {
+        //update cache
+        queryClient.setQueryData(['liked', author?.id], (oldData) => ({
+          ...oldData,
+          data: {
+            ...oldData.data,
+            items: [...oldData.data.items, { object: post.id }],
+          },
+        }));
+      },
     },
-  });
+  );
 
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">

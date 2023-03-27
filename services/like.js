@@ -11,9 +11,9 @@ export const newLike = (author, post) => {
   const inbox = axiosClient.post(post.author.id + '/inbox/', {
     type: 'Like',
     author: author.id,
-    object: post.id,
+    object: post.object,
   });
-  return axios.all([likedPost, inbox]);
+  return axiosClient.all([likedPost, inbox]);
 };
 
 export const getLiked = (authorUrl) => {

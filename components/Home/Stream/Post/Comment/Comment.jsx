@@ -14,46 +14,33 @@ export default function Comment({ author, comment, post, liked }) {
   const queryClient = useQueryClient();
 
   // TODO FIX THIS WITH ACTUAL AUTHOR OBJ
-  const commentRequest = useQuery(
-    ['comment', comment?.author],
-    () => getComment(comment?.author),
+  // const commentRequest = useQuery(
+  //   ['comment', comment?.author],
+  //   () => getComment(comment?.author),
+  //   {
+  //     staleTime: 10000,
+  //   },
+  // );
+
+  const addCommentLike = useMutation(
+    () => newLike(author, { ...post, object: comment.id }),
     {
-      staleTime: 10000,
+      onSuccess() {
+        //update cache
+        queryClient.setQueryData(['liked', author?.id], (oldData) => ({
+          ...oldData,
+          data: {
+            ...oldData.data,
+            items: [...oldData.data.items, { object: comment.id }],
+          },
+        }));
+      },
     },
   );
 
-  const addCommentLike = useMutation((post) => newLike(post), {
-    onSuccess() {
-      //update cache
-      queryClient.setQueryData(['liked', author?.id], (oldData) => ({
-        ...oldData,
-        data: {
-          ...oldData.data,
-          items: [...oldData.data.items, { object: comment.id }],
-        },
-      }));
-    },
-  });
-
-  const submitLike = (object) => {
-    addCommentLike.mutate({
-      type: 'Like',
-      author: {
-        type: 'author',
-        id: author.id,
-        host: author.host,
-        displayName: author.displayName,
-        url: author.url,
-        github: author.github,
-        profileImage: author.profileImage,
-      },
-      object,
-    });
-  };
-
-  if (commentRequest.isLoading) {
-    return null;
-  }
+  // if (commentRequest.isLoading) {
+  //   return null;
+  // }
 
   return (
     <div className="flex items-center gap-4">
@@ -61,7 +48,7 @@ export default function Comment({ author, comment, post, liked }) {
         className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
         src="profile image"
         alt="profile image"
-        loader={() => commentRequest?.data?.data.profileImage}
+        loader={() => comment.author.profileImage}
         width={40}
         height={40}
         placeholder="blur"
@@ -69,14 +56,12 @@ export default function Comment({ author, comment, post, liked }) {
       />
       <div className="flex flex-col gap-1">
         <p className="flex gap-2 text-text">
-          <span className="font-bold">
-            {commentRequest?.data?.data.displayName}
-          </span>
+          <span className="font-bold">{comment.author.displayName}</span>
           {comment.comment}
         </p>
         <span className="flex items-center gap-2 text-xs text-textAlt">
           <Button
-            onClick={() => submitLike(comment.id)}
+            onClick={() => addCommentLike.mutate()}
             disabled={liked.includes(comment.id)}
             loading={addCommentLike.isLoading}
             className="flex text-sm"
