@@ -9,7 +9,7 @@ import Button from '@epicapp/components/Button';
 import { followRequest } from '@epicapp/services/inbox';
 
 export default function Friend({ author, friend }) {
-  // const isAlreadyFollowing = author.following.includes(friend.url);
+  const isAlreadyFollowing = author.following.includes(friend.url);
   const queryClient = useQueryClient();
 
   const followAuthor = useMutation(() => followRequest(author, friend), {
