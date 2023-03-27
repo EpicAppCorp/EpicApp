@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 //component
-import Search from './Search';
+// import Search from './Search';
 import Friend from './Friend';
 
 //services
