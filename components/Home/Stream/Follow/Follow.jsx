@@ -1,12 +1,15 @@
 import Image from 'next/image';
-import { follow, isFollowing } from '@epicapp/services/follow';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 
 //components
 import Button from '@epicapp/components/Button';
 
+//services
+import { follow, isFollowing, unfollow } from '@epicapp/services/follow';
+
 export default function Follow({ author, request }) {
+  const isAFollower = author.followers.includes(request.actor.id);
   const queryClient = useQueryClient();
 
   //cache will never get stale, so only one call when mouonted.
@@ -25,16 +28,33 @@ export default function Follow({ author, request }) {
 
   const addFollower = useMutation(() => follow(author.id, request.actor.url), {
     //update cache so author has one follower now
-    // onSuccess() {
-    //   queryClient.setQueryData(['author'], (oldData) => ({
-    //     ...oldData,
-    //     data: {
-    //       ...oldData.data,
-    //       followers: (oldData.data.followers += 1),
-    //     },
-    //   }));
-    // },
+    onSuccess(data) {
+      queryClient.setQueryData(['author'], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          followers: [...oldData.data.followers, data.data],
+        },
+      }));
+    },
   });
+
+  const removeFollower = useMutation(
+    () => unfollow(author.id, request.actor.url),
+    {
+      onSuccess() {
+        queryClient.setQueryData(['author'], (oldData) => ({
+          ...oldData,
+          data: {
+            ...oldData.data,
+            followers: oldData.data.followers.filter(
+              (u) => u !== request.actor.url,
+            ),
+          },
+        }));
+      },
+    },
+  );
 
   return (
     <div
@@ -82,12 +102,17 @@ export default function Follow({ author, request }) {
           </div>
         </div>
         <Button
-          loading={addFollower.isLoading || following.isLoading}
-          disabled={addFollower.isSuccess || following.isSuccess}
-          onClick={() => addFollower.mutate()}
+          loading={
+            addFollower.isLoading ||
+            following.isLoading ||
+            removeFollower.isLoading
+          }
+          onClick={() =>
+            isAFollower ? removeFollower.mutate() : addFollower.mutate()
+          }
           className="self-center rounded-2xl bg-layer px-4 py-2 text-sm text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
         >
-          {addFollower.isSuccess || following.isSuccess ? 'Accepted' : 'Accept'}
+          {isAFollower ? 'Remove' : 'Accept'}
         </Button>
       </div>
     </div>

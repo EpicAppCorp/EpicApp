@@ -27,38 +27,32 @@ export default function Friend({ author, friend }) {
     },
   });
 
-  const unfollowAuthor = useMutation(
-    (actor, object) => unfollow(actor, object),
-    {
-      onSuccess() {
-        queryClient.setQueryData(['author'], (oldData) => ({
-          ...oldData,
-          data: {
-            ...oldData.data,
-            following: oldData.data.following.filter((u) => u !== friend.url),
-          },
-        }));
-      },
+  const unfollowAuthor = useMutation(() => unfollow(friend.url, author.id), {
+    onSuccess() {
+      queryClient.setQueryData(['author'], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          following: oldData.data.following.filter((u) => u !== friend.url),
+        },
+      }));
     },
-  );
+  });
 
-  const removeFollower = useMutation(
-    (actor, object) => unfollow(actor, object),
-    {
-      onSuccess() {
-        queryClient.setQueryData(['author'], (oldData) => ({
-          ...oldData,
-          data: {
-            ...oldData.data,
-            followers: oldData.data.followers.filter((u) => u !== friend.url),
-          },
-        }));
-      },
+  const removeFollower = useMutation(() => unfollow(author.id, friend.url), {
+    onSuccess() {
+      queryClient.setQueryData(['author'], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          followers: oldData.data.followers.filter((u) => u !== friend.url),
+        },
+      }));
     },
-  );
+  });
 
   return (
-    <article className="">
+    <article>
       <div className="relative flex h-24 w-96 justify-between gap-4 rounded-t-xl bg-foreground p-4">
         <i
           title="You both follow each other"
@@ -94,9 +88,7 @@ export default function Friend({ author, friend }) {
         <Button
           loading={followAuthor.isLoading || unfollowAuthor.isLoading}
           onClick={() =>
-            isAlreadyFollowing
-              ? unfollowAuthor.mutate(friend.url, author.id)
-              : followAuthor.mutate()
+            isAlreadyFollowing ? unfollowAuthor.mutate() : followAuthor.mutate()
           }
           className="h-full w-full self-center text-sm text-textAlt transition-colors hover:bg-primary hover:text-black"
         >
@@ -104,7 +96,7 @@ export default function Friend({ author, friend }) {
         </Button>
         <Button
           loading={removeFollower.isLoading}
-          onClick={() => removeFollower.mutate(author.id, friend.url)}
+          onClick={() => removeFollower.mutate()}
           className={clsx(
             'h-full w-full items-center justify-center self-center text-sm text-textAlt transition-colors hover:bg-primary hover:text-black',
             isAFollower ? 'flex' : 'hidden',
