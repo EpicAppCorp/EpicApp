@@ -39,8 +39,8 @@ export default function Navbar({ author, route, openModal }) {
             <i
               className={clsx(
                 route === 'HOME'
-                  ? 'fa-solid fa-house'
-                  : 'fa-regular fa-house-blank',
+                  ? 'fa-duotone fa-house'
+                  : 'fa-duotone fa-house',
               )}
             />
           </Link>
@@ -49,7 +49,18 @@ export default function Navbar({ author, route, openModal }) {
           <Link className={classBuilder('PROFILE')} href="/details">
             <i
               className={clsx(
-                route === 'PROFILE' ? 'fa-solid fa-user' : 'fa-regular fa-user',
+                route === 'PROFILE' ? 'fa-duotone fa-user' : 'fa-duotone fa-user',
+              )}
+            />
+          </Link>
+        </li>
+        <li>
+          <Link className={classBuilder('EXPLORE')} href="/explore">
+            <i
+              className={clsx(
+                route === 'EXPLORE'
+                  ? 'fa-duotone fa-magnifying-glass'
+                  : 'fa-duotone fa-magnifying-glass',
               )}
             />
           </Link>

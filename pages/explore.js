@@ -31,16 +31,17 @@ export default function Homepage() {
             <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (
-          <HomeLayout route="HOME" author={author.data?.data}>
-            <div className="grid grid-cols-4 gap-8">
-              <section className="col-span-1 w-full">
+          <HomeLayout route="EXPLORE" author={author.data?.data}>
+            <div className="container">
+              <Friends author={author.data?.data}/>
+              {/* <section className="col-span-2 w-full">
                 <Profile author={author.data?.data} />
-              </section>
-              <section className="col-span-3 flex flex-col gap-6">
+              </section> */}
+              {/* <section className="col-span-4 flex flex-col gap-6">
                 <CreatePost author={author.data?.data} />
                 <Stream author={author.data?.data} />
               </section>
-              {/* <section className="col-span-2">
+              <section className="col-span-2">
                 <Friends author={author.data?.data} />
               </section> */}
             </div>

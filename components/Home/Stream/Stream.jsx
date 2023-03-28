@@ -38,7 +38,7 @@ export default function Stream({ author, isInbox }) {
       </p>
     );
   // if no items
-  else if (!inbox.data?.data.items.length)
+  else if (!inbox.data?.data?.items?.length)
     return (
       <p className="py-4 text-center text-sm text-textAlt">
         Nothing here yet... Weird

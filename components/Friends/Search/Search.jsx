@@ -3,9 +3,6 @@ import { useMutation } from 'react-query';
 import { getAuthorById } from '@epicapp/services/author';
 import { sendFollowRequest } from '@epicapp/services/inbox';
 
-//components
-import Button from '@epicapp/components/Button';
-
 export default function ({ authorSendingRequest }) {
   const sendFollow = useMutation((body) => {
     return sendFollowRequest(body);
@@ -56,29 +53,24 @@ export default function ({ authorSendingRequest }) {
   };
 
   return (
-    <section className="rounded-3xl bg-surface p-4">
-      <form onSubmit={searchSubmit}>
-        <div className="flex flex-row gap-4">
-          <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">
-            <input
-              className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
-              type="text"
-              id="authorDisplayName"
-              name="authorDisplayName"
-              placeholder="Creative title for your new post."
-              required
-            />
-          </div>
-          <div className="mt-2">
-            <Button
-              type="submit"
-              className="rounded-2xl bg-layer px-6 py-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
-            >
-              Share
-            </Button>
-          </div>
-        </div>
-      </form>
-    </section>
+    <div className="">
+      <div className="flex w-max items-center rounded-xl bg-foreground px-4 text-lg text-text">
+        <i className="fa-solid fa-magnifying-glass" />
+        <input
+          className="h-14 w-96 bg-transparent px-4 placeholder:text-textAlt/20 focus:outline-none"
+          type="text"
+          id="authorDisplayName"
+          name="authorDisplayName"
+          placeholder="Search for an author"
+          required
+        />
+      </div>
+
+      <ul className='flex gap-6 text-textAlt mt-8 justify-center'>
+        <li>All</li>
+        <li>Followers</li>
+        <li>Following</li>
+      </ul>
+    </div>
   );
 }

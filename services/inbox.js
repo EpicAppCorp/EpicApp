@@ -13,15 +13,7 @@ export const getItem = (url) => {
 };
 
 export const followRequest = (actor, object) => {
-  let url;
-  if (object.host === 'https://t20-social-distribution.herokuapp.com') {
-    url = object.url + '/inbox';
-  } else {
-    url = object.url + '/inbox/';
-  }
-  return axiosClient.post(url, {
-    type: 'follow',
-    summary: `${actor.displayName} wants to follow ${object.displayName}`,
+  return axiosClient.post(actor.url + '/followers/' + object.url, {
     actor,
     object,
   });

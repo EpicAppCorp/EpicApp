@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 //component
-// import Search from './Search';
+import Search from './Search';
 import Friend from './Friend';
 
 //services
@@ -20,9 +20,10 @@ export default function Friends({ author }) {
   }
 
   return (
-    <div className="sticky top-20 w-full h-5/6 overflow-y-auto rounded-xl bg-surface p-4">
-      <h1 className="text-xl text-text">Other Authors</h1>
-      <div className="mt-4 flex flex-col gap-3">
+    <div className="flex flex-col items-center gap-8">
+      <Search />
+
+      <div className="flex gap-3">
         {friends.data.data.items
           .filter((friend) => friend.id !== author.id)
           .map((friend) => (
