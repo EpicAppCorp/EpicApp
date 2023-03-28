@@ -122,13 +122,13 @@ export default function Navbar({ author, route, openModal }) {
         ) : (
           <div>
             <Button
-              onClick={() => openModal('LOGIN')}
+              onClick={() => openModal('Sign In')}
               className="px-6 py-2 text-text transition-colors duration-150 hover:text-primary"
             >
               Login
             </Button>
             <Button
-              onClick={() => openModal('SIGNUP')}
+              onClick={() => openModal('Signup')}
               className="rounded-2xl bg-layer px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
             >
               Signup
