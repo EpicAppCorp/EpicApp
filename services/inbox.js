@@ -1,16 +1,16 @@
 import { axiosClient } from '@epicapp/libs/axios';
 
-export const getInbox = (author) => {
-  return axiosClient.get(
+export const getInbox = (author) =>
+  axiosClient.get(
     author?.host
       ? author.id + '/inbox/'
       : process.env.NEXT_PUBLIC_API + '/authors/' + undefined + '/inbox/',
   );
-};
 
-export const getItem = (url) => {
-  return axiosClient.get(url);
-};
+export const clearInbox = (authorId) =>
+  axiosClient.delete(authorId + '/inbox/');
+
+export const getItem = (url) => axiosClient.get(url);
 
 export const followRequest = (actor, object) => {
   return axiosClient.post(actor.url + '/followers/' + object.url, {

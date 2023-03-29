@@ -1,16 +1,19 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 //components
 import Post from './Post';
 import Follow from '@epicapp/components/Home/Stream/Follow';
 import Like from '@epicapp/components/Home/Stream/Like';
 import Comment from '@epicapp/components/Home/Stream/Comment';
+import Button from '@epicapp/components/Button';
 
 //services
-import { getInbox } from '@epicapp/services/inbox';
+import { getInbox, clearInbox } from '@epicapp/services/inbox';
 import { getLiked } from '@epicapp/services/like';
 
 export default function Stream({ author, isInbox }) {
+  const queryClient = useQueryClient();
+
   const inbox = useQuery(['inbox', author?.id], () => getInbox(author), {
     staleTime: 10000,
   });
@@ -18,6 +21,18 @@ export default function Stream({ author, isInbox }) {
   const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
     enabled: !!author,
     staleTime: 10000,
+  });
+
+  const deleteInbox = useMutation(() => clearInbox(author.id), {
+    onSuccess() {
+      queryClient.setQueryData(['inbox', author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: [],
+        },
+      }));
+    },
   });
 
   //loading animation
@@ -40,24 +55,36 @@ export default function Stream({ author, isInbox }) {
   // if no items
   else if (!inbox.data?.data?.items?.length)
     return (
-      <p className="py-4 text-center text-sm text-textAlt">
+      <p className="text-center text-sm text-textAlt">
         Nothing here yet... Weird
       </p>
     );
   //inbox stream
   else if (isInbox)
     return (
-      <div className="flex flex-col">
-        {inbox.data.data.items.map((item, idx) => {
-          if (item.type.toUpperCase() === 'FOLLOW')
-            return (
-              <Follow key={idx} author={author} request={{ ...item, idx }} />
-            );
-          else if (item.type.toUpperCase() === 'LIKE')
-            return <Like key={idx} like={{ ...item, idx }} />;
-          else if (item.type.toUpperCase() === 'COMMENT')
-            return <Comment key={idx} comment={{ ...item, idx }} />;
-        })}
+      <div>
+        <div className="mt-3 flex justify-center">
+          <Button
+            loading={deleteInbox.isLoading}
+            onClick={() => deleteInbox.mutate()}
+            className="flex items-center gap-1 rounded-xl bg-layer px-3 py-1 text-sm text-textAlt transition-colors duration-150 hover:bg-primary hover:text-black"
+          >
+            <i className="fa-regular fa-trash text-xs" />
+            Clear Inbox
+          </Button>
+        </div>
+        <div className="flex flex-col">
+          {inbox.data.data.items.map((item, idx) => {
+            if (item.type.toUpperCase() === 'FOLLOW')
+              return (
+                <Follow key={idx} author={author} request={{ ...item, idx }} />
+              );
+            else if (item.type.toUpperCase() === 'LIKE')
+              return <Like key={idx} like={{ ...item, idx }} />;
+            else if (item.type.toUpperCase() === 'COMMENT')
+              return <Comment key={idx} comment={{ ...item, idx }} />;
+          })}
+        </div>
       </div>
     );
   //posts only inbox stream
