@@ -70,7 +70,7 @@ export default function Profile({ author }) {
         <hr className="my-6 border-layer" />
         <div className="flex gap-4">
           <Link
-            href="/profile"
+            href="/details"
             className="flex h-14 w-full items-center justify-center rounded-2xl bg-layer text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
           >
             My Profile

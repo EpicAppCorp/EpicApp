@@ -7,3 +7,7 @@ export const getPosts = (author) => {
 export const newPost = (author, post) => {
   return axiosClient.post(author.id + '/posts/', post);
 };
+
+export const deletePost = (author, post) => {
+  return axiosClient.delete(post.id)
+}
