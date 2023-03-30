@@ -6,13 +6,12 @@ import HomeLayout from '@epicapp/layouts/HomeLayout';
 import Profile from '@epicapp/components/Home/Profile';
 import CreatePost from '@epicapp/components/Home/CreatePost';
 import Stream from '@epicapp/components/Home/Stream';
-import Friends from '@epicapp/components/Friends';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function Homepage() {
-  const author = useQuery(['author'], getAuthorDetails, {
+  const author = useQuery(['author'], () => getAuthorDetails(null), {
     staleTime: Infinity,
   });
 

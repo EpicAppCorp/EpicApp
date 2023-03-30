@@ -9,7 +9,7 @@ import Friends from '@epicapp/components/Friends';
 import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function Homepage() {
-  const author = useQuery(['author'], getAuthorDetails, {
+  const author = useQuery(['author'], () => getAuthorDetails(null), {
     staleTime: Infinity,
   });
 

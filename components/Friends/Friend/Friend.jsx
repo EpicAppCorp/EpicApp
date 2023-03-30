@@ -62,17 +62,23 @@ export default function Friend({ author, friend }) {
           )}
         />
         <div className="flex w-full gap-2">
-          <Image
-            className="aspect-square flex-shrink-0 self-start overflow-hidden rounded-full border-4 border-background object-cover"
-            src="profile image"
-            alt="profile image"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
-            loader={() => friend.profileImage}
-            width={60}
-            height={60}
-            priority={true}
-          />
+          {friend?.profileImage ? (
+            <Image
+              className="aspect-square flex-shrink-0 self-start overflow-hidden rounded-full border-4 border-background object-cover"
+              src="profile image"
+              alt="profile image"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+              loader={() => friend.profileImage}
+              width={60}
+              height={60}
+              priority={true}
+            />
+          ) : (
+            <div className="flex h-[60px] w-[60px] shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-layer bg-background object-cover text-3xl text-textAlt">
+              <i className="fa-solid fa-question" />
+            </div>
+          )}
           <div className="flex w-full flex-col">
             <span className="truncate text-sm leading-tight text-textAlt">
               Author

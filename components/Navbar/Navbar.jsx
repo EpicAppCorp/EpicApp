@@ -46,10 +46,20 @@ export default function Navbar({ author, route, openModal }) {
           </Link>
         </li>
         <li>
-          <Link className={classBuilder('PROFILE')} href="/details">
+          <Link
+            className={classBuilder('PROFILE')}
+            href={{
+              pathname: '/details',
+              query: {
+                id: author?.id,
+              },
+            }}
+          >
             <i
               className={clsx(
-                route === 'PROFILE' ? 'fa-duotone fa-user' : 'fa-duotone fa-user',
+                route === 'PROFILE'
+                  ? 'fa-duotone fa-user'
+                  : 'fa-duotone fa-user',
               )}
             />
           </Link>
@@ -84,7 +94,7 @@ export default function Navbar({ author, route, openModal }) {
             <button
               onClick={() => setDropdown(!dropdown)}
               type="button"
-              className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface py-2 px-4"
+              className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface px-4 py-2"
             >
               <Image
                 className="overflow-hidden rounded-full object-cover"
@@ -107,7 +117,7 @@ export default function Navbar({ author, route, openModal }) {
             </button>
 
             {dropdown && (
-              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
+              <ul className="absolute right-0 top-full mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
                 <li>
                   <Link
                     className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
