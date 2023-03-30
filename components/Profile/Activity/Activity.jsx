@@ -24,7 +24,7 @@ export default function Activity({ author, auth, authLiked }) {
     );
   }
 
-  if (!liked.data.data.items.length)
+  if (!liked.data?.data?.items?.length)
     return (
       <p className="text-center text-sm text-textAlt">
         {auth.url === author.url
