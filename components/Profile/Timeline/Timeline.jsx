@@ -5,6 +5,7 @@ import clsx from 'clsx';
 //components
 import Post from '@epicapp/components/Home/Stream/Post';
 import Button from '@epicapp/components/Button';
+import Activity from '../Activity';
 
 //services
 import { getPosts } from '@epicapp/services/post';
@@ -12,12 +13,6 @@ import { getLiked } from '@epicapp/services/like';
 
 export default function Timeline({ auth, author }) {
   const [filter, setFilter] = useState('POSTS');
-
-  // author profile likes
-  const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
-    enabled: filter === 'LIKES',
-    staleTime: 10000,
-  });
 
   //logged in user likes
   const authLiked = useQuery(['liked', auth.id], () => getLiked(auth.id), {
@@ -42,15 +37,6 @@ export default function Timeline({ auth, author }) {
       </div>
     );
 
-  // if no items
-  if (!posts?.data?.data?.items?.length)
-    return (
-      <p className="py-8 text-center text-sm text-textAlt">
-        This author hasn't created any public posts yet... or its all private...
-        or maybe they just don't like ya.
-      </p>
-    );
-
   return (
     <div className="mt-6 flex flex-col gap-6">
       <ul className="flex justify-center gap-6 text-textAlt">
@@ -73,25 +59,39 @@ export default function Timeline({ auth, author }) {
               filter === 'LIKES' ? 'bg-primary text-black' : 'bg-layer ',
             )}
           >
-            <i className="fa-solid fa-heart" /> Likes
+            <i className="fa-solid fa-heart" /> Activity
           </Button>
         </li>
       </ul>
-      {filter === 'POSTS' &&
-        posts?.data?.data?.items
-          .filter(({ type }) => type === 'post')
-          .map((item) => (
-            <Post
-              key={item.id}
-              post={item}
-              author={auth}
-              liked={authLiked.data?.data?.items.map((like) => like.object)}
-            />
-          ))}
-      {filter === 'LIKES' &&
-        liked?.data?.data?.items.map((item) => (
-          <div key={item.id}>{JSON.stringify(item)}</div>
-        ))}
+      {filter === 'POSTS' && (
+        <div className="flex flex-col gap-6">
+          {posts?.data?.data?.items?.length ? (
+            posts?.data?.data?.items
+              .filter(({ type }) => type === 'post')
+              .map((item) => (
+                <Post
+                  key={item.id}
+                  post={item}
+                  author={auth}
+                  liked={authLiked.data?.data?.items.map((like) => like.object)}
+                />
+              ))
+          ) : (
+            <p className="py-8 text-center text-sm text-textAlt">
+              {auth.url === author.url
+                ? 'You havent created any posts yet, maybe do something?'
+                : "This author hasn't created any public posts yet... or its all private... or maybe they just don't like ya."}
+            </p>
+          )}
+        </div>
+      )}
+      {filter === 'LIKES' && (
+        <Activity
+          author={author}
+          auth={auth}
+          authLiked={authLiked.data?.data?.items.map((like) => like.object)}
+        />
+      )}
     </div>
   );
 }

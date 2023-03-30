@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
@@ -13,7 +14,7 @@ import Comment from './Comment';
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 
-export default function Post({ post, author, liked }) {
+export default function Post({ post, author, liked, roundedTop = true }) {
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
 
@@ -67,23 +68,23 @@ export default function Post({ post, author, liked }) {
         }));
         queryClient.setQueryData(['likes', post.id], (oldData) => ({
           ...oldData,
-          data: [
+          data: {
             ...oldData.data,
-            post.id,
-
-            // items: [...oldData.data.items, { object: post.id }],
-          ],
+            items: [...oldData.data.items, { object: post.id }],
+          },
         }));
       },
     },
   );
 
-  function getImages(imgString) {
-    console.log(imgString.split('"'))[1];
-  }
-
   return (
-    <div key={post.id} className="rounded-3xl bg-surface p-4">
+    <div
+      key={post.id}
+      className={clsx(
+        'bg-surface p-4',
+        roundedTop ? 'rounded-3xl' : 'rounded-b-3xl',
+      )}
+    >
       <div className="flex gap-4">
         {post.author?.profileImage ? (
           <Image
@@ -104,7 +105,12 @@ export default function Post({ post, author, liked }) {
         )}
         <div className="w-full">
           <div className="flex justify-between">
-            <span className="text-textAlt">@{post.author.displayName}</span>
+            <Link
+              href={{ pathname: '/details', query: { id: post.author.id } }}
+              className="text-textAlt transition-colors duration-150 hover:text-primary"
+            >
+              @{post.author.displayName}
+            </Link>
             <div
               title={post.author.host}
               className={clsx(
@@ -187,7 +193,11 @@ export default function Post({ post, author, liked }) {
                   : 'fa-regular fa-heart hover:text-[#880808]',
               )}
             />
-            <span className="pl-2 text-base">{likes.data?.data?.length}</span>
+            {likes.data?.data?.items.length ? (
+              <span className="pl-2 text-base">
+                {likes.data?.data?.items.length}
+              </span>
+            ) : null}
           </Button>
           <Button
             disabled={!author}
