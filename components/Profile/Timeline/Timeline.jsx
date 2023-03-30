@@ -20,8 +20,7 @@ export default function Timeline({ auth, author }) {
   });
 
   //logged in user likes
-  const authLiked = useQuery(['liked', author?.id], () => getLiked(author.id), {
-    enabled: filter === 'LIKES',
+  const authLiked = useQuery(['liked', auth.id], () => getLiked(auth.id), {
     staleTime: 10000,
   });
 
@@ -91,7 +90,7 @@ export default function Timeline({ auth, author }) {
           ))}
       {filter === 'LIKES' &&
         liked?.data?.data?.items.map((item) => (
-          <div>{JSON.stringify(item)}</div>
+          <div key={item.id}>{JSON.stringify(item)}</div>
         ))}
     </div>
   );

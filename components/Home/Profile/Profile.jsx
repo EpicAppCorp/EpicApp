@@ -43,7 +43,9 @@ export default function Profile({ author }) {
             href={{ pathname: '/explore', query: { filter: 'FOLLOWERS' } }}
             className="self-end text-center"
           >
-            <h6 className="text-2xl text-text">{author.followers.length}</h6>
+            <h6 className="text-2xl text-text hover:underline hover:underline-offset-4">
+              {author.followers.length}
+            </h6>
             <span className="text-lg text-textAlt">Followers</span>
           </Link>
           <div className="flex justify-center">
@@ -63,7 +65,9 @@ export default function Profile({ author }) {
             href={{ pathname: '/explore', query: { filter: 'FOLLOWING' } }}
             className="self-end text-center"
           >
-            <h6 className="text-2xl text-text">{author.following.length}</h6>
+            <h6 className="text-2xl text-text hover:underline hover:underline-offset-4">
+              {author.following.length}
+            </h6>
             <span className="text-lg text-textAlt">Following</span>
           </Link>
         </div>

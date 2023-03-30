@@ -24,7 +24,6 @@ export default function Homepage({ filter }) {
       <main className="h-screen w-screen">
         {author.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
-            {/* // maybe a ekelton loading animation here? */}
             <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (

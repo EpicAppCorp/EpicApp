@@ -5,8 +5,8 @@ import Button from '@epicapp/components/Button';
 
 export default function ({ filter, changeFilter, setSearch }) {
   return (
-    <div className="">
-      <div className="flex w-max items-center rounded-xl bg-foreground px-4 text-lg text-text">
+    <div>
+      <div className="flex w-max items-center rounded-xl bg-foreground px-4 text-lg text-text sticky top-5">
         <i className="fa-solid fa-magnifying-glass" />
         <input
           className="h-14 w-96 bg-transparent px-4 placeholder:text-textAlt/20 focus:outline-none"

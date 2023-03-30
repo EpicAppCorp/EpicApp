@@ -4,8 +4,6 @@ import { useState } from 'react';
 import Navbar from '@epicapp/components/Navbar';
 import Modal from '@epicapp/components/Modal';
 import Auth from '@epicapp/components/Auth';
-// import SignIn from '@epicapp/components/Auth/SignIn';
-// import Signup from '@epicapp/components/Auth/Signup';
 
 export default function HomeLayout({ children, route, author }) {
   //opens the login modal

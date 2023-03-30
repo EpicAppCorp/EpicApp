@@ -1,9 +1,9 @@
 import { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
+import clsx from 'clsx';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { formatDistance } from 'date-fns';
-import clsx from 'clsx';
-import ReactMarkdown from 'react-markdown';
 
 //components
 import Button from '@epicapp/components/Button';
@@ -27,11 +27,11 @@ export default function Post({ post, author, liked }) {
     enabled: showComments,
   });
 
-  //get likes
-  // const likes = useQuery({
-  //   queryKey: ['likes', post.id],
-  //   queryFn: () => getLikes(post.id),
-  // });
+  // get likes
+  const likes = useQuery({
+    queryKey: ['likes', post.id],
+    queryFn: () => getLikes(post.id),
+  });
 
   //comment mutation
   const addComment = useMutation(
@@ -65,9 +65,22 @@ export default function Post({ post, author, liked }) {
             items: [...oldData.data.items, { object: post.id }],
           },
         }));
+        queryClient.setQueryData(['likes', post.id], (oldData) => ({
+          ...oldData,
+          data: [
+            ...oldData.data,
+            post.id,
+
+            // items: [...oldData.data.items, { object: post.id }],
+          ],
+        }));
       },
     },
   );
+
+  function getImages(imgString) {
+    console.log(imgString.split('"'))[1];
+  }
 
   return (
     <div key={post.id} className="rounded-3xl bg-surface p-4">
@@ -132,14 +145,38 @@ export default function Post({ post, author, liked }) {
           <div className="text-text">{post.content}</div>
         )}
         {post.contentType === 'text/markdown' && (
-          <ReactMarkdown children={post.content} className="text-text" />
+          <ReactMarkdown
+            className={clsx(
+              'relative h-96 w-full text-text',
+              post.content.includes('<img src') ? 'h-96' : 'h-full',
+            )}
+            components={{
+              img: (props) => (
+                <Image
+                  src={props.src}
+                  className="rounded-2xl object-cover"
+                  alt={props.alt}
+                  loader={() => props.src}
+                  fill={true}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+                  quality={100}
+                />
+              ),
+            }}
+          >
+            {post.content.includes('<img src')
+              ? '![](' + post.content.split('"')[1] + ')'
+              : post.content}
+          </ReactMarkdown>
         )}
       </div>
       <div className="flex items-center justify-between text-2xl text-textAlt">
-        <div className="flex gap-6">
+        <div className="flex gap-4">
           <Button
+            className="flex items-center"
             disabled={!author || isLiked}
-            loading={addPostLike.isLoading}
+            loading={addPostLike.isLoading | likes.isLoading}
             onClick={() => addPostLike.mutate()}
           >
             <i
@@ -150,6 +187,7 @@ export default function Post({ post, author, liked }) {
                   : 'fa-regular fa-heart hover:text-[#880808]',
               )}
             />
+            <span className="pl-2 text-base">{likes.data?.data?.length}</span>
           </Button>
           <Button
             disabled={!author}
@@ -201,7 +239,7 @@ export default function Post({ post, author, liked }) {
         )}
         <div className="flex gap-4">
           <Image
-            className="self-center aspect-square overflow-hidden rounded-full border-4 border-background object-cover"
+            className="aspect-square self-center overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
             loader={() => author?.profileImage}
