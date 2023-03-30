@@ -77,7 +77,7 @@ export default function Timeline({ auth, author }) {
                 />
               ))
           ) : (
-            <p className="py-8 text-center text-sm text-textAlt">
+            <p className="text-center text-sm text-textAlt">
               {auth.url === author.url
                 ? 'You havent created any posts yet, maybe do something?'
                 : "This author hasn't created any public posts yet... or its all private... or maybe they just don't like ya."}
