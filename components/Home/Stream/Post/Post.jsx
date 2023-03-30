@@ -14,7 +14,7 @@ import Comment from './Comment';
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
-import { deletePost } from '@epicapp/services/post';
+import { deletePost, repost } from '@epicapp/services/post';
 
 export default function Post({ post, author, liked, type = 'INBOX' }) {
   const queryClient = useQueryClient();
@@ -80,6 +80,12 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
       },
     },
   );
+
+  const newRepost = useMutation(() => repost(author, { ...post }), {
+    onSuccess(data) {
+      console.log(data);
+    },
+  });
 
   const delPost = useMutation(() => deletePost(post.id), {
     onSuccess() {
@@ -269,6 +275,9 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
                 showComments ? 'text-white' : 'hover:text-white',
               )}
             />
+          </Button>
+          <Button onClick={() => newRepost.mutate()}>
+            <i className="fa-regular fa-repeat transition-colors duration-150 hover:text-white" />
           </Button>
         </div>
         <div className="flex gap-2 text-xs">
