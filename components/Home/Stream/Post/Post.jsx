@@ -233,7 +233,7 @@ export default function Post({ post, author, liked, roundedTop = true }) {
         {showComments && comments.isFetched && (
           <div
             className={clsx(
-              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-scroll',
+              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
               comments.data.data.comments.length ? 'flex' : 'hidden',
             )}
           >
