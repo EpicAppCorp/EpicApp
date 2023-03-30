@@ -8,8 +8,8 @@ import Friend from './Friend';
 //services
 import { getAllAuthors } from '@epicapp/services/author';
 
-export default function Friends({ author }) {
-  const [filterType, setFilterType] = useState('ALL');
+export default function Friends({ filter, author }) {
+  const [filterType, setFilterType] = useState(filter ?? 'ALL');
   const [search, setSearch] = useState('');
   const filterFunctions = {
     ALL: (friend) => friend.id === friend.id,
@@ -37,7 +37,7 @@ export default function Friends({ author }) {
           <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
         </div>
       ) : (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-6">
           {friends?.data?.data?.items
             .filter((friend) => friend.displayName.includes(search))
             .filter((friend) => filterFunctions[filterType](friend))

@@ -39,10 +39,13 @@ export default function Profile({ author }) {
       <div className="h-32 w-full bg-primary" />
       <div className="relative h-24 w-full">
         <div className="absolute grid w-full -translate-y-1/2 grid-cols-3">
-          <div className="self-end text-center">
+          <Link
+            href={{ pathname: '/explore', query: { filter: 'FOLLOWERS' } }}
+            className="self-end text-center"
+          >
             <h6 className="text-2xl text-text">{author.followers.length}</h6>
             <span className="text-lg text-textAlt">Followers</span>
-          </div>
+          </Link>
           <div className="flex justify-center">
             <Image
               className="overflow-hidden rounded-full border-8 border-background object-cover"
@@ -56,10 +59,13 @@ export default function Profile({ author }) {
               priority={true}
             />
           </div>
-          <div className="self-end text-center">
+          <Link
+            href={{ pathname: '/explore', query: { filter: 'FOLLOWING' } }}
+            className="self-end text-center"
+          >
             <h6 className="text-2xl text-text">{author.following.length}</h6>
             <span className="text-lg text-textAlt">Following</span>
-          </div>
+          </Link>
         </div>
       </div>
       <div className="px-8 py-4 text-center">
@@ -70,7 +76,7 @@ export default function Profile({ author }) {
         <hr className="my-6 border-layer" />
         <div className="flex gap-4">
           <Link
-            href="/profile"
+            href={{ pathname: '/details', query: { id: author.url } }}
             className="flex h-14 w-full items-center justify-center rounded-2xl bg-layer text-xl text-textAlt transition-all hover:scale-105 hover:bg-primary hover:text-black"
           >
             My Profile

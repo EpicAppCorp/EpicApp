@@ -30,7 +30,7 @@ export default function Comment({ author, comment, liked }) {
   return (
     <div className="flex items-center gap-4">
       <Image
-        className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+        className="self-center aspect-square overflow-hidden rounded-full border-4 border-background object-cover"
         src="profile image"
         alt="profile image"
         loader={() => comment.author.profileImage}

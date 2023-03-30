@@ -10,10 +10,17 @@ import Button from '@epicapp/components/Button';
 import { getPosts } from '@epicapp/services/post';
 import { getLiked } from '@epicapp/services/like';
 
-export default function Timeline({ author }) {
+export default function Timeline({ auth, author }) {
   const [filter, setFilter] = useState('POSTS');
 
+  // author profile likes
   const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
+    enabled: filter === 'LIKES',
+    staleTime: 10000,
+  });
+
+  //logged in user likes
+  const authLiked = useQuery(['liked', author?.id], () => getLiked(author.id), {
     enabled: filter === 'LIKES',
     staleTime: 10000,
   });
@@ -41,7 +48,7 @@ export default function Timeline({ author }) {
     return (
       <p className="py-8 text-center text-sm text-textAlt">
         This author hasn't created any public posts yet... or its all private...
-        maybe they just don't like ya.
+        or maybe they just don't like ya.
       </p>
     );
 
@@ -78,8 +85,8 @@ export default function Timeline({ author }) {
             <Post
               key={item.id}
               post={item}
-              author={author}
-              liked={liked.data?.data?.items.map((like) => like.object)}
+              author={auth}
+              liked={authLiked.data?.data?.items.map((like) => like.object)}
             />
           ))}
       {filter === 'LIKES' &&

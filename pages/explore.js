@@ -8,7 +8,7 @@ import Friends from '@epicapp/components/Friends';
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
-export default function Homepage() {
+export default function Homepage({ filter }) {
   const author = useQuery(['author'], () => getAuthorDetails(null), {
     staleTime: Infinity,
   });
@@ -30,7 +30,7 @@ export default function Homepage() {
         ) : (
           <HomeLayout route="EXPLORE" author={author.data?.data}>
             <div className="container">
-              <Friends author={author.data?.data} />
+              <Friends filter={filter} author={author.data?.data} />
             </div>
           </HomeLayout>
         )}
@@ -50,6 +50,8 @@ export async function getServerSideProps(context) {
     };
   }
   return {
-    props: {},
+    props: {
+      filter: context.query.filter ?? null,
+    },
   };
 }

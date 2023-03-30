@@ -74,7 +74,7 @@ export default function Post({ post, author, liked }) {
       <div className="flex gap-4">
         {post.author?.profileImage ? (
           <Image
-            className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+            className="aspect-square self-start overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
             placeholder="blur"
@@ -201,7 +201,7 @@ export default function Post({ post, author, liked }) {
         )}
         <div className="flex gap-4">
           <Image
-            className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+            className="self-center aspect-square overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
             loader={() => author?.profileImage}

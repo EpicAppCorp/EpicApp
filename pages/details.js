@@ -9,9 +9,13 @@ import Timeline from '@epicapp/components/Profile/Timeline';
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
-export default function ProfilePage({ id }) {
-  const author = useQuery(['profile', id], () => getAuthorDetails(id), {
-    staleTime: 10000,
+export default function Profile({ id }) {
+  const auth = useQuery(['author'], () => getAuthorDetails(null), {
+    staleTime: Infinity,
+  });
+
+  const profile = useQuery(['profile', id], () => getAuthorDetails(id), {
+    staleTime: Infinity,
   });
 
   return (
@@ -23,16 +27,16 @@ export default function ProfilePage({ id }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="h-screen w-screen bg-background">
-        {author.isLoading ? (
+        {auth.isLoading || profile.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
             {/* // maybe a ekelton loading animation here? */}
             <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (
-          <HomeLayout route="PROFILE" author={author.data?.data}>
+          <HomeLayout route="PROFILE" author={auth.data.data}>
             <div className="container">
-              <Details author={author.data?.data} />
-              <Timeline author={author?.data?.data} />
+              <Details auth={auth.data.data} author={profile?.data?.data} />
+              <Timeline auth={auth.data.data} author={profile?.data?.data} />
             </div>
           </HomeLayout>
         )}

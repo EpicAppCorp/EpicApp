@@ -39,9 +39,6 @@ export default function Homepage() {
                 <CreatePost author={author.data?.data} />
                 <Stream author={author.data?.data} />
               </section>
-              {/* <section className="col-span-2">
-                <Friends author={author.data?.data} />
-              </section> */}
             </div>
           </HomeLayout>
         )}
@@ -49,19 +46,3 @@ export default function Homepage() {
     </>
   );
 }
-
-//TODO: DO THIS WAY OR HAVE PUBLIC VIEW
-// export async function getServerSideProps(context) {
-//   if (!context.req.headers.cookie?.includes('access=')) {
-//     return {
-//       props: {},
-//       redirect: {
-//         permanent: false,
-//         destination: '/login',
-//       },
-//     };
-//   }
-//   return {
-//     props: {},
-//   };
-// }

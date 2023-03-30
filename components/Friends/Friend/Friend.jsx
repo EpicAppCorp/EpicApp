@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
+import Link from 'next/link';
 import clsx from 'clsx';
 
 //components
@@ -52,8 +53,11 @@ export default function Friend({ author, friend }) {
   });
 
   return (
-    <article>
-      <div className="relative flex h-24 w-96 justify-between gap-4 rounded-t-xl bg-foreground p-4">
+    <article className="transition-all hover:scale-105 hover:shadow-lg">
+      <Link
+        href={{ pathname: '/details', query: { id: friend.url } }}
+        className="relative flex h-24 w-96 justify-between gap-4 rounded-t-xl bg-foreground p-4"
+      >
         <i
           title="You both follow each other"
           className={clsx(
@@ -89,7 +93,7 @@ export default function Friend({ author, friend }) {
             <p className="w-60 truncate text-xs text-textAlt">{friend.host}</p>
           </div>
         </div>
-      </div>
+      </Link>
       <div className="flex h-12 justify-center overflow-hidden rounded-b-xl bg-layer">
         <Button
           loading={followAuthor.isLoading || unfollowAuthor.isLoading}
