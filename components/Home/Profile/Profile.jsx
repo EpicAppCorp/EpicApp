@@ -37,13 +37,13 @@ export default function Profile({ author }) {
   return (
     <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface">
       <div className="h-32 w-full bg-primary" />
-      <div className="relative h-24 w-full">
+      <div className="relative h-24 w-full pt-4">
         <div className="absolute grid w-full -translate-y-1/2 grid-cols-3">
           <div className="self-end text-center">
             <h6 className="text-2xl text-text">{author.followers.length}</h6>
             <span className="text-lg text-textAlt">Followers</span>
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center pb-6">
             <Image
               className="overflow-hidden rounded-full border-8 border-background object-cover"
               alt="profile image"

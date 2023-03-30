@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 
 //components
-import Post from '@epicapp/components/Home/Stream/Post';
+import Post from '@epicapp/components/Profile/Stream/Post';
 
 //services
 import { getPosts } from '@epicapp/services/post';
