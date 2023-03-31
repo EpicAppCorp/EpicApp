@@ -32,7 +32,10 @@ export default function Navbar({ author, route, openModal }) {
 
   return (
     <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 bg-background px-8 py-4 text-text">
-      <div className="flex items-center">epicapp</div>
+      <div className="flex items-center">
+        <i className="fa-duotone fa-clone pr-2 text-lg" />
+        epicapp
+      </div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
           <Link className={classBuilder('HOME')} href="/">
