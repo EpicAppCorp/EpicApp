@@ -1,24 +1,29 @@
 import { useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
+import Link from 'next/link';
 import Image from 'next/image';
+import clsx from 'clsx';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { formatDistance } from 'date-fns';
-import clsx from 'clsx';
-import ReactMarkdown from 'react-markdown';
 
 //components
 import Button from '@epicapp/components/Button';
+import EditPost from '../EditPost/EditPost';
 import Comment from './Comment';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
+import { deletePost } from '@epicapp/services/post';
 
-export default function Post({ post, author, liked }) {
+export default function Post({ post, author, liked, type = 'INBOX' }) {
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
 
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
+  const [optionsDropdown, setOptionsDropdown] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   //get all comments
   const comments = useQuery({
@@ -27,11 +32,11 @@ export default function Post({ post, author, liked }) {
     enabled: showComments,
   });
 
-  //get likes
-  // const likes = useQuery({
-  //   queryKey: ['likes', post.id],
-  //   queryFn: () => getLikes(post.id),
-  // });
+  // get likes
+  const likes = useQuery({
+    queryKey: ['likes', post.id],
+    queryFn: () => getLikes(post.id),
+  });
 
   //comment mutation
   const addComment = useMutation(
@@ -65,16 +70,45 @@ export default function Post({ post, author, liked }) {
             items: [...oldData.data.items, { object: post.id }],
           },
         }));
+        queryClient.setQueryData(['likes', post.id], (oldData) => ({
+          ...oldData,
+          data: {
+            ...oldData.data,
+            items: [...oldData.data.items, { object: post.id }],
+          },
+        }));
       },
     },
   );
 
+  const delPost = useMutation(() => deletePost(post.id), {
+    onSuccess() {
+      //update cache
+      queryClient.setQueryData(['posts', post.author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: oldData.data.items.filter((p) => p.id !== post.id),
+        },
+      }));
+      setOptionsDropdown(false);
+    },
+  });
+
+  if (editMode)
+    return <EditPost post={post} type={type} back={() => setEditMode(false)} />;
+
   return (
-    <div key={post.id} className="rounded-3xl bg-surface p-4">
+    <div
+      className={clsx(
+        'bg-surface p-4',
+        type !== 'LIKES' ? 'rounded-3xl' : 'rounded-b-3xl',
+      )}
+    >
       <div className="flex gap-4">
         {post.author?.profileImage ? (
           <Image
-            className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+            className="aspect-square self-start overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
             placeholder="blur"
@@ -90,18 +124,62 @@ export default function Post({ post, author, liked }) {
           </div>
         )}
         <div className="w-full">
-          <div className="flex justify-between">
-            <span className="text-textAlt">@{post.author.displayName}</span>
+          <div className="relative flex justify-between">
+            <Link
+              href={{ pathname: '/details', query: { id: post.author.id } }}
+              className="text-textAlt transition-colors duration-150 hover:text-primary"
+            >
+              @{post.author.displayName}
+            </Link>
             <div
               title={post.author.host}
               className={clsx(
                 'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
-                process.env.NEXT_PUBLIC_API.includes(post.author.host)
+                process.env.NEXT_PUBLIC_API.includes(post.author.host) ||
+                  type !== 'TIMELINE'
                   ? 'hidden'
                   : 'flex',
               )}
             >
               <i className="fa-solid fa-square-up-right" /> {post.author.host}
+            </div>
+            <div className="absolute right-0 h-10 w-10">
+              <div
+                onClick={() => setOptionsDropdown(!optionsDropdown)}
+                className={clsx(
+                  'relative flex h-full w-full cursor-pointer items-center justify-center rounded-full hover:bg-layer',
+                  post.author.id === author.id && type === 'TIMELINE'
+                    ? 'flex'
+                    : 'hidden',
+                )}
+              >
+                <i className="fa-regular fa-ellipsis text-2xl text-textAlt" />
+
+                {optionsDropdown && (
+                  <ul className="absolute right-0 top-full z-50 overflow-hidden rounded-xl bg-foreground text-sm">
+                    <li>
+                      <Button
+                        onClick={() => setEditMode(true)}
+                        className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+                        href="/profile"
+                      >
+                        <i className="fa-solid fa-pencil col-span-2" />
+                        Edit
+                      </Button>
+                    </li>
+                    <li>
+                      <Button
+                        loading={delPost.isLoading}
+                        onClick={() => delPost.mutate()}
+                        className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+                      >
+                        <i className="fa-regular fa-trash col-span-2" />
+                        Delete
+                      </Button>
+                    </li>
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -132,14 +210,38 @@ export default function Post({ post, author, liked }) {
           <div className="text-text">{post.content}</div>
         )}
         {post.contentType === 'text/markdown' && (
-          <ReactMarkdown children={post.content} className="text-text" />
+          <ReactMarkdown
+            className={clsx(
+              'relative h-96 w-full text-text',
+              post.content.includes('<img src') ? 'h-96' : 'h-full',
+            )}
+            components={{
+              img: (props) => (
+                <Image
+                  src={props.src}
+                  className="rounded-2xl object-cover"
+                  alt={props.alt}
+                  loader={() => props.src}
+                  fill={true}
+                  placeholder="blur"
+                  blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+                  quality={100}
+                />
+              ),
+            }}
+          >
+            {post.content.includes('<img src')
+              ? '![](' + post.content.split('"')[1] + ')'
+              : post.content}
+          </ReactMarkdown>
         )}
       </div>
       <div className="flex items-center justify-between text-2xl text-textAlt">
-        <div className="flex gap-6">
+        <div className="flex gap-4">
           <Button
+            className="flex items-center"
             disabled={!author || isLiked}
-            loading={addPostLike.isLoading}
+            loading={addPostLike.isLoading | likes.isLoading}
             onClick={() => addPostLike.mutate()}
           >
             <i
@@ -150,6 +252,11 @@ export default function Post({ post, author, liked }) {
                   : 'fa-regular fa-heart hover:text-[#880808]',
               )}
             />
+            {likes.data?.data?.items.length ? (
+              <span className="pl-2 text-base">
+                {likes.data?.data?.items.length}
+              </span>
+            ) : null}
           </Button>
           <Button
             disabled={!author}
@@ -185,11 +292,11 @@ export default function Post({ post, author, liked }) {
         {showComments && comments.isFetched && (
           <div
             className={clsx(
-              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-scroll',
-              comments.data.data.comments.length ? 'flex' : 'hidden',
+              'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
+              comments.data?.data?.comments?.length ? 'flex' : 'hidden',
             )}
           >
-            {comments.data.data.comments.map((comment) => (
+            {comments.data?.data?.comments?.map((comment) => (
               <Comment
                 key={comment.id}
                 author={author}
@@ -201,7 +308,7 @@ export default function Post({ post, author, liked }) {
         )}
         <div className="flex gap-4">
           <Image
-            className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+            className="aspect-square self-center overflow-hidden rounded-full border-4 border-background object-cover"
             src="profile image"
             alt="profile image"
             loader={() => author?.profileImage}

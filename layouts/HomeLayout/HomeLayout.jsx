@@ -3,8 +3,7 @@ import { useState } from 'react';
 //components
 import Navbar from '@epicapp/components/Navbar';
 import Modal from '@epicapp/components/Modal';
-import SignIn from '@epicapp/components/SignIn';
-import Signup from '@epicapp/components/Signup';
+import Auth from '@epicapp/components/Auth';
 
 export default function HomeLayout({ children, route, author }) {
   //opens the login modal
@@ -22,17 +21,7 @@ export default function HomeLayout({ children, route, author }) {
       </div>
 
       <Modal show={modal.show}>
-        {modal.form === 'LOGIN' ? (
-          <SignIn
-            switchHandler={() => setModal({ ...modal, form: 'SIGNUP' })}
-            close={() => setModal({ ...modal, show: false })}
-          />
-        ) : (
-          <Signup
-            switchHandler={() => setModal({ ...modal, form: 'LOGIN' })}
-            close={() => setModal({ ...modal, show: false })}
-          />
-        )}
+        <Auth option={modal.form} close={() => setModal(false)} />
       </Modal>
     </>
   );

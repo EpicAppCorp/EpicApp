@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useMutation, useQueryClient, useQuery } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { formatDistance } from 'date-fns';
 import clsx from 'clsx';
 
@@ -8,19 +8,9 @@ import Button from '@epicapp/components/Button';
 
 //services
 import { newLike } from '@epicapp/services/like';
-// import { getComment } from '@epicapp/services/comment';
 
 export default function Comment({ author, comment, liked }) {
   const queryClient = useQueryClient();
-  // TODO FIX THIS WITH ACTUAL AUTHOR OBJ
-  // const commentRequest = useQuery(
-  //   ['comment', comment?.author],
-  //   () => getComment(comment?.author),
-  //   {
-  //     staleTime: 10000,
-  //   },
-  // );
-
   const addCommentLike = useMutation(
     () => newLike(author, { ...comment, object: comment?.id }),
     {
@@ -37,14 +27,10 @@ export default function Comment({ author, comment, liked }) {
     },
   );
 
-  // if (commentRequest.isLoading) {
-  //   return null;
-  // }
-
   return (
     <div className="flex items-center gap-4">
       <Image
-        className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
+        className="self-center aspect-square overflow-hidden rounded-full border-4 border-background object-cover"
         src="profile image"
         alt="profile image"
         loader={() => comment.author.profileImage}

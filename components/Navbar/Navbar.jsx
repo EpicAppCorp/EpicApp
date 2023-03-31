@@ -32,24 +32,48 @@ export default function Navbar({ author, route, openModal }) {
 
   return (
     <nav className="sticky top-0 z-50 grid w-screen grid-cols-3 bg-background px-8 py-4 text-text">
-      <div className="flex items-center">epicapp</div>
+      <div className="flex items-center">
+        <i className="fa-duotone fa-clone pr-2 text-lg" />
+        epicapp
+      </div>
       <ul className="flex items-center justify-center gap-10 text-xl">
         <li>
           <Link className={classBuilder('HOME')} href="/">
             <i
               className={clsx(
                 route === 'HOME'
-                  ? 'fa-solid fa-house'
-                  : 'fa-regular fa-house-blank',
+                  ? 'fa-duotone fa-house'
+                  : 'fa-duotone fa-house',
               )}
             />
           </Link>
         </li>
         <li>
-          <Link className={classBuilder('PROFILE')} href="/details">
+          <Link
+            className={classBuilder('PROFILE')}
+            href={{
+              pathname: '/details',
+              query: {
+                id: author?.id,
+              },
+            }}
+          >
             <i
               className={clsx(
-                route === 'PROFILE' ? 'fa-solid fa-user' : 'fa-regular fa-user',
+                route === 'PROFILE'
+                  ? 'fa-duotone fa-user'
+                  : 'fa-duotone fa-user',
+              )}
+            />
+          </Link>
+        </li>
+        <li>
+          <Link className={classBuilder('EXPLORE')} href="/explore">
+            <i
+              className={clsx(
+                route === 'EXPLORE'
+                  ? 'fa-duotone fa-magnifying-glass'
+                  : 'fa-duotone fa-magnifying-glass',
               )}
             />
           </Link>
@@ -73,7 +97,7 @@ export default function Navbar({ author, route, openModal }) {
             <button
               onClick={() => setDropdown(!dropdown)}
               type="button"
-              className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface py-2 px-4"
+              className="flex w-max min-w-max max-w-2xl items-center gap-4 rounded-xl bg-surface px-4 py-2"
             >
               <Image
                 className="overflow-hidden rounded-full object-cover"
@@ -96,11 +120,11 @@ export default function Navbar({ author, route, openModal }) {
             </button>
 
             {dropdown && (
-              <ul className="absolute top-full right-0 mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
+              <ul className="absolute right-0 top-full mt-2 w-full overflow-hidden rounded-xl bg-surface text-base shadow-2xl">
                 <li>
                   <Link
                     className="grid h-11 grid-cols-12 items-center gap-2 px-4 transition-colors duration-150 hover:bg-primary hover:text-black"
-                    href="/details"
+                    href={{ pathname: '/details', query: { id: author.url } }}
                   >
                     <i className="fa-solid fa-user col-span-2 text-base" />
                     Profile
@@ -122,13 +146,13 @@ export default function Navbar({ author, route, openModal }) {
         ) : (
           <div>
             <Button
-              onClick={() => openModal('LOGIN')}
+              onClick={() => openModal('Sign In')}
               className="px-6 py-2 text-text transition-colors duration-150 hover:text-primary"
             >
               Login
             </Button>
             <Button
-              onClick={() => openModal('SIGNUP')}
+              onClick={() => openModal('Signup')}
               className="rounded-2xl bg-layer px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
             >
               Signup
