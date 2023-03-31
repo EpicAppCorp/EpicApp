@@ -29,14 +29,13 @@ export default function Profile({ id }) {
       <main className="h-screen w-screen bg-background">
         {auth.isLoading || profile.isLoading ? (
           <div className="flex h-full items-center justify-center text-9xl text-primary">
-            {/* // maybe a ekelton loading animation here? */}
             <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
           </div>
         ) : (
-          <HomeLayout route="PROFILE" author={auth.data.data}>
+          <HomeLayout route="PROFILE" author={auth.data?.data}>
             <div className="container">
-              <Details auth={auth.data.data} author={profile?.data?.data} />
-              <Timeline auth={auth.data.data} author={profile?.data?.data} />
+              <Details auth={auth.data?.data} author={profile?.data?.data} />
+              <Timeline auth={auth.data?.data} author={profile?.data?.data} />
             </div>
           </HomeLayout>
         )}

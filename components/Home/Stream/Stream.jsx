@@ -48,7 +48,7 @@ export default function Stream({ author, isInbox }) {
   else if (isInbox)
     return (
       <div className="flex flex-col">
-        {inbox.data.data.items.map((item, idx) => {
+        {inbox.data?.data?.items.map((item, idx) => {
           if (item.type.toUpperCase() === 'FOLLOW')
             return (
               <Follow key={idx} author={author} request={{ ...item, idx }} />
@@ -64,7 +64,7 @@ export default function Stream({ author, isInbox }) {
   else
     return (
       <div className="flex flex-col gap-6">
-        {inbox.data.data.items
+        {inbox.data?.data?.items
           .filter(({ type }) => type === 'post')
           .map((item) => (
             <Post

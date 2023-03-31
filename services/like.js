@@ -9,4 +9,4 @@ export const newLike = (author, item) =>
     object: item.object,
   });
 
-export const getLiked = (authorUrl) => axiosClient.get(authorUrl + '/liked/');
+export const getLiked = (authorUrl) => axiosClient.get(authorUrl + '/liked');

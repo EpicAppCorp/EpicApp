@@ -14,7 +14,7 @@ import Comment from './Comment';
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 
-export default function Post({ post, author, liked, roundedTop = true }) {
+export default function Post({ post, author, liked, isInbox = true }) {
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
 
@@ -82,7 +82,7 @@ export default function Post({ post, author, liked, roundedTop = true }) {
       key={post.id}
       className={clsx(
         'bg-surface p-4',
-        roundedTop ? 'rounded-3xl' : 'rounded-b-3xl',
+        isInbox ? 'rounded-3xl' : 'rounded-b-3xl',
       )}
     >
       <div className="flex gap-4">
@@ -115,7 +115,8 @@ export default function Post({ post, author, liked, roundedTop = true }) {
               title={post.author.host}
               className={clsx(
                 'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
-                process.env.NEXT_PUBLIC_API.includes(post.author.host)
+                process.env.NEXT_PUBLIC_API.includes(post.author.host) ||
+                  isInbox
                   ? 'hidden'
                   : 'flex',
               )}
@@ -234,10 +235,10 @@ export default function Post({ post, author, liked, roundedTop = true }) {
           <div
             className={clsx(
               'mb-4 max-h-48 min-h-0 flex-col gap-3 overflow-y-auto',
-              comments.data.data.comments.length ? 'flex' : 'hidden',
+              comments.data?.data?.comments?.length ? 'flex' : 'hidden',
             )}
           >
-            {comments.data.data.comments.map((comment) => (
+            {comments.data?.data?.comments?.map((comment) => (
               <Comment
                 key={comment.id}
                 author={author}

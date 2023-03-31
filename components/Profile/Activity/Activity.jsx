@@ -11,7 +11,7 @@ import { getItem } from '@epicapp/services/inbox';
 
 export default function Activity({ author, auth, authLiked }) {
   // author profile likes
-  const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
+  const liked = useQuery(['liked', author?.id], () => getLiked(author.url), {
     staleTime: 10000,
   });
 
@@ -35,13 +35,13 @@ export default function Activity({ author, auth, authLiked }) {
 
   return (
     <section className="flex flex-col gap-6">
-      {liked.data.data.items.map((like) => (
+      {liked.data?.data?.items?.map((like) => (
         <ActivityItem
           key={like.id}
           like={like}
           author={author}
           auth={auth}
-          liked={liked.data.data.items}
+          liked={liked.data?.data?.items}
           authLiked={authLiked}
         />
       ))}
@@ -105,7 +105,7 @@ function ActivityItem({ like, author, liked, auth, authLiked }) {
           <Post
             post={likedItem?.data?.data}
             author={auth}
-            roundedTop={false}
+            isInbox={false}
             liked={authLiked}
           />
         )}
