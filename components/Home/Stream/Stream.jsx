@@ -48,15 +48,19 @@ export default function Stream({ author, isInbox }) {
   else if (isInbox)
     return (
       <div className="flex flex-col">
-        {inbox.data?.data?.items.map((item, idx) => {
+        {inbox.data?.data?.items.map((item, idx, inbox) => {
           if (item.type.toUpperCase() === 'FOLLOW')
             return (
-              <Follow key={idx} author={author} request={{ ...item, idx }} />
+              <Follow
+                key={idx}
+                author={author}
+                request={{ ...item, idx, inbox }}
+              />
             );
           else if (item.type.toUpperCase() === 'LIKE')
-            return <Like key={idx} like={{ ...item, idx }} />;
+            return <Like key={idx} like={{ ...item, idx, inbox }} />;
           else if (item.type.toUpperCase() === 'COMMENT')
-            return <Comment key={idx} comment={{ ...item, idx }} />;
+            return <Comment key={idx} comment={{ ...item, idx, inbox }} />;
         })}
       </div>
     );

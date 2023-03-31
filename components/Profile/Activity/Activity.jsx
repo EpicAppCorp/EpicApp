@@ -69,19 +69,22 @@ function ActivityItem({ like, author, liked, auth, authLiked }) {
 
   return (
     <div className="relative">
-      <div className="flex items-center gap-2 rounded-t-xl bg-layer px-4 py-1 text-text">
+      <div className="flex items-center gap-4 rounded-t-xl bg-layer px-4 py-1 text-text">
         {author?.profileImage ? (
-          <Image
-            className="aspect-square self-start overflow-hidden rounded-full border-4 border-background object-cover"
-            src="profile image"
-            alt="profile image"
-            placeholder="blur"
-            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
-            loader={() => author.profileImage}
-            width={40}
-            height={40}
-            priority={true}
-          />
+          <div className="relative">
+            <Image
+              className="aspect-square self-start overflow-hidden rounded-full border-4 border-background object-cover"
+              src="profile image"
+              alt="profile image"
+              placeholder="blur"
+              blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
+              loader={() => author.profileImage}
+              width={40}
+              height={40}
+              priority={true}
+            />
+            <i className="fa-solid fa-heart absolute left-7 top-4 text-lg text-[#880808]" />
+          </div>
         ) : (
           <div className="flex h-[40px] w-[40px] items-center justify-center overflow-hidden rounded-full border-4 border-layer bg-background object-cover text-3xl text-textAlt">
             <i className="fa-solid fa-question" />

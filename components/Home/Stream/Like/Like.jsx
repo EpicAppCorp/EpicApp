@@ -3,11 +3,6 @@ import Link from 'next/link';
 import clsx from 'clsx';
 
 export default function Like({ like }) {
-  //   let likedItem = useQuery({
-  //     queryKey: ['comments', 'posts'],
-  //     queryFn: () => getItem(like.object),
-  //   });
-
   return (
     <Link
       href={{
@@ -17,8 +12,10 @@ export default function Like({ like }) {
         },
       }}
       className={clsx(
-        'flex h-28 items-center',
-        like.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
+        'flex h-28 items-center hover:bg-layer',
+        like.idx >= 0 &&
+          like.idx < like.inbox.length - 1 &&
+          'border-b border-textAlt/10',
       )}
     >
       <div className="flex w-full gap-4 px-4">

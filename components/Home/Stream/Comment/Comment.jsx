@@ -12,8 +12,10 @@ export default function Comment({ comment }) {
         },
       }}
       className={clsx(
-        'flex h-28 items-center',
-        comment.idx % 2 === 0 ? 'bg-surface' : 'bg-foreground',
+        'flex h-28 items-center hover:bg-layer',
+        comment.idx >= 0 &&
+          comment.idx < comment.inbox.length - 1 &&
+          'border-b border-textAlt/10',
       )}
     >
       <div className="flex w-full items-center justify-between px-4">
