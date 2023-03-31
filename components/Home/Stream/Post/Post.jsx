@@ -8,11 +8,13 @@ import { formatDistance } from 'date-fns';
 
 //components
 import Button from '@epicapp/components/Button';
+import EditPost from '../EditPost/EditPost';
 import Comment from './Comment';
 
 //services
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
+import { deletePost } from '@epicapp/services/post';
 
 export default function Post({ post, author, liked, isInbox = true }) {
   const queryClient = useQueryClient();
@@ -20,6 +22,8 @@ export default function Post({ post, author, liked, isInbox = true }) {
 
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
+  const [optionsDropdown, setoptionsDropdown] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   //get all comments
   const comments = useQuery({
@@ -77,9 +81,26 @@ export default function Post({ post, author, liked, isInbox = true }) {
     },
   );
 
+  const delPost = useMutation(() => deletePost(post.id), {
+    onSuccess() {
+      //update cache
+      queryClient.setQueryData(['posts', post.author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: oldData.data.items.filter((p) => p.id !== post.id),
+        },
+      }));
+    },
+  });
+
+  if (editMode)
+    return (
+      <EditPost post={post} isInbox={isInbox} back={() => setEditMode(false)} />
+    );
+
   return (
     <div
-      key={post.id}
       className={clsx(
         'bg-surface p-4',
         isInbox ? 'rounded-3xl' : 'rounded-b-3xl',
@@ -104,7 +125,7 @@ export default function Post({ post, author, liked, isInbox = true }) {
           </div>
         )}
         <div className="w-full">
-          <div className="flex justify-between">
+          <div className="relative flex justify-between">
             <Link
               href={{ pathname: '/details', query: { id: post.author.id } }}
               className="text-textAlt transition-colors duration-150 hover:text-primary"
@@ -122,6 +143,42 @@ export default function Post({ post, author, liked, isInbox = true }) {
               )}
             >
               <i className="fa-solid fa-square-up-right" /> {post.author.host}
+            </div>
+            <div className="absolute right-0 h-10 w-10">
+              <div
+                onClick={() => setoptionsDropdown(!optionsDropdown)}
+                className={clsx(
+                  'relative flex h-full w-full items-center justify-center rounded-full hover:bg-layer',
+                  post.author.id === author.id ? 'flex' : 'hidden',
+                )}
+              >
+                <i className="fa-regular fa-ellipsis text-2xl text-textAlt" />
+
+                {optionsDropdown && (
+                  <ul className="absolute right-0 top-full overflow-hidden rounded-xl bg-foreground text-sm">
+                    <li>
+                      <Button
+                        onClick={() => setEditMode(true)}
+                        className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+                        href="/profile"
+                      >
+                        <i className="fa-solid fa-pencil col-span-2" />
+                        Edit
+                      </Button>
+                    </li>
+                    <li>
+                      <Button
+                        loading={delPost.isLoading}
+                        onClick={() => delPost.mutate()}
+                        className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+                      >
+                        <i className="fa-regular fa-trash col-span-2" />
+                        Delete
+                      </Button>
+                    </li>
+                  </ul>
+                )}
+              </div>
             </div>
           </div>
           <div className="flex items-center gap-3">

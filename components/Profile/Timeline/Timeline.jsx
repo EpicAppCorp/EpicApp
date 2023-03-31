@@ -20,7 +20,6 @@ export default function Timeline({ auth, author }) {
   });
 
   const posts = useQuery(['posts', author?.id], () => getPosts(author.id), {
-    retry: 1,
     staleTime: 10000,
     enabled: !!author,
   });
