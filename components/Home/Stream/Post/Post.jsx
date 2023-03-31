@@ -148,7 +148,7 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
                 onClick={() => setOptionsDropdown(!optionsDropdown)}
                 className={clsx(
                   'relative flex h-full w-full cursor-pointer items-center justify-center rounded-full hover:bg-layer',
-                  post.author.id === author.id && type === 'TIMELINE'
+                  post.author.id === author?.id && type === 'TIMELINE'
                     ? 'flex'
                     : 'hidden',
                 )}
