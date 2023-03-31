@@ -108,7 +108,7 @@ function ActivityItem({ like, author, liked, auth, authLiked }) {
           <Post
             post={likedItem?.data?.data}
             author={auth}
-            isInbox={false}
+            type="LIKES"
             liked={authLiked}
           />
         )}

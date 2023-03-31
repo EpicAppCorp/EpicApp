@@ -72,6 +72,7 @@ export default function Timeline({ auth, author }) {
                   key={item.id}
                   post={item}
                   author={auth}
+                  type="TIMELINE"
                   liked={authLiked.data?.data?.items.map((like) => like.object)}
                 />
               ))

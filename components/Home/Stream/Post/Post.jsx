@@ -16,13 +16,13 @@ import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 import { deletePost } from '@epicapp/services/post';
 
-export default function Post({ post, author, liked, isInbox = true }) {
+export default function Post({ post, author, liked, type = 'INBOX' }) {
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
 
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
-  const [optionsDropdown, setoptionsDropdown] = useState(false);
+  const [optionsDropdown, setOptionsDropdown] = useState(false);
   const [editMode, setEditMode] = useState(false);
 
   //get all comments
@@ -91,19 +91,18 @@ export default function Post({ post, author, liked, isInbox = true }) {
           items: oldData.data.items.filter((p) => p.id !== post.id),
         },
       }));
+      setOptionsDropdown(false);
     },
   });
 
   if (editMode)
-    return (
-      <EditPost post={post} isInbox={isInbox} back={() => setEditMode(false)} />
-    );
+    return <EditPost post={post} type={type} back={() => setEditMode(false)} />;
 
   return (
     <div
       className={clsx(
         'bg-surface p-4',
-        isInbox ? 'rounded-3xl' : 'rounded-b-3xl',
+        type !== 'LIKES' ? 'rounded-3xl' : 'rounded-b-3xl',
       )}
     >
       <div className="flex gap-4">
@@ -137,7 +136,7 @@ export default function Post({ post, author, liked, isInbox = true }) {
               className={clsx(
                 'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
                 process.env.NEXT_PUBLIC_API.includes(post.author.host) ||
-                  isInbox
+                  type !== 'TIMELINE'
                   ? 'hidden'
                   : 'flex',
               )}
@@ -146,16 +145,18 @@ export default function Post({ post, author, liked, isInbox = true }) {
             </div>
             <div className="absolute right-0 h-10 w-10">
               <div
-                onClick={() => setoptionsDropdown(!optionsDropdown)}
+                onClick={() => setOptionsDropdown(!optionsDropdown)}
                 className={clsx(
-                  'relative flex h-full w-full items-center justify-center rounded-full hover:bg-layer',
-                  post.author.id === author.id ? 'flex' : 'hidden',
+                  'relative flex h-full w-full cursor-pointer items-center justify-center rounded-full hover:bg-layer',
+                  post.author.id === author.id && type === 'TIMELINE'
+                    ? 'flex'
+                    : 'hidden',
                 )}
               >
                 <i className="fa-regular fa-ellipsis text-2xl text-textAlt" />
 
                 {optionsDropdown && (
-                  <ul className="absolute right-0 top-full overflow-hidden rounded-xl bg-foreground text-sm">
+                  <ul className="absolute right-0 top-full z-50 overflow-hidden rounded-xl bg-foreground text-sm">
                     <li>
                       <Button
                         onClick={() => setEditMode(true)}

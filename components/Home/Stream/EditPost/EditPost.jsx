@@ -10,7 +10,7 @@ import Button from '@epicapp/components/Button/Button';
 import { editPost } from '@epicapp/services/post';
 import { convertBase64 } from '@epicapp/utils/image';
 
-export default function EditPost({ post, isInbox, back }) {
+export default function EditPost({ post, type, back }) {
   const queryClient = useQueryClient();
   const [contentType, setContentType] = useState('text/plain');
   const [imageFileName, setImageFileName] = useState(null);
@@ -60,12 +60,7 @@ export default function EditPost({ post, isInbox, back }) {
   };
 
   return (
-    <div
-      className={clsx(
-        'bg-surface p-4',
-        isInbox ? 'rounded-3xl' : 'rounded-b-3xl',
-      )}
-    >
+    <div className="bg-surface p-4">
       <form className="flex gap-4" onSubmit={formHandler}>
         {post.author?.profileImage ? (
           <Image
@@ -182,7 +177,7 @@ export default function EditPost({ post, isInbox, back }) {
                 loading={editPostMutation.isLoading}
                 className="rounded-2xl bg-layer px-6 py-2 text-textAlt transition-colors hover:bg-primary hover:text-black"
               >
-                Share
+                Save
               </Button>
             </div>
           </div>
