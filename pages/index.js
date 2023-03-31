@@ -10,6 +10,7 @@ import Friends from '@epicapp/components/Friends';
 
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
+import GitHubActivity from '@epicapp/components/GitHubActivity';
 
 export default function Homepage() {
   const author = useQuery(['author'], getAuthorDetails, {
@@ -35,6 +36,9 @@ export default function Homepage() {
             <div className="grid grid-cols-8 gap-8">
               <section className="col-span-2 w-full">
                 <Profile author={author.data?.data} />
+                <div className="py-10">
+                  <GitHubActivity author={author.data?.data} />
+                </div>
               </section>
               <section className="col-span-4 flex flex-col gap-6">
                 <CreatePost author={author.data?.data} />
