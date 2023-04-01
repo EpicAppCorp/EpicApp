@@ -18,7 +18,10 @@ export default function Auth({ close, option }) {
   //login mutation
   const authenticate = useMutation((body) => authenticateAuthor(body), {
     onSuccess(data) {
-      Cookies.set('access', data.data.cookie);
+      Cookies.set('access', data.data.cookie, {
+        secure: true,
+        sameSite: 'none',
+      });
       queryClient.setQueryData(['author'], () => data);
       close();
     },
