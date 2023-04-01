@@ -1,6 +1,7 @@
 import { useMutation } from 'react-query';
 import Image from 'next/image';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 
 //components
 import Button from '@epicapp/components/Button';
@@ -12,6 +13,7 @@ export default function Profile({ author }) {
   const logout = useMutation(() => logoutAuthor(), {
     onSuccess() {
       window.location.reload();
+      Cookies.remove('access');
     },
   });
 

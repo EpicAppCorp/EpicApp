@@ -10,6 +10,7 @@ import Inbox from '@epicapp/components/Inbox';
 
 //services
 import { logoutAuthor } from '@epicapp/services/author';
+import Cookies from 'js-cookie';
 
 export default function Navbar({ author, route, openModal }) {
   const [dropdown, setDropdown] = useState(false);
@@ -26,6 +27,7 @@ export default function Navbar({ author, route, openModal }) {
 
   const logout = useMutation(() => logoutAuthor(), {
     onSuccess() {
+      Cookies.remove('access');
       window.location.reload();
     },
   });
