@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import clsx from 'clsx';
+import Cookies from 'js-cookie';
 
 //components
 import Button from '../Button';
@@ -17,6 +18,7 @@ export default function Auth({ close, option }) {
   //login mutation
   const authenticate = useMutation((body) => authenticateAuthor(body), {
     onSuccess(data) {
+      Cookies.set('access', data.data.cookie);
       queryClient.setQueryData(['author'], () => data);
       close();
     },
@@ -53,7 +55,7 @@ export default function Auth({ close, option }) {
         authType === 'Sign In' ? 'h-[475px]' : 'h-[605px]',
       )}
     >
-      <Button onClick={close} type="button" className="absolute top-4 right-6">
+      <Button onClick={close} type="button" className="absolute right-6 top-4">
         <i className="fa-solid fa-xmark text-2xl text-textAlt hover:text-primary" />
       </Button>
       <div className="flex flex-col gap-6">

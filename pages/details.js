@@ -9,7 +9,7 @@ import Timeline from '@epicapp/components/Profile/Timeline';
 //services
 import { getAuthorDetails } from '@epicapp/services/author';
 
-export default function Profile({ id }) {
+export default function DetailsPage({ id }) {
   const auth = useQuery(['author'], () => getAuthorDetails(null), {
     staleTime: Infinity,
   });
@@ -45,7 +45,6 @@ export default function Profile({ id }) {
 export async function getServerSideProps(context) {
   if (!context.query.id || !context.req.headers.cookie?.includes('access=')) {
     return {
-      props: {},
       redirect: {
         permanent: false,
         destination: '/',

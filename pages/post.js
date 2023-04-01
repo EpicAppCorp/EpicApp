@@ -68,7 +68,6 @@ export async function getServerSideProps(context) {
     !context.req.headers.cookie?.includes('access=')
   ) {
     return {
-      props: {},
       redirect: {
         permanent: false,
         destination: '/',

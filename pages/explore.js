@@ -41,7 +41,6 @@ export default function Homepage({ filter }) {
 export async function getServerSideProps(context) {
   if (!context.req.headers.cookie?.includes('access=')) {
     return {
-      props: {},
       redirect: {
         permanent: false,
         destination: '/',
