@@ -21,6 +21,7 @@ export default function Auth({ close, option }) {
       Cookies.set('access', data.data.cookie, {
         secure: true,
         sameSite: 'Lax',
+        domain: '',
       });
       queryClient.setQueryData(['author'], () => data);
       close();
