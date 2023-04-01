@@ -21,7 +21,7 @@ export default function Auth({ close, option }) {
       Cookies.set('access', data.data.cookie, {
         secure: true,
         sameSite: 'Lax',
-        domain: '',
+        domain: '.group-13-epic-app.herokuapp.com',
       });
       queryClient.setQueryData(['author'], () => data);
       close();
