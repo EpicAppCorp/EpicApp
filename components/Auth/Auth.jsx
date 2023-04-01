@@ -10,6 +10,7 @@ import Signup from './Signup';
 
 //services
 import { authenticateAuthor, createAuthor } from '@epicapp/services/author';
+import { axiosClient } from '@epicapp/libs/axios';
 
 export default function Auth({ close, option }) {
   const queryClient = useQueryClient();
@@ -22,6 +23,9 @@ export default function Auth({ close, option }) {
         secure: true,
       });
       queryClient.setQueryData(['author'], () => data);
+      axiosClient.defaults.headers = {
+        Authorization: data.data.cookie,
+      };
       close();
     },
   });

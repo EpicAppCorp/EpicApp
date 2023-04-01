@@ -12,8 +12,8 @@ import { logoutAuthor } from '@epicapp/services/author';
 export default function Profile({ author }) {
   const logout = useMutation(() => logoutAuthor(), {
     onSuccess() {
-      window.location.reload();
       Cookies.remove('access');
+      window.location.reload();
     },
   });
 

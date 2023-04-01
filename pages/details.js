@@ -10,13 +10,9 @@ import Timeline from '@epicapp/components/Profile/Timeline';
 import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function DetailsPage({ id }) {
-  const auth = useQuery(['author'], () => getAuthorDetails(null), {
-    staleTime: Infinity,
-  });
+  const auth = useQuery(['author'], () => getAuthorDetails(null));
 
-  const profile = useQuery(['profile', id], () => getAuthorDetails(id), {
-    staleTime: Infinity,
-  });
+  const profile = useQuery(['profile', id], () => getAuthorDetails(id));
 
   return (
     <main className="h-screen w-screen bg-background">
