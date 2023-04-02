@@ -242,7 +242,7 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
           </ReactMarkdown>
         )}
       </div>
-      <div className="flex items-center justify-between text-2xl text-textAlt">
+      <div className="flex items-center justify-between text-xl text-textAlt">
         <div className="flex gap-4">
           <Button
             className="flex items-center"
@@ -276,7 +276,11 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
               )}
             />
           </Button>
-          <Button onClick={() => newRepost.mutate()}>
+          <Button
+            disabled={!author}
+            loading={newRepost.isLoading}
+            onClick={() => newRepost.mutate()}
+          >
             <i className="fa-regular fa-repeat transition-colors duration-150 hover:text-white" />
           </Button>
         </div>
