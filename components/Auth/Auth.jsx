@@ -113,15 +113,15 @@ export default function Auth({ close, option }) {
         <div className="flex justify-center text-quaternary">
           {register.isError && (
             <div className="bg-errorF text-errorB mb-2 rounded-lg p-1">
-              {Object.keys(register.error.response.data).map((key) => (
-                <div>{register.error.response.data[key]}</div>
+              {Object.keys(register.error?.response?.data).map((key) => (
+                <div>{register.error?.response?.data[key]}</div>
               ))}
             </div>
           )}
 
-          {authenticate.isError && (
+          {authenticate?.isError && (
             <div className="bg-errorF text-errorB mb-5 rounded-lg p-1">
-              {authenticate.error.response.data}
+              {authenticate?.error?.response?.data}
             </div>
           )}
         </div>

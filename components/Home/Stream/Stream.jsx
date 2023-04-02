@@ -11,8 +11,18 @@ import { getInbox } from '@epicapp/services/inbox';
 import { getLiked } from '@epicapp/services/like';
 
 export default function Stream({ author, isInbox }) {
+  const queryClient = useQueryClient();
   const inbox = useQuery(['inbox', author?.id], () => getInbox(author), {
     staleTime: 10000,
+    onSuccess(data) {
+      queryClient.setQueryData(['inbox', author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: data.data.items.filter((item) => item.id),
+        },
+      }));
+    },
   });
 
   const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
