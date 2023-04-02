@@ -19,7 +19,7 @@ export default function Stream({ author, isInbox }) {
         ...oldData,
         data: {
           ...oldData.data,
-          items: data.data.items.filter((item) => item.id),
+          items: data.data.items.filter((item) => item.type),
         },
       }));
     },
