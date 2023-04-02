@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 
 //components
 import Post from './Post';
@@ -11,8 +11,18 @@ import { getInbox } from '@epicapp/services/inbox';
 import { getLiked } from '@epicapp/services/like';
 
 export default function Stream({ author, isInbox }) {
+  const queryClient = useQueryClient();
   const inbox = useQuery(['inbox', author?.id], () => getInbox(author), {
     staleTime: 10000,
+    onSuccess(data) {
+      queryClient.setQueryData(['inbox', author?.id], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          items: data.data.items.filter((item) => item.type),
+        },
+      }));
+    },
   });
 
   const liked = useQuery(['liked', author?.id], () => getLiked(author.id), {
@@ -38,9 +48,9 @@ export default function Stream({ author, isInbox }) {
       </p>
     );
   // if no items
-  else if (!inbox.data?.data.items.length)
+  else if (!inbox.data?.data?.items?.length)
     return (
-      <p className="py-4 text-center text-sm text-textAlt">
+      <p className="text-center text-sm text-textAlt">
         Nothing here yet... Weird
       </p>
     );
@@ -48,15 +58,19 @@ export default function Stream({ author, isInbox }) {
   else if (isInbox)
     return (
       <div className="flex flex-col">
-        {inbox.data.data.items.map((item, idx) => {
+        {inbox.data?.data?.items.map((item, idx, inbox) => {
           if (item.type.toUpperCase() === 'FOLLOW')
             return (
-              <Follow key={idx} author={author} request={{ ...item, idx }} />
+              <Follow
+                key={idx}
+                author={author}
+                request={{ ...item, idx, inbox }}
+              />
             );
           else if (item.type.toUpperCase() === 'LIKE')
-            return <Like key={idx} like={{ ...item, idx }} />;
+            return <Like key={idx} like={{ ...item, idx, inbox }} />;
           else if (item.type.toUpperCase() === 'COMMENT')
-            return <Comment key={idx} comment={{ ...item, idx }} />;
+            return <Comment key={idx} comment={{ ...item, idx, inbox }} />;
         })}
       </div>
     );
@@ -64,7 +78,7 @@ export default function Stream({ author, isInbox }) {
   else
     return (
       <div className="flex flex-col gap-6">
-        {inbox.data.data.items
+        {inbox.data?.data?.items
           .filter(({ type }) => type === 'post')
           .map((item) => (
             <Post
