@@ -26,6 +26,7 @@ export default function CreatePost({ author }) {
     type: 'PUBLIC',
     icon: 'fa-regular fa-earth-asia',
   });
+  const [unlisted, setUnlisted] = useState(false);
 
   // mutation
   const createPost = useMutation((post) => newPost(author, post), {
@@ -72,6 +73,7 @@ export default function CreatePost({ author }) {
           : contentType,
       visibility: visibility.type,
       categories: ['cool'],
+      unlisted: unlisted,
       author: {
         type: 'author',
         id: author.id,
@@ -105,24 +107,27 @@ export default function CreatePost({ author }) {
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
             {/* change the visibility type of post */}
-            <Button
-              type="button"
-              onClick={() =>
-                setVisibility({ ...visibility, open: !visibility.open })
-              }
-              className="relative flex w-full justify-center gap-2 py-4 text-lg text-textAlt"
-            >
-              <i className={visibility.icon} />
-              <i
-                className={clsx(
-                  'text-sm',
-                  visibility.open
-                    ? 'fa-regular fa-solid fa-caret-up'
-                    : 'fa-regular fa-solid fa-caret-down',
-                )}
-              />
+            <div className="relative">
+              <Button
+                type="button"
+                onClick={() =>
+                  setVisibility({ ...visibility, open: !visibility.open })
+                }
+                className="flex w-full justify-center gap-2 py-4 text-lg text-textAlt"
+              >
+                <i className={visibility.icon} />
+                <i
+                  className={clsx(
+                    'text-sm',
+                    visibility.open
+                      ? 'fa-regular fa-solid fa-caret-up'
+                      : 'fa-regular fa-solid fa-caret-down',
+                  )}
+                />
+              </Button>
+
               {visibility.open && (
-                <ul className="absolute top-10 overflow-hidden rounded-xl bg-foreground text-sm shadow-xl">
+                <ul className="absolute top-10 z-20 cursor-pointer overflow-hidden rounded-xl bg-foreground text-sm text-textAlt shadow-xl">
                   <li
                     className="flex items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
                     onClick={() =>
@@ -138,11 +143,11 @@ export default function CreatePost({ author }) {
                   <li
                     className="flex items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
                     onClick={() => {
-                      setVisibility(() => ({
-                        open: true,
-                        type: 'PUBLIC',
+                      setVisibility({
+                        open: false,
+                        type: 'FRIENDS',
                         icon: 'fa-regular fa-user-group',
-                      }));
+                      });
                     }}
                   >
                     <i className="fa-regular fa-user-group" /> Friends
@@ -161,6 +166,17 @@ export default function CreatePost({ author }) {
                   </li>
                 </ul>
               )}
+            </div>
+            <Button
+              className="flex w-full justify-center"
+              onClick={() => setUnlisted(!unlisted)}
+            >
+              <i
+                class={clsx(
+                  'fa-solid text-textAlt transition-colors duration-150  hover:text-white',
+                  unlisted ? 'fa-eye-slash' : 'fa-eye',
+                )}
+              />
             </Button>
           </div>
           <div className="w-full">
