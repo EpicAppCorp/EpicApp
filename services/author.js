@@ -20,5 +20,5 @@ export const getAllAuthors = () =>
   axiosClient.get(process.env.NEXT_PUBLIC_API + '/friends/');
 
 export const getAuthorGithub = async (username) => {
-  axios.get("https://api.github.com/users/" + username + "/events");
+  return axios.get("https://api.github.com/users/" + username + "/events");
 }
