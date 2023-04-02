@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import Image from 'next/image';
 import clsx from 'clsx';
@@ -14,6 +14,11 @@ import { convertBase64 } from '@epicapp/utils/image';
 
 export default function CreatePost({ author }) {
   const queryClient = useQueryClient();
+
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
+  const bodyRef = useRef(null);
+
   const [contentType, setContentType] = useState('text/plain');
   const [imageFileName, setImageFileName] = useState(null);
   const [visibility, setVisibility] = useState({
@@ -33,6 +38,11 @@ export default function CreatePost({ author }) {
           items: [data.data, ...oldData.data.items],
         },
       }));
+
+      //reset the fields
+      titleRef.current.value = '';
+      descriptionRef.current.value = '';
+      bodyRef.current.value = '';
     },
   });
 
@@ -156,6 +166,7 @@ export default function CreatePost({ author }) {
           <div className="w-full">
             <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">
               <input
+                ref={titleRef}
                 className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
                 type="text"
                 name="title"
@@ -163,6 +174,7 @@ export default function CreatePost({ author }) {
                 required={true}
               />
               <input
+                ref={descriptionRef}
                 className="h-9 w-full border-b border-layer bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
                 type="text"
                 name="description"
@@ -172,7 +184,8 @@ export default function CreatePost({ author }) {
               <div className="flex h-14 items-center">
                 {contentType !== 'image/png;base64' ? (
                   <textarea
-                    className="m-0 w-full bg-transparent h-full min-h-14 max-h-14 p-3 placeholder:text-textAlt/20 focus:outline-none"
+                    ref={bodyRef}
+                    className="min-h-14 m-0 h-full max-h-14 w-full bg-transparent p-3 placeholder:text-textAlt/20 focus:outline-none"
                     placeholder="What is that you want to tell the world?"
                     name="body"
                     required={true}
@@ -188,6 +201,7 @@ export default function CreatePost({ author }) {
                       </span>
                     </div>
                     <input
+                      ref={bodyRef}
                       className="hidden"
                       type="file"
                       accept="image/png, image/gif, image/jpeg"
