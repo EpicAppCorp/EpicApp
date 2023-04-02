@@ -11,3 +11,7 @@ export const newPost = (author, post) => {
 export const editPost = (post) => axiosClient.post(post.id, post);
 
 export const deletePost = (postId) => axiosClient.delete(postId);
+
+export const repost = (author, post) => {
+  return axiosClient.post(author.id + '/repost/', post);
+};
