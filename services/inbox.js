@@ -1,4 +1,4 @@
-import { axiosClient } from '@epicapp/libs/axios';
+import { axiosClient, getAxiosInstance } from '@epicapp/libs/axios';
 
 export const getInbox = (author) =>
   axiosClient.get(
@@ -10,7 +10,7 @@ export const getInbox = (author) =>
 export const clearInbox = (authorId) =>
   axiosClient.delete(authorId + '/inbox/');
 
-export const getItem = (url) => axiosClient.get(url);
+export const getItem = (url) => getAxiosInstance(url).get(url);
 
 export const followRequest = (actor, object) => {
   return axiosClient.post(actor.url + '/followers/' + object.url, {
