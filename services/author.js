@@ -1,4 +1,5 @@
 import { axiosClient } from '@epicapp/libs/axios';
+import axios from 'axios';
 
 export const getAuthorDetails = (id) => {
   if (!id) return axiosClient.get('/auth/details/');
@@ -17,3 +18,7 @@ export const getAuthorById = (authorId) =>
 
 export const getAllAuthors = () =>
   axiosClient.get(process.env.NEXT_PUBLIC_API + '/friends/');
+
+export const getAuthorGithub = async (username) => {
+  return axios.get("https://api.github.com/users/" + username + "/events");
+}
