@@ -85,6 +85,7 @@ export default function Stream({ author, isInbox }) {
               key={item.id}
               post={item}
               liked={liked.data?.data?.items.map((like) => like.object)}
+              type="INBOX"
               author={author}
             />
           ))}
