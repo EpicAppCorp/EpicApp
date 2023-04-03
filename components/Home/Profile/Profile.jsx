@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import clsx from 'clsx';
 
 //components
 import Button from '@epicapp/components/Button';
@@ -9,7 +10,7 @@ import Button from '@epicapp/components/Button';
 //services
 import { logoutAuthor } from '@epicapp/services/author';
 
-export default function Profile({ author }) {
+export default function Profile({ author, filter, setFilter }) {
   const logout = useMutation(() => logoutAuthor(), {
     onSuccess() {
       Cookies.remove('access');
@@ -37,8 +38,30 @@ export default function Profile({ author }) {
     );
 
   return (
-    <div className="sticky top-20 w-full overflow-hidden rounded-xl bg-surface">
-      <div className="h-32 w-full bg-primary" />
+    <div className="sticky top-[5.9rem] w-full rounded-xl bg-surface">
+      <div className="relative h-32 w-full rounded-t-xl bg-primary">
+        <ul className="absolute left-1/2 flex h-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-2 rounded-xl bg-surface px-4 text-sm">
+          <li
+            onClick={() => setFilter(1)}
+            className={clsx(
+              'cursor-pointer',
+              filter ? 'text-text' : 'text-textAlt',
+            )}
+          >
+            Stream
+          </li>
+          <li className="h-full w-[1px] bg-textAlt/20"></li>
+          <li
+            onClick={() => setFilter(0)}
+            className={clsx(
+              'cursor-pointer',
+              !filter ? 'text-text' : 'text-textAlt',
+            )}
+          >
+            Github
+          </li>
+        </ul>
+      </div>
       <div className="relative h-24 w-full pt-4">
         <div className="absolute grid w-full -translate-y-1/2 grid-cols-3">
           <Link
