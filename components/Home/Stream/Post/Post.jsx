@@ -71,7 +71,7 @@ export default function Post({ post, author, liked, type }) {
   const addPostLike = useMutation(
     () => newLike(author, { ...post, object: postId }),
     {
-      onSuccess() {
+      onSettled() {
         //update cache
         queryClient.setQueryData(['liked', author?.id], (oldData) => ({
           ...oldData,

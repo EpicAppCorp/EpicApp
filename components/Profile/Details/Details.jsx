@@ -15,7 +15,7 @@ export default function Details({ auth, author }) {
   const queryClient = useQueryClient();
 
   const followAuthor = useMutation(() => followRequest(auth, author), {
-    onSuccess() {
+    onSettled() {
       queryClient.setQueryData(['author'], (oldData) => ({
         ...oldData,
         data: {
@@ -27,7 +27,7 @@ export default function Details({ auth, author }) {
   });
 
   const unfollowAuthor = useMutation(() => unfollow(author.url, auth.id), {
-    onSuccess() {
+    onSettled() {
       queryClient.setQueryData(['author'], (oldData) => ({
         ...oldData,
         data: {
@@ -39,7 +39,7 @@ export default function Details({ auth, author }) {
   });
 
   const removeFollower = useMutation(() => unfollow(auth.id, author.url), {
-    onSuccess() {
+    onSettled() {
       queryClient.setQueryData(['author'], (oldData) => ({
         ...oldData,
         data: {
