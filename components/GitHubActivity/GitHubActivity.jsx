@@ -27,10 +27,10 @@ export default function GitHubActivity({ author }) {
         {gitActivity.data?.data.map((event) => (
           <div
             key={event.id}
-            className="flex gap-4 rounded-xl bg-foreground px-4 py-2"
+            className="flex gap-4 rounded-xl bg-surface px-4 py-2"
           >
             <Image
-              className="self-start overflow-hidden rounded-full border-4 border-background object-cover"
+              className="self-center overflow-hidden rounded-full border-4 border-background object-cover"
               src="github image"
               alt="github image"
               placeholder="blur"

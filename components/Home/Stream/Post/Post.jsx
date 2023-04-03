@@ -17,8 +17,9 @@ import { getLikes, newLike } from '@epicapp/services/like';
 import { deletePost, repost } from '@epicapp/services/post';
 
 export default function Post({ post, author, liked, type }) {
+  const postId = post.id.includes('http') ? post.id : post.origin;
   const queryClient = useQueryClient();
-  const isLiked = liked?.includes(post.id);
+  const isLiked = liked?.includes(postId);
 
   const commentInputRef = useRef(null);
   const [showComments, setShowComments] = useState(false);
@@ -27,26 +28,35 @@ export default function Post({ post, author, liked, type }) {
 
   //get all comments
   const comments = useQuery({
-    queryKey: ['comments', post.id],
-    queryFn: () => getComments(post.id),
+    queryKey: ['comments', postId],
+    queryFn: () => getComments(postId),
     enabled: showComments,
+    onSuccess: (data) => {
+      queryClient.setQueryData(['comments', postId], (oldData) => ({
+        ...oldData,
+        data: {
+          ...oldData.data,
+          comments: data.data.comments ?? data.data.items,
+        },
+      }));
+    },
   });
 
   // get likes
   const likes = useQuery({
-    queryKey: ['likes', post.id],
-    queryFn: () => getLikes(post.id),
+    queryKey: ['likes', postId],
+    queryFn: () => getLikes(postId),
   });
 
   //comment mutation
   const addComment = useMutation(
-    (comment) => newComment(author, { ...post, comment }),
+    (comment) => newComment(author, { ...post, id: postId, comment }),
     {
       onSuccess(data) {
         commentInputRef.current.value = '';
         //update cache
         showComments &&
-          queryClient.setQueryData(['comments', post.id], (oldData) => ({
+          queryClient.setQueryData(['comments', postId], (oldData) => ({
             ...oldData,
             data: {
               ...oldData.data,
@@ -59,7 +69,7 @@ export default function Post({ post, author, liked, type }) {
 
   //like mutation
   const addPostLike = useMutation(
-    () => newLike(author, { ...post, object: post.id }),
+    () => newLike(author, { ...post, object: postId }),
     {
       onSuccess() {
         //update cache
@@ -67,14 +77,14 @@ export default function Post({ post, author, liked, type }) {
           ...oldData,
           data: {
             ...oldData.data,
-            items: [...oldData.data.items, { object: post.id }],
+            items: [...oldData.data.items, { object: postId }],
           },
         }));
-        queryClient.setQueryData(['likes', post.id], (oldData) => ({
+        queryClient.setQueryData(['likes', postId], (oldData) => ({
           ...oldData,
           data: {
             ...oldData.data,
-            items: [...oldData.data.items, { object: post.id }],
+            items: [...oldData.data.items, { object: postId }],
           },
         }));
       },
@@ -83,14 +93,14 @@ export default function Post({ post, author, liked, type }) {
 
   const newRepost = useMutation(() => repost(author, { ...post }));
 
-  const delPost = useMutation(() => deletePost(post.id), {
+  const delPost = useMutation(() => deletePost(postId), {
     onSuccess() {
       //update cache
       queryClient.setQueryData(['posts', post.author?.id], (oldData) => ({
         ...oldData,
         data: {
           ...oldData.data,
-          items: oldData.data.items.filter((p) => p.id !== post.id),
+          items: oldData.data.items.filter((p) => p.id !== postId),
         },
       }));
       setOptionsDropdown(false);
