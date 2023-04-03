@@ -153,7 +153,7 @@ export default function Post({ post, author, liked, type }) {
                 title={post.author.host}
                 className={clsx(
                   'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
-                  process.env.NEXT_PUBLIC_API.includes(post.author.host) &&
+                  !process.env.NEXT_PUBLIC_API.includes(post.author.host) &&
                     type === 'INBOX'
                     ? 'flex'
                     : 'hidden',
