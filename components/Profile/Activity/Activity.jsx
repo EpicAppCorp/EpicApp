@@ -18,7 +18,6 @@ export default function Activity({ author, auth, authLiked }) {
   if (liked.isLoading) {
     return (
       <div className="flex h-full items-center justify-center py-8 text-9xl text-primary">
-        {/* // maybe a ekelton loading animation here? */}
         <i className="fa-solid fa-spinner-third animate-spin bg-transparent text-2xl text-primary" />
       </div>
     );
@@ -41,7 +40,6 @@ export default function Activity({ author, auth, authLiked }) {
           like={like}
           author={author}
           auth={auth}
-          liked={liked.data?.data?.items}
           authLiked={authLiked}
         />
       ))}
@@ -49,7 +47,7 @@ export default function Activity({ author, auth, authLiked }) {
   );
 }
 
-function ActivityItem({ like, author, liked, auth, authLiked }) {
+function ActivityItem({ like, author, auth, authLiked }) {
   const likedItem = useQuery(
     ['item', like.object],
     () => getItem(like.object),
@@ -66,6 +64,8 @@ function ActivityItem({ like, author, liked, auth, authLiked }) {
       </div>
     );
   }
+
+  if (!likedItem?.data?.data.id) return null;
 
   return (
     <div className="relative">

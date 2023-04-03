@@ -16,7 +16,7 @@ import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 import { deletePost, repost } from '@epicapp/services/post';
 
-export default function Post({ post, author, liked, type = 'INBOX' }) {
+export default function Post({ post, author, liked, type }) {
   const queryClient = useQueryClient();
   const isLiked = liked?.includes(post.id);
 
@@ -81,11 +81,7 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
     },
   );
 
-  const newRepost = useMutation(() => repost(author, { ...post }), {
-    onSuccess(data) {
-      console.log(data);
-    },
-  });
+  const newRepost = useMutation(() => repost(author, { ...post }));
 
   const delPost = useMutation(() => deletePost(post.id), {
     onSuccess() {
@@ -147,10 +143,10 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
                 title={post.author.host}
                 className={clsx(
                   'mt-1 w-max items-center gap-2 rounded-xl bg-primary/10 px-2 text-xs text-primary',
-                  process.env.NEXT_PUBLIC_API.includes(post.author.host) ||
-                    type !== 'TIMELINE'
-                    ? 'hidden'
-                    : 'flex',
+                  process.env.NEXT_PUBLIC_API.includes(post.author.host) &&
+                    type === 'INBOX'
+                    ? 'flex'
+                    : 'hidden',
                 )}
               >
                 <i className="fa-solid fa-square-up-right" /> {post.author.host}
@@ -291,7 +287,11 @@ export default function Post({ post, author, liked, type = 'INBOX' }) {
             </Button>
           </div>
           <div className="flex gap-2 text-xs">
-            {post?.categories.map((category, idx) => (
+            {[
+              ...(typeof post.categories === 'string'
+                ? [post.categories]
+                : post.categories),
+            ].map((category, idx) => (
               <span className="rounded-xl text-textAlt" key={idx}>
                 {category}
               </span>

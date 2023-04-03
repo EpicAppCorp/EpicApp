@@ -19,7 +19,7 @@ export default function Timeline({ auth, author }) {
     staleTime: 10000,
   });
 
-  const posts = useQuery(['posts', author?.id], () => getPosts(author.id), {
+  const posts = useQuery(['posts', author?.id], () => getPosts(author.url), {
     staleTime: 10000,
     enabled: !!author,
   });
