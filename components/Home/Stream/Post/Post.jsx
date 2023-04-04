@@ -15,6 +15,7 @@ import Comment from './Comment';
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 import { deletePost, repost } from '@epicapp/services/post';
+import { iconMap } from '@epicapp/utils/visibility';
 
 export default function Post({ post, author, liked, type }) {
   const postId = post.id.includes('http') ? post.id : post.origin;
@@ -71,7 +72,7 @@ export default function Post({ post, author, liked, type }) {
   const addPostLike = useMutation(
     () => newLike(author, { ...post, object: postId }),
     {
-      onSettled() {
+      onSuccess() {
         //update cache
         queryClient.setQueryData(['liked', author?.id], (oldData) => ({
           ...oldData,
@@ -145,9 +146,10 @@ export default function Post({ post, author, liked, type }) {
             <div className="relative flex justify-between">
               <Link
                 href={{ pathname: '/details', query: { id: post.author.id } }}
-                className="text-textAlt transition-colors duration-150 hover:text-primary"
+                className="flex items-center gap-1 text-textAlt transition-colors duration-150 hover:text-primary"
               >
                 @{post.author.displayName}
+                <i className={iconMap[post.visibility]} />
               </Link>
               <div
                 title={post.author.host}
@@ -211,13 +213,19 @@ export default function Post({ post, author, liked, type }) {
             <p className="text-xs text-textAlt">{post.description}</p>
           </div>
         </div>
-        <div className="my-8">
+        <div
+          className={clsx(
+            'my-8',
+            post.contentType.includes('image/') &&
+              'overflow-hidden rounded-2xl bg-background',
+          )}
+        >
           {post.contentType.includes('image/') && (
             <div className="relative h-96 w-full">
               <Image
                 alt={post.description}
                 src={post.content}
-                className="rounded-2xl object-cover"
+                className="object-contain"
                 fill={true}
                 placeholder="blur"
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="

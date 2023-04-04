@@ -11,6 +11,7 @@ import { newPost } from '@epicapp/services/post';
 
 ///utils
 import { convertBase64 } from '@epicapp/utils/image';
+import Visibility from './Visibility/Visibility';
 
 export default function CreatePost({ author }) {
   const queryClient = useQueryClient();
@@ -105,63 +106,10 @@ export default function CreatePost({ author }) {
               blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="
             />
             {/* change the visibility type of post */}
-            <Button
-              type="button"
-              onClick={() =>
-                setVisibility({ ...visibility, open: !visibility.open })
-              }
-              className="relative flex w-full justify-center gap-2 py-4 text-lg text-textAlt"
-            >
-              <i className={visibility.icon} />
-              <i
-                className={clsx(
-                  'text-sm',
-                  visibility.open
-                    ? 'fa-regular fa-solid fa-caret-up'
-                    : 'fa-regular fa-solid fa-caret-down',
-                )}
-              />
-              {visibility.open && (
-                <ul className="absolute top-10 overflow-hidden rounded-xl bg-foreground text-sm shadow-xl">
-                  <li
-                    className="flex items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
-                    onClick={() =>
-                      setVisibility({
-                        open: false,
-                        type: 'PUBLIC',
-                        icon: 'fa-regular fa-earth-asia',
-                      })
-                    }
-                  >
-                    <i className="fa-regular fa-earth-asia" /> Public
-                  </li>
-                  <li
-                    className="flex items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
-                    onClick={() => {
-                      setVisibility(() => ({
-                        open: true,
-                        type: 'PUBLIC',
-                        icon: 'fa-regular fa-user-group',
-                      }));
-                    }}
-                  >
-                    <i className="fa-regular fa-user-group" /> Friends
-                  </li>
-                  <li
-                    className="flex items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
-                    onClick={() =>
-                      setVisibility({
-                        open: false,
-                        type: 'PRIVATE',
-                        icon: 'fa-regular fa-lock',
-                      })
-                    }
-                  >
-                    <i className="fa-regular fa-lock" /> Private
-                  </li>
-                </ul>
-              )}
-            </Button>
+            <Visibility
+              visibility={visibility}
+              setVisibility={(options) => setVisibility(options)}
+            />
           </div>
           <div className="w-full">
             <div className="w-full overflow-hidden rounded-2xl bg-foreground text-text">

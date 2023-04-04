@@ -10,8 +10,12 @@ import Timeline from '@epicapp/components/Profile/Timeline';
 import { getAuthorDetails } from '@epicapp/services/author';
 
 export default function DetailsPage({ id }) {
+  if (!id) return null;
+
+  //user logged in
   const auth = useQuery(['author'], () => getAuthorDetails(null));
 
+  //detaisl of the user's profile
   const profile = useQuery(['profile', id], () => getAuthorDetails(id));
 
   return (
