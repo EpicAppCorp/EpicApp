@@ -168,15 +168,18 @@ export default function CreatePost({ author }) {
               )}
             </div>
             <Button
-              className="flex w-full justify-center"
+              className="flex w-full flex-col items-center justify-center gap-0.5"
               onClick={() => setUnlisted(!unlisted)}
             >
               <i
-                class={clsx(
+                className={clsx(
                   'fa-solid text-textAlt transition-colors duration-150  hover:text-white',
                   unlisted ? 'fa-eye-slash' : 'fa-eye',
                 )}
               />
+              <div className="text-xs text-textAlt">
+                {unlisted ? 'unlisted' : 'listed'}
+              </div>
             </Button>
           </div>
           <div className="w-full">
