@@ -71,8 +71,9 @@ export default function CreatePost({ author }) {
         contentType === 'image/png;base64'
           ? body.split(',')[0].split('data:')[1]
           : contentType,
-      visibility: visibility.type,
+      visibility: visibility.type === 'UNLISTED' ? 'PUBLIC' : visibility.type,
       categories: ['cool'],
+      unlisted: visibility.type === 'UNLISTED',
       author: {
         type: 'author',
         id: author.id,

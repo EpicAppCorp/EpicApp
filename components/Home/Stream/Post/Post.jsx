@@ -107,7 +107,6 @@ export default function Post({ post, author, liked, type }) {
       setOptionsDropdown(false);
     },
   });
-
   if (editMode)
     return <EditPost post={post} type={type} back={() => setEditMode(false)} />;
 

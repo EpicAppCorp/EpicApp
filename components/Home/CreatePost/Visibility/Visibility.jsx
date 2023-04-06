@@ -65,11 +65,11 @@ export default function Visibility({ visibility, setVisibility }) {
               setVisibility({
                 open: false,
                 type: 'UNLISTED',
-                icon: 'fa-regular fa-unlock',
+                icon: 'fa-regular fa-eye-slash',
               })
             }
           >
-            <i className="fa-regular fa-unlock" /> Unlisted
+            <i className="fa-regular fa-eye-slash" /> Unlisted
           </li>
         </ul>
       )}
