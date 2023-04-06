@@ -33,7 +33,7 @@ export default function Comment({ author, comment, liked }) {
         className="aspect-square self-center overflow-hidden rounded-full border-4 border-background object-cover"
         src="profile image"
         alt="profile image"
-        loader={() => comment.author.profileImage}
+        loader={() => comment.author?.profileImage}
         width={40}
         height={40}
         placeholder="blur"
@@ -41,7 +41,7 @@ export default function Comment({ author, comment, liked }) {
       />
       <div className="flex flex-col gap-1">
         <p className="flex gap-2 text-text">
-          <span className="font-bold">{comment.author.displayName}</span>
+          <span className="font-bold">{comment.author?.displayName}</span>
           {comment.comment}
         </p>
         <span className="flex items-center gap-2 text-xs text-textAlt">

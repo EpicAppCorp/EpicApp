@@ -74,13 +74,15 @@ export default function Post({ post, author, liked, type }) {
     {
       onSuccess() {
         //update cache
-        queryClient.setQueryData(['liked', author?.id], (oldData) => ({
-          ...oldData,
-          data: {
-            ...oldData.data,
-            items: [...oldData.data.items, { object: postId }],
-          },
-        }));
+        queryClient.setQueryData(['liked', author?.id], (oldData) => {
+          return {
+            ...oldData,
+            data: {
+              ...oldData.data,
+              items: [...oldData.data.items, { object: postId }],
+            },
+          };
+        });
         queryClient.setQueryData(['likes', postId], (oldData) => ({
           ...oldData,
           data: {

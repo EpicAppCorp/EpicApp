@@ -9,7 +9,7 @@ import { followRequest } from '@epicapp/services/inbox';
 import { unfollow } from '@epicapp/services/follow';
 
 export default function Details({ auth, author }) {
-  const following = auth.following.includes(author.url);
+  const following = auth?.following.includes(author.url);
   const follower = auth.followers.includes(author.url);
 
   const queryClient = useQueryClient();
