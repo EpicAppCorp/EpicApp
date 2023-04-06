@@ -48,7 +48,7 @@ export default function Visibility({ visibility, setVisibility }) {
           >
             <i className="fa-regular fa-user-group" /> Friends
           </li>
-          <li
+          {/* <li
             className="flex cursor-pointer items-center gap-2 border-b border-b-textAlt/20 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
             onClick={() =>
               setVisibility({
@@ -58,7 +58,7 @@ export default function Visibility({ visibility, setVisibility }) {
             }
           >
             <i className="fa-regular fa-lock" /> Private
-          </li>
+          </li> */}
           <li
             className="flex cursor-pointer items-center gap-2 px-4 py-2 transition-colors duration-100 hover:bg-primary hover:text-background"
             onClick={() =>
