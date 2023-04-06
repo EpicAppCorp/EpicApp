@@ -15,6 +15,7 @@ import Comment from './Comment';
 import { getComments, newComment } from '@epicapp/services/comment';
 import { getLikes, newLike } from '@epicapp/services/like';
 import { deletePost, repost } from '@epicapp/services/post';
+import { iconMap } from '@epicapp/utils/visibility';
 
 export default function Post({ post, author, liked, type }) {
   const postId = post.id.includes('http') ? post.id : post.origin;
@@ -71,7 +72,7 @@ export default function Post({ post, author, liked, type }) {
   const addPostLike = useMutation(
     () => newLike(author, { ...post, object: postId }),
     {
-      onSettled() {
+      onSuccess() {
         //update cache
         queryClient.setQueryData(['liked', author?.id], (oldData) => ({
           ...oldData,
@@ -106,7 +107,6 @@ export default function Post({ post, author, liked, type }) {
       setOptionsDropdown(false);
     },
   });
-
   if (editMode)
     return <EditPost post={post} type={type} back={() => setEditMode(false)} />;
 
@@ -145,7 +145,7 @@ export default function Post({ post, author, liked, type }) {
             <div className="relative flex justify-between">
               <Link
                 href={{ pathname: '/details', query: { id: post.author.id } }}
-                className="text-textAlt transition-colors duration-150 hover:text-primary"
+                className="flex items-center gap-1 text-textAlt transition-colors duration-150 hover:text-primary"
               >
                 @{post.author.displayName}
               </Link>
@@ -164,18 +164,33 @@ export default function Post({ post, author, liked, type }) {
               <div className="absolute right-0 h-10 w-10">
                 <div
                   onClick={() => setOptionsDropdown(!optionsDropdown)}
-                  className={clsx(
-                    'relative flex h-full w-full cursor-pointer items-center justify-center rounded-full hover:bg-layer',
-                    post.author.id === author?.id && type === 'TIMELINE'
-                      ? 'flex'
-                      : 'hidden',
-                  )}
+                  className="relative flex h-full w-full cursor-pointer items-center justify-center rounded-full hover:bg-layer"
                 >
                   <i className="fa-regular fa-ellipsis text-2xl text-textAlt" />
 
                   {optionsDropdown && (
-                    <ul className="absolute right-0 top-full z-50 overflow-hidden rounded-xl bg-foreground text-sm">
+                    <ul className="absolute right-0 top-full z-50 w-max overflow-hidden rounded-xl bg-background text-sm">
                       <li>
+                        <Button
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              window.location.origin + `/post?postId=${postId}`,
+                            );
+                          }}
+                          className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
+                          href="/profile"
+                        >
+                          <i className="fa-solid fa-link" />
+                          Copy Link
+                        </Button>
+                      </li>
+                      <li
+                        className={clsx(
+                          post.author.id === author?.id && type === 'TIMELINE'
+                            ? 'block'
+                            : 'hidden',
+                        )}
+                      >
                         <Button
                           onClick={() => setEditMode(true)}
                           className="flex h-full w-full items-center gap-2 px-6 py-2 text-text transition-colors duration-150 hover:bg-primary hover:text-black"
@@ -185,7 +200,13 @@ export default function Post({ post, author, liked, type }) {
                           Edit
                         </Button>
                       </li>
-                      <li>
+                      <li
+                        className={clsx(
+                          post.author.id === author?.id && type === 'TIMELINE'
+                            ? 'block'
+                            : 'hidden',
+                        )}
+                      >
                         <Button
                           loading={delPost.isLoading}
                           onClick={() => delPost.mutate()}
@@ -202,6 +223,13 @@ export default function Post({ post, author, liked, type }) {
             </div>
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-bold text-text">{post.title}</h1>
+              <i
+                title={post.unlisted ? 'UNLISTED' : post.visibility}
+                className={
+                  'text-textAlt ' +
+                  iconMap[post.unlisted ? 'UNLISTED' : post.visibility]
+                }
+              />
               <span className="text-xs font-light text-primary before:mr-2 before:inline-block before:h-2 before:w-2 before:rounded-full before:bg-primary before:content-['']">
                 {formatDistance(new Date(post.published), new Date(), {
                   addSuffix: true,
@@ -211,13 +239,19 @@ export default function Post({ post, author, liked, type }) {
             <p className="text-xs text-textAlt">{post.description}</p>
           </div>
         </div>
-        <div className="my-8">
+        <div
+          className={clsx(
+            'my-8',
+            post.contentType.includes('image/') &&
+              'overflow-hidden rounded-2xl bg-background',
+          )}
+        >
           {post.contentType.includes('image/') && (
             <div className="relative h-96 w-full">
               <Image
                 alt={post.description}
                 src={post.content}
-                className="rounded-2xl object-cover"
+                className="object-contain"
                 fill={true}
                 placeholder="blur"
                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNUqgcAAMkAo/sGMSwAAAAASUVORK5CYII="

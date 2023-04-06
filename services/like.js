@@ -4,7 +4,7 @@ export const getLikes = (url) => getAxiosInstance(url).get(url + '/likes');
 
 export const newLike = (author, item) =>
   getAxiosInstance(item.author.url).post(item.author.url + '/inbox', {
-    type: 'Like',
+    type: 'like',
     author: author.id,
     object: item.object,
   });
