@@ -53,17 +53,32 @@ export default function Post({ post, author, liked, type }) {
   const addComment = useMutation(
     (comment) => newComment(author, { ...post, id: postId, comment }),
     {
-      onSuccess(data) {
+      onMutate: async (comment) => {
         commentInputRef.current.value = '';
-        //update cache
+
+        await queryClient.cancelQueries({ queryKey: ['comments', postId] });
+
         showComments &&
           queryClient.setQueryData(['comments', postId], (oldData) => ({
             ...oldData,
             data: {
               ...oldData.data,
-              comments: [...oldData.data.comments, data.data],
+              comments: [
+                ...oldData.data.comments,
+                {
+                  author,
+                  comment,
+                  id: post.id,
+                  contentType: 'text/markdown',
+                  published: new Date().toISOString(),
+                  type: 'comment',
+                },
+              ],
             },
           }));
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ['comments', postId] });
       },
     },
   );
