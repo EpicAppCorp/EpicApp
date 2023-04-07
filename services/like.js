@@ -9,6 +9,7 @@ export const newLike = (author, item) => {
     object: item.object,
     summary: `${author.displayName} likes ${item.author.displayName}'s ${item.type}`,
   };
+  let url = item.author.url;
 
   if (item.author.url.includes('social-distribution-media')) {
     body = {
@@ -23,11 +24,24 @@ export const newLike = (author, item) => {
         summary: `${author.displayName} likes ${item.author.displayName}'s ${item.type}`,
       },
     };
+  } else if (!item.author.id.includes('http')) {
+    let authorId = item.author.id;
+    let postId = item.id;
+    url = item.author.url;
+    if (item.type === 'comment') {
+      authorId = item.post.author.id;
+      postId = item.post.id;
+      url = item.post.author.url;
+    }
+    body = {
+      type: 'like',
+      author: author.id,
+      object: `https://t20-social-distribution.herokuapp.com/service/authors/${authorId}/posts/${postId}`,
+      summary: `${author.displayName} likes ${item.author.displayName}'s ${item.type}`,
+    };
   }
-  return getAxiosInstance(item.author.url).post(
-    item.author.url + '/inbox',
-    body,
-  );
+
+  return getAxiosInstance(url).post(url + '/inbox', body);
 };
 
 export const getLiked = (authorUrl) =>
