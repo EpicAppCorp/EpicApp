@@ -19,3 +19,6 @@ export const getAllAuthors = () =>
 export const getAuthorGithub = async (username) => {
   return axios.get('https://api.github.com/users/' + username + '/events');
 };
+
+export const updateAuthor = async (author) =>
+  axiosClient.put(process.env.NEXT_PUBLIC_API + '/auth/details', author);
