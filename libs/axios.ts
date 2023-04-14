@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 
 export const axiosClient = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API,
-  timeout: 10000,
+  timeout: 100000,
   withCredentials: true,
   headers: {
     Authorization: Cookies.get('access') ?? '',
@@ -12,7 +12,7 @@ export const axiosClient = axios.create({
 
 const teamTwo = axios.create({
   baseURL: 'https://social-distribution-media.herokuapp.com/api',
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     Authorization: 'Basic R3JvdXAxM1VzZXI6bTEjZGVsZnA3Mlde',
   },
@@ -20,7 +20,7 @@ const teamTwo = axios.create({
 
 const teamSix = axios.create({
   baseURL: 'https://cmput404-group6-instatonne.herokuapp.com',
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     Authorization: 'Basic R3JvdXAxM1VzZXI6Z3JvdXAxM2dyb3VwMTM=',
   },
@@ -28,7 +28,7 @@ const teamSix = axios.create({
 
 const teamTwenty = axios.create({
   baseURL: 'https://t20-social-distribution.herokuapp.com/service',
-  timeout: 10000,
+  timeout: 100000,
   headers: {
     Authorization: 'token',
   },
