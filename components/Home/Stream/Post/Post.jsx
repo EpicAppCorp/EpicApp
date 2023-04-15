@@ -129,11 +129,6 @@ export default function Post({ post, author, liked, type }) {
 
   return (
     <div className="relative">
-      {post.source !== post.origin ? (
-        <div className="absolute right-[-12px] top-[-13px] rounded-xl bg-primary px-2">
-          Repost
-        </div>
-      ) : null}
       <div
         className={clsx(
           'bg-surface p-4',
@@ -282,7 +277,7 @@ export default function Post({ post, author, liked, type }) {
             <ReactMarkdown
               className={clsx(
                 'relative h-96 w-full text-text',
-                post.content.includes('<img src') ? 'h-96' : 'h-full',
+                post.content?.includes('<img src') ? 'h-96' : 'h-full',
               )}
               components={{
                 img: (props) => (
@@ -299,7 +294,7 @@ export default function Post({ post, author, liked, type }) {
                 ),
               }}
             >
-              {post.content.includes('<img src')
+              {post.content?.includes('<img src')
                 ? '![](' + post.content.split('"')[1] + ')'
                 : post.content}
             </ReactMarkdown>
